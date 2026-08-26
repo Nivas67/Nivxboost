@@ -56,17 +56,17 @@
         <div class="quick-telemetry">
           <div class="telemetry-item">
             <span class="tel-label"><i class="fa-solid fa-satellite-dish"></i> ISP NODE</span>
-            <span class="tel-value" id="hudIsp">Nivx Anycast Global</span>
+            <span class="tel-value" id="hudIsp">Detecting live network...</span>
           </div>
           <div class="telemetry-divider"></div>
           <div class="telemetry-item">
             <span class="tel-label"><i class="fa-solid fa-network-wired"></i> PROTOCOL</span>
-            <span class="tel-value" id="hudProtocol">HTTP/3 &bull; QUIC</span>
+            <span class="tel-value" id="hudProtocol">--</span>
           </div>
           <div class="telemetry-divider"></div>
           <div class="telemetry-item">
             <span class="tel-label"><i class="fa-solid fa-shield-halved"></i> MTU BUFFER</span>
-            <span class="tel-value" id="hudMtu">1500 (Auto-Scaled)</span>
+            <span class="tel-value" id="hudMtu">1500 (Standard)</span>
           </div>
         </div>
       </div>
@@ -238,10 +238,10 @@
                 <div class="metric-data">
                   <span class="metric-label">LATENCY / PING</span>
                   <div class="metric-value-wrap">
-                    <span class="metric-val" id="metricPing">28</span>
+                    <span class="metric-val" id="metricPing">--</span>
                     <span class="metric-unit">ms</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaPing"><i class="fa-solid fa-arrow-trend-down"></i> -64% latency</span>
+                  <span class="metric-delta positive" id="deltaPing"><i class="fa-solid fa-signal"></i> Measuring...</span>
                 </div>
               </div>
 
@@ -252,10 +252,10 @@
                 <div class="metric-data">
                   <span class="metric-label">JITTER STABILITY</span>
                   <div class="metric-value-wrap">
-                    <span class="metric-val" id="metricJitter">0.8</span>
+                    <span class="metric-val" id="metricJitter">--</span>
                     <span class="metric-unit">ms</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaJitter"><i class="fa-solid fa-circle-check"></i> Ultra Stable</span>
+                  <span class="metric-delta positive" id="deltaJitter"><i class="fa-solid fa-signal"></i> Measuring...</span>
                 </div>
               </div>
 
@@ -266,10 +266,10 @@
                 <div class="metric-data">
                   <span class="metric-label">BUFFERBLOAT</span>
                   <div class="metric-value-wrap">
-                    <span class="metric-val" id="metricBloat">A+</span>
+                    <span class="metric-val" id="metricBloat">--</span>
                     <span class="metric-unit">Grade</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaBloat"><i class="fa-solid fa-shield"></i> 0ms Queuing</span>
+                  <span class="metric-delta positive" id="deltaBloat"><i class="fa-solid fa-shield"></i> Live Queue</span>
                 </div>
               </div>
 
@@ -280,10 +280,10 @@
                 <div class="metric-data">
                   <span class="metric-label">PACKET LOSS</span>
                   <div class="metric-value-wrap">
-                    <span class="metric-val" id="metricLoss">0.00</span>
+                    <span class="metric-val" id="metricLoss">--</span>
                     <span class="metric-unit">%</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaLoss"><i class="fa-solid fa-check-double"></i> 0 Drops</span>
+                  <span class="metric-delta positive" id="deltaLoss"><i class="fa-solid fa-check-double"></i> Live Loss Rate</span>
                 </div>
               </div>
             </div>
@@ -292,14 +292,14 @@
             <div class="glass-card game-presets-card">
               <div class="card-header-compact">
                 <span class="card-tag"><i class="fa-solid fa-crosshairs"></i> ONE-CLICK GAME ACCELERATOR</span>
-                <span class="live-pulse-chip">120Hz TICK SYNC</span>
+                <span class="live-pulse-chip">SOCKET PRECONNECT</span>
               </div>
               <div class="game-presets-grid">
                 <div class="game-preset-item" data-game="cs2">
                   <div class="game-icon"><i class="fa-solid fa-gun"></i></div>
                   <div class="game-info">
                     <span class="game-title">Counter-Strike 2</span>
-                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 14ms</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> Direct Node</span>
                   </div>
                   <button class="game-opt-btn" title="Optimize for CS2">ACTIVATE</button>
                 </div>
@@ -308,7 +308,7 @@
                   <div class="game-icon"><i class="fa-solid fa-shield-cat"></i></div>
                   <div class="game-info">
                     <span class="game-title">Valorant</span>
-                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 11ms</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> Direct Node</span>
                   </div>
                   <button class="game-opt-btn" title="Optimize for Valorant">ACTIVATE</button>
                 </div>
@@ -317,7 +317,7 @@
                   <div class="game-icon"><i class="fa-solid fa-person-rifle"></i></div>
                   <div class="game-info">
                     <span class="game-title">Fortnite & Apex</span>
-                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 16ms</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> Direct Node</span>
                   </div>
                   <button class="game-opt-btn" title="Optimize for Fortnite/Apex">ACTIVATE</button>
                 </div>
@@ -326,7 +326,7 @@
                   <div class="game-icon"><i class="fa-solid fa-jet-fighter"></i></div>
                   <div class="game-info">
                     <span class="game-title">Call of Duty: Warzone</span>
-                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 19ms</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> Direct Node</span>
                   </div>
                   <button class="game-opt-btn" title="Optimize for Warzone">ACTIVATE</button>
                 </div>
@@ -343,9 +343,9 @@
                 <canvas id="liveSpectrumCanvas" width="480" height="130" class="spectrum-canvas"></canvas>
               </div>
               <div class="spectrum-footer">
-                <div class="spec-stat"><span>PEAK:</span> <strong id="specPeak">742.8 Mbps</strong></div>
-                <div class="spec-stat"><span>CURRENT:</span> <strong id="specCurrent">486.2 Mbps</strong></div>
-                <div class="spec-stat"><span>OPTIMIZED:</span> <strong class="green-text" id="specEff">99.4%</strong></div>
+                <div class="spec-stat"><span>PEAK:</span> <strong id="specPeak">-- Mbps</strong></div>
+                <div class="spec-stat"><span>CURRENT:</span> <strong id="specCurrent">-- Mbps</strong></div>
+                <div class="spec-stat"><span>OPTIMIZED:</span> <strong class="green-text" id="specEff">Ready</strong></div>
               </div>
             </div>
 
@@ -570,11 +570,11 @@
             <div class="hog-stats-banner">
               <div class="hog-stat-card">
                 <span>TOTAL BACKGROUND USAGE</span>
-                <strong class="yellow-text" id="totalHogUsage">142.4 Mbps</strong>
+                <strong class="yellow-text" id="totalHogUsage">Active (Live)</strong>
               </div>
               <div class="hog-stat-card">
                 <span>BANDWIDTH RECLAIMED</span>
-                <strong class="green-text" id="reclaimedBandwidth">+128.0 Mbps</strong>
+                <strong class="green-text" id="reclaimedBandwidth">Optimized</strong>
               </div>
               <div class="hog-stat-card">
                 <span>GAMING QOS PRIORITY</span>
