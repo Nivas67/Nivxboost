@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  * NIVXBOOST — QUANTUM NETWORK SPEED & LATENCY ACCELERATOR
- * Full Architecture & Engine Implementation
+ * Clean, High-Precision Engine Implementation
  * ============================================================================
  */
 
@@ -42,16 +42,16 @@
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.05);
+      osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(900, this.ctx.currentTime + 0.04);
 
-      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.05);
+      osc.stop(this.ctx.currentTime + 0.04);
     }
 
     playCharge() {
@@ -61,18 +61,18 @@
 
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(140, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 1.2);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(660, this.ctx.currentTime + 0.8);
 
-      gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.15, this.ctx.currentTime + 1.0);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.2);
+      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 0.7);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.8);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 1.2);
+      osc.stop(this.ctx.currentTime + 0.8);
     }
 
     playWarp() {
@@ -82,17 +82,17 @@
 
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(900, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(2400, this.ctx.currentTime + 0.35);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(700, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1600, this.ctx.currentTime + 0.3);
 
-      gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.4);
+      osc.stop(this.ctx.currentTime + 0.3);
     }
 
     playSuccess() {
@@ -100,20 +100,20 @@
       this.init();
       if (!this.ctx) return;
 
-      const notes = [523.25, 659.25, 783.99, 1046.5]; // C E G C chord
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
       notes.forEach((freq, i) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.07);
 
-        gain.gain.setValueAtTime(0.08, this.ctx.currentTime + i * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.08 + 0.5);
+        gain.gain.setValueAtTime(0.06, this.ctx.currentTime + i * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.07 + 0.4);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
-        osc.start(this.ctx.currentTime + i * 0.08);
-        osc.stop(this.ctx.currentTime + i * 0.08 + 0.5);
+        osc.start(this.ctx.currentTime + i * 0.07);
+        osc.stop(this.ctx.currentTime + i * 0.07 + 0.4);
       });
     }
 
@@ -124,17 +124,17 @@
 
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'square';
+      osc.type = 'sine';
       osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-      osc.frequency.setValueAtTime(320, this.ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(330, this.ctx.currentTime + 0.08);
 
-      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.25);
+      osc.stop(this.ctx.currentTime + 0.2);
     }
   }
 
@@ -179,9 +179,9 @@
       { id: 4, name: 'Windows Delivery Optimization', pid: 4812, usage: 13.1, icon: 'fa-brands fa-windows', throttled: false }
     ],
     auraThemes: [
-      { name: 'Cyan Vortex', color1: '#00f0ff', color2: '#7928ca' },
-      { name: 'Emerald Turbo', color1: '#00ff87', color2: '#00f0ff' },
-      { name: 'Hyper Magenta', color1: '#ff007f', color2: '#ffd000' }
+      { name: 'Electric Azure', color1: '#38bdf8', color2: '#818cf8' },
+      { name: 'Mint Emerald', color1: '#10b981', color2: '#38bdf8' },
+      { name: 'Royal Indigo', color1: '#818cf8', color2: '#f59e0b' }
     ],
     currentAuraIndex: 0
   };
@@ -219,13 +219,13 @@
 
   function initBoosterParticles() {
     boosterParticles = [];
-    for (let i = 0; i < 48; i++) {
+    for (let i = 0; i < 36; i++) {
       boosterParticles.push({
         angle: Math.random() * Math.PI * 2,
-        radius: 120 + Math.random() * 60,
-        speed: 0.01 + Math.random() * 0.02,
-        size: 1.5 + Math.random() * 2.5,
-        alpha: 0.2 + Math.random() * 0.8
+        radius: 130 + Math.random() * 45,
+        speed: 0.008 + Math.random() * 0.015,
+        size: 1.5 + Math.random() * 2,
+        alpha: 0.2 + Math.random() * 0.7
       });
     }
   }
@@ -241,57 +241,57 @@
     boosterCtx.clearRect(0, 0, w, h);
 
     // Speed multiplier based on state
-    const speedMult = State.isBoosting ? 4.5 : State.isBoosted ? 2.0 : 1.0;
-    boosterAngle += 0.015 * speedMult;
+    const speedMult = State.isBoosting ? 3.5 : State.isBoosted ? 1.5 : 0.8;
+    boosterAngle += 0.01 * speedMult;
 
-    // 1. Outer Tick Ring
+    // 1. Clean Outer Tick Ring
     boosterCtx.save();
     boosterCtx.translate(cx, cy);
     boosterCtx.rotate(boosterAngle * 0.2);
 
-    const ticks = 60;
+    const ticks = 48;
     for (let i = 0; i < ticks; i++) {
       const rad = (i / ticks) * Math.PI * 2;
-      const isMajor = i % 5 === 0;
-      const len = isMajor ? 12 : 6;
-      const r1 = 188;
+      const isMajor = i % 4 === 0;
+      const len = isMajor ? 10 : 5;
+      const r1 = 175;
       const r2 = r1 - len;
 
       boosterCtx.beginPath();
       boosterCtx.moveTo(Math.cos(rad) * r1, Math.sin(rad) * r1);
       boosterCtx.lineTo(Math.cos(rad) * r2, Math.sin(rad) * r2);
-      boosterCtx.strokeStyle = isMajor ? (State.isBoosted ? '#00ff87' : '#00f0ff') : 'rgba(255, 255, 255, 0.12)';
+      boosterCtx.strokeStyle = isMajor ? (State.isBoosted ? '#10b981' : '#38bdf8') : 'rgba(255, 255, 255, 0.08)';
       boosterCtx.lineWidth = isMajor ? 2 : 1;
       boosterCtx.stroke();
     }
     boosterCtx.restore();
 
-    // 2. Animated Glowing Arc
+    // 2. Crisp Glowing Arc
     boosterCtx.save();
     boosterCtx.translate(cx, cy);
     boosterCtx.rotate(-boosterAngle);
 
-    const gradient = boosterCtx.createLinearGradient(-150, -150, 150, 150);
+    const gradient = boosterCtx.createLinearGradient(-140, -140, 140, 140);
     if (State.isBoosted) {
-      gradient.addColorStop(0, '#00ff87');
-      gradient.addColorStop(0.5, '#00f0ff');
-      gradient.addColorStop(1, '#ffd000');
+      gradient.addColorStop(0, '#10b981');
+      gradient.addColorStop(0.6, '#38bdf8');
+      gradient.addColorStop(1, 'transparent');
     } else {
-      gradient.addColorStop(0, '#00f0ff');
-      gradient.addColorStop(0.5, '#7928ca');
+      gradient.addColorStop(0, '#38bdf8');
+      gradient.addColorStop(0.5, '#818cf8');
       gradient.addColorStop(1, 'transparent');
     }
 
     boosterCtx.beginPath();
-    boosterCtx.arc(0, 0, 160, 0, Math.PI * 1.5);
+    boosterCtx.arc(0, 0, 150, 0, Math.PI * 1.4);
     boosterCtx.strokeStyle = gradient;
-    boosterCtx.lineWidth = State.isBoosted ? 6 : 3;
-    boosterCtx.shadowBlur = State.isBoosted ? 24 : 12;
-    boosterCtx.shadowColor = State.isBoosted ? '#00ff87' : '#00f0ff';
+    boosterCtx.lineWidth = State.isBoosted ? 4 : 2.5;
+    boosterCtx.shadowBlur = State.isBoosted ? 16 : 8;
+    boosterCtx.shadowColor = State.isBoosted ? '#10b981' : '#38bdf8';
     boosterCtx.stroke();
     boosterCtx.restore();
 
-    // 3. Floating Energy Particle Wave
+    // 3. Smooth Ambient Particles
     boosterParticles.forEach(p => {
       p.angle += p.speed * speedMult;
       const px = cx + Math.cos(p.angle) * p.radius;
@@ -299,9 +299,7 @@
 
       boosterCtx.beginPath();
       boosterCtx.arc(px, py, p.size, 0, Math.PI * 2);
-      boosterCtx.fillStyle = State.isBoosted ? `rgba(0, 255, 135, ${p.alpha})` : `rgba(0, 240, 255, ${p.alpha})`;
-      boosterCtx.shadowBlur = 8;
-      boosterCtx.shadowColor = State.isBoosted ? '#00ff87' : '#00f0ff';
+      boosterCtx.fillStyle = State.isBoosted ? `rgba(16, 185, 129, ${p.alpha})` : `rgba(56, 189, 248, ${p.alpha})`;
       boosterCtx.fill();
     });
 
@@ -314,7 +312,7 @@
   // ==========================================================================
   const spectrumCanvas = document.getElementById('liveSpectrumCanvas');
   const spectrumCtx = spectrumCanvas ? spectrumCanvas.getContext('2d') : null;
-  const spectrumData = Array(60).fill(120);
+  const spectrumData = Array(50).fill(120);
 
   function drawLiveSpectrum() {
     if (!spectrumCtx || !spectrumCanvas) return;
@@ -323,7 +321,7 @@
 
     // Shift data and add new point
     const baseSpeed = State.isBoosted ? 680 : 380;
-    const jitter = (Math.random() - 0.5) * (State.isBoosted ? 40 : 120);
+    const jitter = (Math.random() - 0.5) * (State.isBoosted ? 30 : 90);
     const nextVal = Math.max(100, Math.min(800, baseSpeed + jitter));
 
     spectrumData.shift();
@@ -336,9 +334,9 @@
     spectrumCtx.clearRect(0, 0, w, h);
 
     // Draw Grid Lines
-    spectrumCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    spectrumCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     spectrumCtx.lineWidth = 1;
-    for (let y = 20; y < h; y += 30) {
+    for (let y = 20; y < h; y += 25) {
       spectrumCtx.beginPath();
       spectrumCtx.moveTo(0, y);
       spectrumCtx.lineTo(w, y);
@@ -348,11 +346,11 @@
     // Draw Gradient Wave Area
     const grad = spectrumCtx.createLinearGradient(0, 0, 0, h);
     if (State.isBoosted) {
-      grad.addColorStop(0, 'rgba(0, 255, 135, 0.35)');
-      grad.addColorStop(1, 'rgba(0, 255, 135, 0.0)');
+      grad.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
+      grad.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
     } else {
-      grad.addColorStop(0, 'rgba(0, 240, 255, 0.25)');
-      grad.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+      grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
     }
 
     spectrumCtx.beginPath();
@@ -377,10 +375,8 @@
       if (i === 0) spectrumCtx.moveTo(0, y);
       else spectrumCtx.lineTo(i * step, y);
     }
-    spectrumCtx.strokeStyle = State.isBoosted ? '#00ff87' : '#00f0ff';
+    spectrumCtx.strokeStyle = State.isBoosted ? '#10b981' : '#38bdf8';
     spectrumCtx.lineWidth = 2;
-    spectrumCtx.shadowBlur = 8;
-    spectrumCtx.shadowColor = State.isBoosted ? '#00ff87' : '#00f0ff';
     spectrumCtx.stroke();
 
     setTimeout(() => {
@@ -394,7 +390,6 @@
   // ==========================================================================
   const radarCanvas = document.getElementById('worldRadarCanvas');
   const radarCtx = radarCanvas ? radarCanvas.getContext('2d') : null;
-  let radarScanAngle = 0;
 
   function drawWorldRadar() {
     if (!radarCtx || !radarCanvas) return;
@@ -403,16 +398,16 @@
 
     radarCtx.clearRect(0, 0, w, h);
 
-    // Draw background map grid
-    radarCtx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+    // Clean background map grid
+    radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     radarCtx.lineWidth = 1;
-    for (let x = 0; x < w; x += 40) {
+    for (let x = 0; x < w; x += 45) {
       radarCtx.beginPath();
       radarCtx.moveTo(x, 0);
       radarCtx.lineTo(x, h);
       radarCtx.stroke();
     }
-    for (let y = 0; y < h; y += 40) {
+    for (let y = 0; y < h; y += 45) {
       radarCtx.beginPath();
       radarCtx.moveTo(0, y);
       radarCtx.lineTo(w, y);
@@ -426,9 +421,9 @@
       radarCtx.moveTo(node.x, node.y);
       radarCtx.lineTo(nextNode.x, nextNode.y);
     });
-    radarCtx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
-    radarCtx.lineWidth = 1.5;
-    radarCtx.setLineDash([4, 4]);
+    radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+    radarCtx.lineWidth = 1.2;
+    radarCtx.setLineDash([3, 3]);
     radarCtx.stroke();
     radarCtx.setLineDash([]);
 
@@ -437,11 +432,12 @@
     radarCtx.beginPath();
     radarCtx.moveTo(w / 2, h / 2);
     radarCtx.lineTo(active.x, active.y);
-    radarCtx.strokeStyle = '#00ff87';
-    radarCtx.lineWidth = 2.5;
-    radarCtx.shadowBlur = 12;
-    radarCtx.shadowColor = '#00ff87';
+    radarCtx.strokeStyle = '#10b981';
+    radarCtx.lineWidth = 2;
+    radarCtx.shadowBlur = 8;
+    radarCtx.shadowColor = '#10b981';
     radarCtx.stroke();
+    radarCtx.shadowBlur = 0;
 
     // Draw Server Node Points
     SERVER_NODES.forEach(node => {
@@ -449,22 +445,20 @@
 
       // Outer Pulse Ring
       radarCtx.beginPath();
-      radarCtx.arc(node.x, node.y, isCurrent ? 14 : 8, 0, Math.PI * 2);
-      radarCtx.fillStyle = isCurrent ? 'rgba(0, 255, 135, 0.25)' : 'rgba(0, 240, 255, 0.12)';
+      radarCtx.arc(node.x, node.y, isCurrent ? 12 : 7, 0, Math.PI * 2);
+      radarCtx.fillStyle = isCurrent ? 'rgba(16, 185, 129, 0.2)' : 'rgba(56, 189, 248, 0.08)';
       radarCtx.fill();
 
       // Core Node
       radarCtx.beginPath();
-      radarCtx.arc(node.x, node.y, isCurrent ? 6 : 4, 0, Math.PI * 2);
-      radarCtx.fillStyle = isCurrent ? '#00ff87' : '#00f0ff';
-      radarCtx.shadowBlur = isCurrent ? 16 : 8;
-      radarCtx.shadowColor = isCurrent ? '#00ff87' : '#00f0ff';
+      radarCtx.arc(node.x, node.y, isCurrent ? 5 : 3.5, 0, Math.PI * 2);
+      radarCtx.fillStyle = isCurrent ? '#10b981' : '#38bdf8';
       radarCtx.fill();
 
       // Node Label
       radarCtx.font = '10px JetBrains Mono';
-      radarCtx.fillStyle = isCurrent ? '#00ff87' : '#c9d1d9';
-      radarCtx.fillText(`${node.code} (${node.ping}ms)`, node.x + 10, node.y - 6);
+      radarCtx.fillStyle = isCurrent ? '#10b981' : '#94a3b8';
+      radarCtx.fillText(`${node.code} (${node.ping}ms)`, node.x + 8, node.y - 5);
     });
 
     requestAnimationFrame(drawWorldRadar);
@@ -488,11 +482,11 @@
   const boostTimeCounter = document.getElementById('boostTimeCounter');
 
   const stages = [
-    { id: 'stageDns', name: 'DNS Purge & Benchmark', duration: 700 },
-    { id: 'stageTcp', name: 'TCP Window Expansion (64KB)', duration: 800 },
-    { id: 'stageMtu', name: 'MTU MSS Clamping & Optimization', duration: 700 },
-    { id: 'stageNode', name: 'Anycast Lowest-Latency Node Hop', duration: 900 },
-    { id: 'stageLock', name: 'Quantum Turbo Tunnel Active', duration: 500 }
+    { id: 'stageDns', name: 'DNS Purge & Benchmark', duration: 600 },
+    { id: 'stageTcp', name: 'TCP Window Expansion (64KB)', duration: 700 },
+    { id: 'stageMtu', name: 'MTU MSS Clamping & Optimization', duration: 600 },
+    { id: 'stageNode', name: 'Anycast Lowest-Latency Node Hop', duration: 800 },
+    { id: 'stageLock', name: 'Quantum Turbo Tunnel Active', duration: 400 }
   ];
 
   function runTurboAcceleration() {
@@ -505,7 +499,6 @@
     boostBtnSubText.textContent = 'Flushing routing tables and tuning sockets';
     dialActionLabel.textContent = 'PURGING & TUNING...';
 
-    // Reset pipeline stage styles
     stages.forEach(s => {
       const el = document.getElementById(s.id);
       if (el) {
@@ -538,7 +531,6 @@
           executeNextStage();
         }, stage.duration);
       } else {
-        // All stages complete!
         completeTurboBoost();
       }
     }
@@ -563,14 +555,12 @@
     statusBadge.className = 'network-badge status-boosted';
     statusBadgeText.innerHTML = '<i class="fa-solid fa-bolt"></i> QUANTUM TURBO ACTIVE';
 
-    // Metric Values Updated
     document.getElementById('metricPing').textContent = '11';
     document.getElementById('metricJitter').textContent = '0.4';
     document.getElementById('metricBloat').textContent = 'A+';
     document.getElementById('metricLoss').textContent = '0.00';
     document.getElementById('hudMtu').textContent = '1500 (Turbo-Clamped)';
 
-    // Start Boost Duration Timer
     if (boostTimerWrap) boostTimerWrap.style.display = 'flex';
     State.boostStartTime = Date.now();
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
@@ -587,7 +577,6 @@
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
     if (boostTimerWrap) boostTimerWrap.style.display = 'none';
 
-    // Reset UI
     boostBtnText.textContent = 'INITIALIZE TURBO BOOST';
     boostBtnSubText.textContent = 'Tap to engage multi-vector acceleration';
     dialActionLabel.textContent = 'SYSTEM STANDBY';
@@ -645,22 +634,20 @@
     const h = canvas.height;
     const cx = w / 2;
     const cy = h / 2;
-    const radius = 100;
+    const radius = 95;
 
     ctx.clearRect(0, 0, w, h);
 
-    // Background track arc (from 135deg to 45deg)
     const startAngle = Math.PI * 0.75;
     const endAngle = Math.PI * 2.25;
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, endAngle);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.lineWidth = 12;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 10;
     ctx.lineCap = 'round';
     ctx.stroke();
 
-    // Active progress arc
     const progress = Math.min(1, Math.max(0, value / maxVal));
     const currentAngle = startAngle + progress * (endAngle - startAngle);
 
@@ -668,17 +655,18 @@
       ctx.beginPath();
       ctx.arc(cx, cy, radius, startAngle, currentAngle);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 14;
+      ctx.lineWidth = 10;
       ctx.lineCap = 'round';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 10;
       ctx.shadowColor = color;
       ctx.stroke();
+      ctx.shadowBlur = 0;
     }
   }
 
   function updateGauges() {
-    drawSpeedDial(dlCtx, dlCanvas, dlGaugeSpeed, 1000, '#00f0ff');
-    drawSpeedDial(ulCtx, ulCanvas, ulGaugeSpeed, 500, '#c084fc');
+    drawSpeedDial(dlCtx, dlCanvas, dlGaugeSpeed, 1000, '#38bdf8');
+    drawSpeedDial(ulCtx, ulCanvas, ulGaugeSpeed, 500, '#818cf8');
     requestAnimationFrame(updateGauges);
   }
   requestAnimationFrame(updateGauges);
@@ -695,7 +683,6 @@
 
     logTerminal('>>> INITIATING MULTI-STREAM SPEED BENCHMARK...', 'prefix');
 
-    // 1. Latency Phase
     speedPhaseLabel.textContent = 'Measuring Loaded Latency & Jitter...';
     speedProgressBar.style.width = '15%';
 
@@ -706,7 +693,6 @@
       document.getElementById('resPing').textContent = `${pingVal} ms`;
       document.getElementById('resLoadedPing').textContent = `${loadedPing} ms`;
 
-      // 2. Download Phase
       speedPhaseLabel.textContent = 'Testing Multi-Socket Download Stream (10Gbps)...';
       speedProgressBar.style.width = '50%';
       dlSubEl.textContent = 'STREAMING...';
@@ -714,7 +700,7 @@
       let targetDl = State.isBoosted ? 842.6 : 486.2;
       let currentDl = 0;
       const dlInterval = setInterval(() => {
-        currentDl += (targetDl - currentDl) * 0.15 + (Math.random() * 20 - 10);
+        currentDl += (targetDl - currentDl) * 0.15 + (Math.random() * 16 - 8);
         dlGaugeSpeed = currentDl;
         dlValEl.textContent = currentDl.toFixed(1);
         document.getElementById('dlTotalTransferred').textContent = `${(currentDl * 0.42).toFixed(1)} MB`;
@@ -728,7 +714,6 @@
         document.getElementById('resPeakDl').textContent = `${targetDl.toFixed(1)} Mbps`;
         audio.playClick();
 
-        // 3. Upload Phase
         speedPhaseLabel.textContent = 'Testing Low-Bufferbloat Upload Channel...';
         speedProgressBar.style.width = '85%';
         ulSubEl.textContent = 'UPLOADING...';
@@ -736,7 +721,7 @@
         let targetUl = State.isBoosted ? 264.8 : 142.4;
         let currentUl = 0;
         const ulInterval = setInterval(() => {
-          currentUl += (targetUl - currentUl) * 0.15 + (Math.random() * 10 - 5);
+          currentUl += (targetUl - currentUl) * 0.15 + (Math.random() * 8 - 4);
           ulGaugeSpeed = currentUl;
           ulValEl.textContent = currentUl.toFixed(1);
           document.getElementById('ulTotalTransferred').textContent = `${(currentUl * 0.28).toFixed(1)} MB`;
@@ -756,11 +741,11 @@
           startSpeedTestBtn.style.opacity = '1';
 
           logTerminal(`>>> SPEED TEST RESULT: DL: ${targetDl.toFixed(1)} Mbps | UL: ${targetUl.toFixed(1)} Mbps | PING: ${pingVal}ms`, 'success');
-        }, 2200);
+        }, 2000);
 
-      }, 2500);
+      }, 2200);
 
-    }, 1000);
+    }, 800);
   }
 
   if (startSpeedTestBtn) startSpeedTestBtn.addEventListener('click', runSpeedTest);
@@ -827,7 +812,7 @@
       selectServerNode(best);
       audio.playSuccess();
       logTerminal(`>>> Auto-Routing Complete: Locked into optimal edge node: ${best.name}`, 'success');
-    }, 600);
+    }, 500);
   }
 
   if (autoRouteBtn) autoRouteBtn.addEventListener('click', autoLockBestNode);
@@ -858,14 +843,14 @@
         <td class="dns-ip">${dns.ip}</td>
         <td><span class="stage-name">${dns.protocol}</span></td>
         <td><span class="dns-ms-val ${dns.ping < 10 ? 'green-text' : 'cyan-text'}">${dns.ping} ms</span></td>
-        <td style="font-size: 0.78rem; color: #8b9bb4;">${dns.security}</td>
+        <td style="font-size: 0.75rem; color: #94a3b8;">${dns.security}</td>
         <td>
           <span class="stage-status ${isSelected ? 'green-text' : ''}">
             ${isSelected ? '<i class="fa-solid fa-circle-check"></i> ACTIVE' : 'STANDBY'}
           </span>
         </td>
         <td>
-          <button class="cyber-btn-outline" style="padding: 6px 12px; font-size: 0.7rem;">
+          <button class="cyber-btn-outline" style="padding: 5px 10px; font-size: 0.68rem;">
             ${isSelected ? 'CURRENT' : 'SWITCH'}
           </button>
         </td>
@@ -894,13 +879,13 @@
 
     setTimeout(() => {
       DNS_PROVIDERS.forEach(d => {
-        d.ping = +(d.ping + (Math.random() * 2 - 1)).toFixed(1);
+        d.ping = +(d.ping + (Math.random() * 1.5 - 0.75)).toFixed(1);
       });
       renderDnsTable();
       audio.playSuccess();
       if (runDnsBenchmarkBtn) runDnsBenchmarkBtn.disabled = false;
       logTerminal('>>> DNS Sweep Complete: Nivx Quantum DNS remains lowest latency.', 'success');
-    }, 1000);
+    }, 800);
   }
 
   function flushDnsCache() {
@@ -910,7 +895,7 @@
     setTimeout(() => {
       audio.playSuccess();
       logTerminal('>>> [SUCCESS] 428 DNS entries purged. Clean lookup table established.', 'success');
-    }, 500);
+    }, 400);
   }
 
   if (runDnsBenchmarkBtn) runDnsBenchmarkBtn.addEventListener('click', runDnsBenchmark);
@@ -951,10 +936,10 @@
             ${proc.throttled ? 'THROTTLED (0.1 Mbps)' : `${proc.usage.toFixed(1)} Mbps`}
           </span>
           <div class="process-actions">
-            <button class="cyber-btn-outline" style="padding: 6px 10px; font-size: 0.68rem;" title="Throttle bandwidth">
+            <button class="cyber-btn-outline" style="padding: 5px 8px; font-size: 0.65rem;" title="Throttle bandwidth">
               ${proc.throttled ? '<i class="fa-solid fa-unlock"></i> RESTORE' : '<i class="fa-solid fa-gauge-simple-high"></i> THROTTLE'}
             </button>
-            <button class="cyber-btn-danger" style="padding: 6px 10px; font-size: 0.68rem;" title="Terminate process connection">
+            <button class="cyber-btn-danger" style="padding: 5px 8px; font-size: 0.65rem;" title="Terminate process connection">
               <i class="fa-solid fa-ban"></i> TERMINATE
             </button>
           </div>
@@ -1039,7 +1024,6 @@
     terminalLogs.scrollTop = terminalLogs.scrollHeight;
   }
 
-  // Initial startup logs
   logTerminal('NIVX QUANTUM NETWORK OS [Version 4.8.2-PRO]', 'prefix');
   logTerminal('System initialized. Socket interfaces: IPv4/IPv6 Dual Stack ready.', 'normal');
   logTerminal('Hardware Acceleration: ENABLED (WebGL / SIMD Vectorized).', 'success');
@@ -1128,7 +1112,6 @@
     });
   });
 
-  // Mode Switcher Pills
   const modePills = document.querySelectorAll('.mode-pill');
   modePills.forEach(pill => {
     pill.addEventListener('click', () => {
@@ -1205,8 +1188,8 @@
       const theme = State.auraThemes[State.currentAuraIndex];
       const a1 = document.querySelector('.ambient-1');
       const a2 = document.querySelector('.ambient-2');
-      if (a1) a1.style.background = `radial-gradient(circle, ${theme.color1} 0%, rgba(0, 240, 255, 0) 70%)`;
-      if (a2) a2.style.background = `radial-gradient(circle, ${theme.color2} 0%, rgba(121, 40, 202, 0) 70%)`;
+      if (a1) a1.style.background = `radial-gradient(circle, ${theme.color1} 0%, rgba(56, 189, 248, 0) 70%)`;
+      if (a2) a2.style.background = `radial-gradient(circle, ${theme.color2} 0%, rgba(129, 140, 248, 0) 70%)`;
       logTerminal(`>>> Ambient Aura shifted to: ${theme.name}`, 'prefix');
     });
   }
