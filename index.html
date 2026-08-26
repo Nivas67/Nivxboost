@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NivxBoost — Ultra-Premium Quantum Network Speed & Latency Accelerator</title>
+  <meta name="description" content="NivxBoost: Next-generation network speed accelerator, ping stabilizer, DNS optimizer, and gaming packet prioritizer. Unlock maximum bandwidth with one click.">
+  <meta name="keywords" content="network booster, internet speed test, ping reducer, lag fix, DNS optimizer, bandwidth accelerator, gaming latency">
+  <meta name="theme-color" content="#050813">
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:title" content="NivxBoost — Quantum Network Speed Accelerator">
+  <meta property="og:description" content="Accelerate your internet speed, eliminate jitter, optimize DNS routing, and lock in ultra-low gaming latency.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Orbitron, Outfit, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for High-Tech HUD UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="cyber-body">
+  <div class="ambient-glow ambient-1"></div>
+  <div class="ambient-glow ambient-2"></div>
+  <div class="ambient-glow ambient-3"></div>
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+
+  <!-- Main App Shell -->
+  <div class="app-container">
+    
+    <!-- Top Navigation HUD Bar -->
+    <header class="hud-header">
+      <div class="header-left">
+        <div class="logo-wrapper">
+          <div class="logo-icon-box">
+            <i class="fa-solid fa-bolt-lightning logo-lightning"></i>
+            <span class="logo-pulse-ring"></span>
+          </div>
+          <div class="logo-text">
+            <span class="logo-brand">NIVX<span class="logo-accent">BOOST</span></span>
+            <span class="logo-tagline">QUANTUM NETWORK OS v4.8</span>
+          </div>
+        </div>
+        <div class="network-badge status-idle" id="networkStatusBadge">
+          <span class="status-dot"></span>
+          <span class="status-text" id="statusBadgeText">SYSTEM IDLE &bull; READY</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="quick-telemetry">
+          <div class="telemetry-item">
+            <span class="tel-label"><i class="fa-solid fa-satellite-dish"></i> ISP NODE</span>
+            <span class="tel-value" id="hudIsp">Nivx Anycast Global</span>
+          </div>
+          <div class="telemetry-divider"></div>
+          <div class="telemetry-item">
+            <span class="tel-label"><i class="fa-solid fa-network-wired"></i> PROTOCOL</span>
+            <span class="tel-value" id="hudProtocol">HTTP/3 &bull; QUIC</span>
+          </div>
+          <div class="telemetry-divider"></div>
+          <div class="telemetry-item">
+            <span class="tel-label"><i class="fa-solid fa-shield-halved"></i> MTU BUFFER</span>
+            <span class="tel-value" id="hudMtu">1500 (Auto-Scaled)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="hud-action-btn" id="soundToggleBtn" title="Toggle Futuristic Audio SFX" aria-label="Toggle Sound Effects">
+          <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+          <span class="btn-tooltip">SFX ON</span>
+        </button>
+        <button class="hud-action-btn" id="themeGlowBtn" title="Cycle Ambient Aura Glow" aria-label="Cycle Glow Theme">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+        <button class="hud-action-btn" id="exportAuditBtn" title="Export Diagnostics Report" aria-label="Export Audit Report">
+          <i class="fa-solid fa-file-shield"></i>
+          <span>AUDIT CERT</span>
+        </button>
+        <button class="hud-action-btn primary-glow-btn" id="openSettingsBtn" title="System Configuration" aria-label="Open Settings">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav class="hud-nav-tabs" role="tablist">
+      <button class="nav-tab-btn active" data-tab="tab-turbo" role="tab" aria-selected="true">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>TURBO ACCELERATOR</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-speedtest" role="tab" aria-selected="false">
+        <i class="fa-solid fa-tachograph-digital"></i>
+        <span>SPEED LAB</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-nodes" role="tab" aria-selected="false">
+        <i class="fa-solid fa-earth-americas"></i>
+        <span>GLOBAL NODE HOPPER</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-dns" role="tab" aria-selected="false">
+        <i class="fa-solid fa-server"></i>
+        <span>DNS OPTIMIZER</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-limiter" role="tab" aria-selected="false">
+        <i class="fa-solid fa-filter-circle-xmark"></i>
+        <span>BANDWIDTH HOG LIMITER</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-terminal" role="tab" aria-selected="false">
+        <i class="fa-solid fa-terminal"></i>
+        <span>TELEMETRY LOGS</span>
+      </button>
+    </nav>
+
+    <!-- Content Sections Container -->
+    <main class="hud-main-content">
+      
+      <!-- TAB 1: TURBO ACCELERATOR (HERO ENGINE) -->
+      <section class="tab-pane active" id="tab-turbo" role="tabpanel">
+        <div class="turbo-grid">
+          
+          <!-- Left Column: Primary Speed Accelerator Engine -->
+          <div class="glass-card turbo-engine-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-tag"><i class="fa-solid fa-atom"></i> QUANTUM ACCELERATION</span>
+                <h2 class="card-title">Network Optimization Matrix</h2>
+              </div>
+              <div class="mode-pills">
+                <button class="mode-pill active" data-mode="gaming"><i class="fa-solid fa-gamepad"></i> Ultra Gaming</button>
+                <button class="mode-pill" data-mode="streaming"><i class="fa-solid fa-film"></i> 8K Stream</button>
+                <button class="mode-pill" data-mode="download"><i class="fa-solid fa-download"></i> Max Bandwidth</button>
+                <button class="mode-pill" data-mode="balanced"><i class="fa-solid fa-scale-balanced"></i> Balanced</button>
+              </div>
+            </div>
+
+            <!-- Central Booster Display Gauge -->
+            <div class="dial-container">
+              <canvas id="boosterCanvas" width="420" height="420" class="booster-canvas"></canvas>
+              
+              <div class="dial-center-overlay">
+                <div class="quantum-core" id="quantumCore">
+                  <div class="core-rings"></div>
+                  <div class="core-icon-wrap">
+                    <i class="fa-solid fa-bolt" id="coreIcon"></i>
+                  </div>
+                </div>
+
+                <div class="dial-status-info">
+                  <span class="dial-small-label" id="dialActionLabel">SYSTEM STANDBY</span>
+                  <div class="dial-huge-value" id="dialThroughputMultiplier">+0%</div>
+                  <span class="dial-sub-metric" id="dialSubMetric">CLICK BELOW TO ACCELERATE</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pipeline Step Visualizer -->
+            <div class="boost-pipeline-stages">
+              <div class="pipeline-stage" id="stageDns">
+                <div class="stage-icon"><i class="fa-solid fa-broom"></i></div>
+                <div class="stage-meta">
+                  <span class="stage-name">DNS Flush</span>
+                  <span class="stage-status">Ready</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="pipeline-stage" id="stageTcp">
+                <div class="stage-icon"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+                <div class="stage-meta">
+                  <span class="stage-name">TCP Window</span>
+                  <span class="stage-status">Ready</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="pipeline-stage" id="stageMtu">
+                <div class="stage-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+                <div class="stage-meta">
+                  <span class="stage-name">MTU Tuning</span>
+                  <span class="stage-status">Ready</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="pipeline-stage" id="stageNode">
+                <div class="stage-icon"><i class="fa-solid fa-route"></i></div>
+                <div class="stage-meta">
+                  <span class="stage-name">Anycast Hop</span>
+                  <span class="stage-status">Ready</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="pipeline-stage" id="stageLock">
+                <div class="stage-icon"><i class="fa-solid fa-lock"></i></div>
+                <div class="stage-meta">
+                  <span class="stage-name">Turbo Lock</span>
+                  <span class="stage-status">Ready</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Big Booster Button Action -->
+            <div class="boost-button-wrapper">
+              <button class="cyber-boost-btn" id="mainBoostBtn" aria-label="Activate Turbo Network Boost">
+                <span class="btn-glow-aura"></span>
+                <span class="btn-inner">
+                  <i class="fa-solid fa-rocket btn-icon"></i>
+                  <span class="btn-main-text" id="boostBtnText">INITIALIZE TURBO BOOST</span>
+                  <span class="btn-sub-text" id="boostBtnSubText">Tap to engage multi-vector acceleration</span>
+                </span>
+              </button>
+            </div>
+
+            <!-- Instant Revert / Reset Option -->
+            <div class="turbo-footer-actions">
+              <button class="link-action-btn" id="revertBoostBtn">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Default ISP Stack
+              </button>
+              <div class="live-boost-timer" id="boostTimerWrap" style="display: none;">
+                <i class="fa-solid fa-clock-rotate-left"></i> BOOST DURATION: <span id="boostTimeCounter">00:00:00</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Live Metrics, Telemetry & Gaming Presets -->
+          <div class="turbo-side-column">
+            
+            <!-- Real-Time Impact Metric Cards -->
+            <div class="metrics-grid">
+              <div class="glass-card mini-metric-card">
+                <div class="metric-icon-box cyan-glow">
+                  <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <div class="metric-data">
+                  <span class="metric-label">LATENCY / PING</span>
+                  <div class="metric-value-wrap">
+                    <span class="metric-val" id="metricPing">28</span>
+                    <span class="metric-unit">ms</span>
+                  </div>
+                  <span class="metric-delta positive" id="deltaPing"><i class="fa-solid fa-arrow-trend-down"></i> -64% latency</span>
+                </div>
+              </div>
+
+              <div class="glass-card mini-metric-card">
+                <div class="metric-icon-box green-glow">
+                  <i class="fa-solid fa-wave-square"></i>
+                </div>
+                <div class="metric-data">
+                  <span class="metric-label">JITTER STABILITY</span>
+                  <div class="metric-value-wrap">
+                    <span class="metric-val" id="metricJitter">0.8</span>
+                    <span class="metric-unit">ms</span>
+                  </div>
+                  <span class="metric-delta positive" id="deltaJitter"><i class="fa-solid fa-circle-check"></i> Ultra Stable</span>
+                </div>
+              </div>
+
+              <div class="glass-card mini-metric-card">
+                <div class="metric-icon-box purple-glow">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="metric-data">
+                  <span class="metric-label">BUFFERBLOAT</span>
+                  <div class="metric-value-wrap">
+                    <span class="metric-val" id="metricBloat">A+</span>
+                    <span class="metric-unit">Grade</span>
+                  </div>
+                  <span class="metric-delta positive" id="deltaBloat"><i class="fa-solid fa-shield"></i> 0ms Queuing</span>
+                </div>
+              </div>
+
+              <div class="glass-card mini-metric-card">
+                <div class="metric-icon-box magenta-glow">
+                  <i class="fa-solid fa-shield-virus"></i>
+                </div>
+                <div class="metric-data">
+                  <span class="metric-label">PACKET LOSS</span>
+                  <div class="metric-value-wrap">
+                    <span class="metric-val" id="metricLoss">0.00</span>
+                    <span class="metric-unit">%</span>
+                  </div>
+                  <span class="metric-delta positive" id="deltaLoss"><i class="fa-solid fa-check-double"></i> 0 Drops</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gaming Low-Latency Fast Profiles -->
+            <div class="glass-card game-presets-card">
+              <div class="card-header-compact">
+                <span class="card-tag"><i class="fa-solid fa-crosshairs"></i> ONE-CLICK GAME ACCELERATOR</span>
+                <span class="live-pulse-chip">120Hz TICK SYNC</span>
+              </div>
+              <div class="game-presets-grid">
+                <div class="game-preset-item" data-game="cs2">
+                  <div class="game-icon"><i class="fa-solid fa-gun"></i></div>
+                  <div class="game-info">
+                    <span class="game-title">Counter-Strike 2</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 14ms</span>
+                  </div>
+                  <button class="game-opt-btn" title="Optimize for CS2">ACTIVATE</button>
+                </div>
+
+                <div class="game-preset-item" data-game="valorant">
+                  <div class="game-icon"><i class="fa-solid fa-shield-cat"></i></div>
+                  <div class="game-info">
+                    <span class="game-title">Valorant</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 11ms</span>
+                  </div>
+                  <button class="game-opt-btn" title="Optimize for Valorant">ACTIVATE</button>
+                </div>
+
+                <div class="game-preset-item" data-game="fortnite">
+                  <div class="game-icon"><i class="fa-solid fa-person-rifle"></i></div>
+                  <div class="game-info">
+                    <span class="game-title">Fortnite & Apex</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 16ms</span>
+                  </div>
+                  <button class="game-opt-btn" title="Optimize for Fortnite/Apex">ACTIVATE</button>
+                </div>
+
+                <div class="game-preset-item" data-game="warzone">
+                  <div class="game-icon"><i class="fa-solid fa-jet-fighter"></i></div>
+                  <div class="game-info">
+                    <span class="game-title">Call of Duty: Warzone</span>
+                    <span class="game-ping"><i class="fa-solid fa-bolt"></i> 19ms</span>
+                  </div>
+                  <button class="game-opt-btn" title="Optimize for Warzone">ACTIVATE</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Network Waveform Visualizer -->
+            <div class="glass-card wave-card">
+              <div class="card-header-compact">
+                <span class="card-tag"><i class="fa-solid fa-chart-area"></i> REAL-TIME BANDWIDTH SPECTRUM</span>
+                <span class="live-indicator"><span class="pulse-dot"></span> LIVE 60 FPS</span>
+              </div>
+              <div class="canvas-wrap">
+                <canvas id="liveSpectrumCanvas" width="480" height="130" class="spectrum-canvas"></canvas>
+              </div>
+              <div class="spectrum-footer">
+                <div class="spec-stat"><span>PEAK:</span> <strong id="specPeak">742.8 Mbps</strong></div>
+                <div class="spec-stat"><span>CURRENT:</span> <strong id="specCurrent">486.2 Mbps</strong></div>
+                <div class="spec-stat"><span>OPTIMIZED:</span> <strong class="green-text" id="specEff">99.4%</strong></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 2: SPEED LAB (LIVE SPEEDOMETER & REAL SPEED TESTING) -->
+      <section class="tab-pane" id="tab-speedtest" role="tabpanel">
+        <div class="speedlab-layout">
+          <div class="glass-card speedtest-main-card">
+            
+            <div class="speedtest-header">
+              <div>
+                <span class="card-tag"><i class="fa-solid fa-flask-vial"></i> PRECISION MULTI-STREAM BENCHMARK</span>
+                <h2 class="card-title">Network Throughput Laboratory</h2>
+              </div>
+              <div class="server-selector-wrap">
+                <label for="speedServerSelect"><i class="fa-solid fa-location-crosshairs"></i> Target Node:</label>
+                <select id="speedServerSelect" class="cyber-select">
+                  <option value="tokyo">Tokyo High-Speed Anycast (10Gbps)</option>
+                  <option value="frankfurt" selected>Frankfurt Core Edge (25Gbps)</option>
+                  <option value="london">London Low-Latency Tier-1 (40Gbps)</option>
+                  <option value="useast">US-East Ashburn Hypernode (100Gbps)</option>
+                  <option value="mumbai">Mumbai Direct Peering (20Gbps)</option>
+                  <option value="singapore">Singapore Equinix SG1 (40Gbps)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dual Gauge Display (Download & Upload) -->
+            <div class="dual-gauges-container">
+              
+              <!-- Download Gauge -->
+              <div class="gauge-column">
+                <div class="gauge-title-badge download-theme">
+                  <i class="fa-solid fa-arrow-down"></i> DOWNLOAD SPEED
+                </div>
+                <div class="gauge-canvas-box">
+                  <canvas id="downloadGaugeCanvas" width="280" height="280"></canvas>
+                  <div class="gauge-center-text">
+                    <span class="gauge-speed-val" id="dlSpeedValue">0.0</span>
+                    <span class="gauge-speed-unit">Mbps</span>
+                    <span class="gauge-status-sub" id="dlStatusSub">Standby</span>
+                  </div>
+                </div>
+                <div class="gauge-footer-metric">
+                  <span>TOTAL TRANSFERRED:</span>
+                  <strong id="dlTotalTransferred">0 MB</strong>
+                </div>
+              </div>
+
+              <!-- Center Start / Control Trigger -->
+              <div class="gauge-center-controller">
+                <div class="speed-progress-ring-wrap">
+                  <button class="cyber-speed-btn" id="startSpeedTestBtn" aria-label="Start Speed Test">
+                    <i class="fa-solid fa-play" id="speedTestPlayIcon"></i>
+                    <span id="speedTestBtnLabel">START TEST</span>
+                  </button>
+                </div>
+                <div class="test-progress-bar-wrap">
+                  <div class="test-progress-bar" id="speedTestProgressBar"></div>
+                </div>
+                <span class="test-phase-label" id="speedTestPhaseLabel">Click to run full diagnostic</span>
+              </div>
+
+              <!-- Upload Gauge -->
+              <div class="gauge-column">
+                <div class="gauge-title-badge upload-theme">
+                  <i class="fa-solid fa-arrow-up"></i> UPLOAD SPEED
+                </div>
+                <div class="gauge-canvas-box">
+                  <canvas id="uploadGaugeCanvas" width="280" height="280"></canvas>
+                  <div class="gauge-center-text">
+                    <span class="gauge-speed-val" id="ulSpeedValue">0.0</span>
+                    <span class="gauge-speed-unit">Mbps</span>
+                    <span class="gauge-status-sub" id="ulStatusSub">Standby</span>
+                  </div>
+                </div>
+                <div class="gauge-footer-metric">
+                  <span>TOTAL TRANSFERRED:</span>
+                  <strong id="ulTotalTransferred">0 MB</strong>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Speed Test Results Summary Grid -->
+            <div class="speed-summary-grid">
+              <div class="summary-item">
+                <span class="sum-label"><i class="fa-solid fa-download"></i> PEAK DOWNLOAD</span>
+                <span class="sum-value green-text" id="resPeakDl">-- Mbps</span>
+              </div>
+              <div class="summary-item">
+                <span class="sum-label"><i class="fa-solid fa-upload"></i> PEAK UPLOAD</span>
+                <span class="sum-value purple-text" id="resPeakUl">-- Mbps</span>
+              </div>
+              <div class="summary-item">
+                <span class="sum-label"><i class="fa-solid fa-stopwatch"></i> IDLE LATENCY</span>
+                <span class="sum-value cyan-text" id="resPing">-- ms</span>
+              </div>
+              <div class="summary-item">
+                <span class="sum-label"><i class="fa-solid fa-stopwatch-20"></i> LOADED LATENCY</span>
+                <span class="sum-value yellow-text" id="resLoadedPing">-- ms</span>
+              </div>
+              <div class="summary-item">
+                <span class="sum-label"><i class="fa-solid fa-medal"></i> STREAM QUALITY</span>
+                <span class="sum-value green-text" id="resStreamScore">4K / 8K HDR Ready</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: GLOBAL NODE HOPPER (SERVER MESH & ROUTING) -->
+      <section class="tab-pane" id="tab-nodes" role="tabpanel">
+        <div class="nodes-layout">
+          
+          <div class="glass-card radar-map-card">
+            <div class="card-header">
+              <div>
+                <span class="card-tag"><i class="fa-solid fa-network-wired"></i> ANYCAST BACKBONE MESH</span>
+                <h2 class="card-title">Global Low-Latency Node Map</h2>
+              </div>
+              <button class="cyber-btn-outline" id="autoRouteBtn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AUTO-LOCK BEST NODE
+              </button>
+            </div>
+
+            <div class="world-radar-container">
+              <canvas id="worldRadarCanvas" width="920" height="420" class="radar-canvas"></canvas>
+              <div class="radar-scan-line"></div>
+              <div class="radar-overlay-info">
+                <div class="active-node-indicator">
+                  <span class="pulse-dot green"></span>
+                  <span>CURRENT ACTIVE TUNNEL: <strong id="activeNodeName">Frankfurt IXP (FRA-01)</strong></span>
+                </div>
+                <div class="node-security-status">
+                  <i class="fa-solid fa-lock"></i> AES-256-GCM Hardware Encrypted
+                </div>
+              </div>
+            </div>
+
+            <!-- Server Node Selection Grid -->
+            <div class="server-node-cards-grid" id="serverNodesContainer">
+              <!-- Dynamically populated / interactive nodes -->
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 4: DNS OPTIMIZER & BENCHMARK -->
+      <section class="tab-pane" id="tab-dns" role="tabpanel">
+        <div class="dns-layout">
+          
+          <div class="glass-card dns-main-card">
+            <div class="card-header">
+              <div>
+                <span class="card-tag"><i class="fa-solid fa-server"></i> DOH / DOT RESOLVER BENCHMARK</span>
+                <h2 class="card-title">DNS Latency Matrix & Cache Accelerator</h2>
+              </div>
+              <button class="cyber-btn-outline" id="runDnsBenchmarkBtn">
+                <i class="fa-solid fa-arrows-rotate"></i> RE-RUN BENCHMARK
+              </button>
+            </div>
+
+            <div class="dns-bench-table-wrap">
+              <table class="cyber-table">
+                <thead>
+                  <tr>
+                    <th>RESOLVER PROVIDER</th>
+                    <th>PRIMARY IP</th>
+                    <th>PROTOCOL</th>
+                    <th>QUERY TIME</th>
+                    <th>SECURITY / FILTERING</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="dnsTableBody">
+                  <!-- DNS rows dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dns-card-footer">
+              <div class="dns-tip">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Nivx Quantum DNS employs AI-assisted lookahead caching and anycast DNS routing to reduce initial connection handshakes by up to <strong>75%</strong>.</span>
+              </div>
+              <button class="cyber-btn-primary" id="flushDnsCacheOnlyBtn">
+                <i class="fa-solid fa-broom"></i> FLUSH LOCAL DNS CACHE
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 5: BANDWIDTH HOG LIMITER -->
+      <section class="tab-pane" id="tab-limiter" role="tabpanel">
+        <div class="limiter-layout">
+          
+          <div class="glass-card limiter-main-card">
+            <div class="card-header">
+              <div>
+                <span class="card-tag"><i class="fa-solid fa-filter-circle-xmark"></i> BACKGROUND PROCESS TELEMETRY</span>
+                <h2 class="card-title">Bandwidth Hog Inspector & QOS Allocator</h2>
+              </div>
+              <div class="limiter-actions">
+                <button class="cyber-btn-danger" id="killAllHogsBtn">
+                  <i class="fa-solid fa-skull"></i> THROTTLE ALL UNNECESSARY APPS
+                </button>
+              </div>
+            </div>
+
+            <div class="hog-stats-banner">
+              <div class="hog-stat-card">
+                <span>TOTAL BACKGROUND USAGE</span>
+                <strong class="yellow-text" id="totalHogUsage">142.4 Mbps</strong>
+              </div>
+              <div class="hog-stat-card">
+                <span>BANDWIDTH RECLAIMED</span>
+                <strong class="green-text" id="reclaimedBandwidth">+128.0 Mbps</strong>
+              </div>
+              <div class="hog-stat-card">
+                <span>GAMING QOS PRIORITY</span>
+                <strong class="cyan-text">REALTIME (CLASS 1)</strong>
+              </div>
+            </div>
+
+            <div class="process-list" id="processListContainer">
+              <!-- Dynamically populated process items -->
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 6: TELEMETRY & DIAGNOSTIC TERMINAL -->
+      <section class="tab-pane" id="tab-terminal" role="tabpanel">
+        <div class="terminal-layout">
+          
+          <div class="glass-card terminal-card">
+            <div class="terminal-window-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <div class="terminal-title">nivx-quantum-telemetry-cli &bull; root@nivx-accel-v4.8</div>
+              <div class="terminal-actions">
+                <button class="term-btn" id="clearTerminalBtn" title="Clear console"><i class="fa-solid fa-eraser"></i> Clear</button>
+                <button class="term-btn" id="copyLogsBtn" title="Copy logs"><i class="fa-solid fa-copy"></i> Copy</button>
+              </div>
+            </div>
+
+            <div class="terminal-body" id="terminalLogs">
+              <!-- Streaming cyber console logs -->
+            </div>
+
+            <div class="terminal-input-bar">
+              <span class="term-prompt">nivx@quantum:~$</span>
+              <input type="text" id="terminalInput" class="term-cmd-input" placeholder="Type command (e.g., 'ping', 'turbo', 'dns', 'traceroute', 'help')..." autocomplete="off" spellcheck="false">
+              <button class="term-send-btn" id="terminalSubmitBtn"><i class="fa-solid fa-arrow-turn-down"></i></button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom HUD Footer Bar -->
+    <footer class="hud-footer">
+      <div class="footer-left">
+        <span class="build-info"><i class="fa-solid fa-code-branch"></i> NivxBoost Core v4.8.2 &bull; Engine Status: <strong class="green-text">OPTIMAL</strong></span>
+      </div>
+      <div class="footer-center">
+        <span class="webrtc-shield"><i class="fa-solid fa-shield-check green-text"></i> WebRTC Leak Prevention: <strong>ACTIVE</strong></span>
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/Nivas67/Nivxboost" target="_blank" rel="noopener noreferrer" class="footer-link">
+          <i class="fa-brands fa-github"></i> GitHub Repository
+        </a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- MODAL 1: SYSTEM SETTINGS -->
+  <div class="cyber-modal" id="settingsModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="settingsBackdrop"></div>
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-sliders cyan-text"></i>
+          <h3>System Optimization Preferences</h3>
+        </div>
+        <button class="modal-close-btn" id="closeSettingsBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Auto-Boost on High Latency</span>
+            <span class="setting-desc">Automatically flush socket buffer when ping exceeds 60ms</span>
+          </div>
+          <label class="cyber-switch">
+            <input type="checkbox" id="settingAutoBoost" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Hardware Acceleration</span>
+            <span class="setting-desc">Use WebGL / GPU shaders for telemetry and packet visualization</span>
+          </div>
+          <label class="cyber-switch">
+            <input type="checkbox" id="settingGpu" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Aggressive TCP Window Tuning</span>
+            <span class="setting-desc">Expand receiver window to 64KB for high-bandwidth fiber</span>
+          </div>
+          <label class="cyber-switch">
+            <input type="checkbox" id="settingTcp" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Sci-Fi Synthesized Audio SFX</span>
+            <span class="setting-desc">Enable audio feedback on acceleration and diagnostic state changes</span>
+          </div>
+          <label class="cyber-switch">
+            <input type="checkbox" id="settingSfx" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cyber-btn-outline" id="saveSettingsBtn">SAVE CONFIGURATION</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: NETWORK AUDIT CERTIFICATE -->
+  <div class="cyber-modal" id="auditModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="auditBackdrop"></div>
+    <div class="glass-card modal-content audit-certificate-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-certificate green-text"></i>
+          <h3>Official Network Diagnostics & Speed Certificate</h3>
+        </div>
+        <button class="modal-close-btn" id="closeAuditBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="auditCertificateBody">
+        <div class="certificate-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>NIVX VERIFIED AUDIT</span>
+        </div>
+        <div class="cert-details-grid">
+          <div class="cert-item">
+            <span>TIMESTAMP</span>
+            <strong id="certTimestamp">2026-08-27 01:40 UTC</strong>
+          </div>
+          <div class="cert-item">
+            <span>OPTIMIZATION SCORE</span>
+            <strong class="green-text" id="certScore">99.4 / 100 (A+)</strong>
+          </div>
+          <div class="cert-item">
+            <span>LATENCY STATUS</span>
+            <strong id="certPing">11ms (Low Jitter)</strong>
+          </div>
+          <div class="cert-item">
+            <span>BUFFERBLOAT RATING</span>
+            <strong class="cyan-text" id="certBloat">GRADE A+ (0ms queue)</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cyber-btn-outline" id="downloadJsonCertBtn"><i class="fa-solid fa-download"></i> DOWNLOAD JSON AUDIT</button>
+        <button class="cyber-btn-primary" id="printCertBtn"><i class="fa-solid fa-print"></i> PRINT / SAVE PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Synthesizer & Main Script -->
+  <script src="app.js"></script>
+</body>
+</html>

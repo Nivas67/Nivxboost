@@ -1,0 +1,14 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary and Cache Files
+*.log
+.temp/
+.cache/
+dist/
+node_modules/
+
+# Antigravity artifacts (local only)
+.gemini/
