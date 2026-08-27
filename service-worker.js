@@ -1,16 +1,28 @@
 /**
  * NivxBoost Progressive Web App (PWA) Service Worker
- * Provides offline caching, network optimization, and fast app boot.
+ * v5.0.0 - Google Auth Update: Always fetch HTML fresh from network
  */
 
-const CACHE_NAME = 'nivxboost-pwa-v4.8.9';
+const CACHE_NAME = 'nivxboost-pwa-v5.0.0';
+
+// Only cache static assets (CSS, JS, icons) — NOT HTML pages
+// HTML pages (index.html, login.html) are always fetched fresh from network
+// so that auth changes take effect immediately in the installed PWA
 const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
   './icon.svg'
+];
+
+// Pages that must ALWAYS be served fresh (never from cache)
+const ALWAYS_FRESH = [
+  '/Nivxboost/',
+  '/Nivxboost/index.html',
+  '/Nivxboost/login.html',
+  '/',
+  '/index.html',
+  '/login.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -27,6 +39,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log('[SW] Deleting old cache:', key);
             return caches.delete(key);
           }
         })
@@ -36,27 +49,47 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Pass dynamic API and telemetry requests directly to network
-  if (event.request.url.includes('speed.cloudflare.com') || 
-      event.request.url.includes('dns-query') || 
-      event.request.url.includes('generate_204') ||
-      event.request.url.includes('tile.openstreetmap.org')) {
+  const url = new URL(event.request.url);
+  const path = url.pathname;
+
+  // Always pass network-only requests through
+  if (
+    url.href.includes('speed.cloudflare.com') ||
+    url.href.includes('dns-query') ||
+    url.href.includes('generate_204') ||
+    url.href.includes('tile.openstreetmap.org') ||
+    url.href.includes('googleapis.com') ||
+    url.href.includes('accounts.google.com')
+  ) {
     return;
   }
 
+  // HTML pages: ALWAYS fetch fresh from network, fall back to cache if offline
+  const isHtmlPage = ALWAYS_FRESH.some(p => path === p || path.endsWith('.html'));
+  if (event.request.mode === 'navigate' || isHtmlPage) {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        // Offline fallback
+        return caches.match('./login.html') || caches.match('./index.html');
+      })
+    );
+    return;
+  }
+
+  // Static assets: cache-first strategy
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
       return fetch(event.request).then((networkResponse) => {
-        return networkResponse;
-      }).catch(() => {
-        // Return cached index.html for navigation requests when offline
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
+        // Cache new static assets on the fly
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
-      });
+        return networkResponse;
+      }).catch(() => undefined);
     })
   );
 });
