@@ -2807,6 +2807,13 @@
       return;
     }
 
+    // ── Only allow real Google sessions ──────────────────────────────────────
+    if (user.provider !== 'google') {
+      localStorage.removeItem('nivx_user_session');
+      window.location.replace('login.html');
+      return;
+    }
+
     // ── Session is valid: populate header ────────────────────────────────────
     State.currentUser = user;
 
