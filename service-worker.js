@@ -1,9 +1,9 @@
 /**
  * NivxBoost Progressive Web App (PWA) Service Worker
- * v5.0.0 - Google Auth Update: Always fetch HTML fresh from network
+ * v5.0.1 - Instant Responsive Buttons & Mobile Overhaul
  */
 
-const CACHE_NAME = 'nivxboost-pwa-v5.0.0';
+const CACHE_NAME = 'nivxboost-pwa-v5.0.1';
 
 // Only cache static assets (CSS, JS, icons) — NOT HTML pages
 // HTML pages (index.html, login.html) are always fetched fresh from network

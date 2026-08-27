@@ -2626,28 +2626,6 @@
     });
   }
 
-  // ==========================================================================
-  // 24. AUTHENTICATION & LOGIN/REGISTRATION CONTROLLER (STITCH DESIGN)
-  // ==========================================================================
-  const authModalBtn = document.getElementById('authModalBtn');
-  const authModal = document.getElementById('authModal');
-  const closeAuthBtn = document.getElementById('closeAuthBtn');
-  const authBackdrop = document.getElementById('authBackdrop');
-  const authTabSignIn = document.getElementById('authTabSignIn');
-  const authTabSignUp = document.getElementById('authTabSignUp');
-  const signInForm = document.getElementById('signInForm');
-  const signUpForm = document.getElementById('signUpForm');
-  const authFormsContainer = document.getElementById('authFormsContainer');
-  const authProfileContainer = document.getElementById('authProfileContainer');
-  const userAccountLabel = document.getElementById('userAccountLabel');
-  const userAvatarIcon = document.getElementById('userAvatarIcon');
-  const profileDisplayName = document.getElementById('profileDisplayName');
-  const profileDisplayEmail = document.getElementById('profileDisplayEmail');
-  const signOutBtn = document.getElementById('signOutBtn');
-  const googleAuthBtn = document.getElementById('googleAuthBtn');
-  const appleAuthBtn = document.getElementById('appleAuthBtn');
-  const togglePwdVisibility = document.getElementById('togglePwdVisibility');
-  const authPassword = document.getElementById('authPassword');
 
   // ==========================================================================
   // 24. GOOGLE OPERATOR PROFILE MODAL & SIGN OUT CONTROLLER
