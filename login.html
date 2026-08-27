@@ -18,6 +18,9 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
@@ -70,6 +73,23 @@
       background-image: linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
       background-size: 32px 32px;
+    }
+
+    /* Google One Tap container override */
+    #g_id_onload { display: none; }
+
+    #googleLoginBtn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .google-signin-loading {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
@@ -226,12 +246,19 @@
 
       <!-- OAuth & Quick Guest Buttons -->
       <div class="grid grid-cols-2 gap-3">
+        <!-- Real Google Sign-In Button -->
         <button
           type="button"
           id="googleLoginBtn"
           class="bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
         >
-          <i class="fa-brands fa-google text-red-400"></i> Google ID
+          <svg width="14" height="14" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Google ID
         </button>
         <button
           type="button"
@@ -240,6 +267,15 @@
         >
           <i class="fa-brands fa-apple text-gray-200"></i> Apple ID
         </button>
+      </div>
+
+      <!-- Hidden Google One Tap -->  
+      <div id="g_id_onload"
+        data-client_id="862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com"
+        data-callback="handleGoogleCredential"
+        data-auto_select="false"
+        data-cancel_on_tap_outside="true"
+        data-context="signin">
       </div>
 
       <!-- Quick Guest Access -->
@@ -263,7 +299,118 @@
   </div>
 
   <script>
-    // Authentication Logic
+    // =========================================================================
+    // GOOGLE IDENTITY SERVICES — REAL OAUTH 2.0 AUTHENTICATION
+    // Client ID: 862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com
+    // =========================================================================
+    const GOOGLE_CLIENT_ID = '862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com';
+
+    // Decode JWT payload from Google credential
+    function parseJwt(token) {
+      try {
+        const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(base64));
+      } catch (e) {
+        return {};
+      }
+    }
+
+    // Called by Google after real sign-in
+    function handleGoogleCredential(response) {
+      const payload = parseJwt(response.credential);
+      const name = payload.name || 'Google User';
+      const email = payload.email || 'user@gmail.com';
+      const picture = payload.picture || '';
+      const googleId = payload.sub || '';
+
+      authenticateAndRedirect(name, email, {
+        provider: 'google',
+        picture,
+        googleId,
+        token: response.credential
+      });
+    }
+
+    // Trigger Google Sign-In popup
+    function triggerGoogleSignIn() {
+      const btn = document.getElementById('googleLoginBtn');
+      btn.innerHTML = '<span class="google-signin-loading">Connecting to Google...</span>';
+      btn.disabled = true;
+
+      if (window.google && window.google.accounts) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCredential,
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // One Tap was blocked — use popup flow instead
+            google.accounts.oauth2.initTokenClient({
+              client_id: GOOGLE_CLIENT_ID,
+              scope: 'openid email profile',
+              callback: (tokenResponse) => {
+                if (tokenResponse.access_token) {
+                  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+                  })
+                  .then(r => r.json())
+                  .then(userInfo => {
+                    authenticateAndRedirect(
+                      userInfo.name || 'Google User',
+                      userInfo.email || 'user@gmail.com',
+                      { provider: 'google', picture: userInfo.picture, token: tokenResponse.access_token }
+                    );
+                  })
+                  .catch(() => {
+                    resetGoogleBtn();
+                    alert('Google sign-in failed. Please try again.');
+                  });
+                }
+              }
+            }).requestAccessToken();
+          }
+        });
+      } else {
+        // GSI library not yet loaded
+        resetGoogleBtn();
+        alert('Google Sign-In is loading... please try again in a moment.');
+      }
+    }
+
+    function resetGoogleBtn() {
+      const btn = document.getElementById('googleLoginBtn');
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg> Google ID`;
+    }
+
+    // =========================================================================
+    // SESSION & REDIRECT
+    // =========================================================================
+    function authenticateAndRedirect(userName, userEmail, extras = {}) {
+      const userObj = {
+        name: userName || 'Commander Nivas',
+        email: userEmail || 'operator@nivx.io',
+        picture: extras.picture || '',
+        provider: extras.provider || 'email',
+        googleId: extras.googleId || '',
+        token: extras.token || ('nivx_jwt_' + Math.random().toString(36).substring(2)),
+        loggedIn: true,
+        loginTime: Date.now()
+      };
+      localStorage.setItem('nivx_user_session', JSON.stringify(userObj));
+      window.location.href = 'index.html';
+    }
+
+    // =========================================================================
+    // UI CONTROLLERS
+    // =========================================================================
     const tabSignIn = document.getElementById('tabSignIn');
     const tabSignUp = document.getElementById('tabSignUp');
     const loginForm = document.getElementById('loginForm');
@@ -272,7 +419,6 @@
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     const passwordInput = document.getElementById('password');
 
-    // Tab Switching
     tabSignIn.addEventListener('click', () => {
       tabSignIn.className = 'flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all';
       tabSignUp.className = 'flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all';
@@ -289,26 +435,11 @@
       cardTitle.textContent = 'Create Profile';
     });
 
-    // Toggle Password Visibility
     togglePasswordBtn.addEventListener('click', () => {
       const isPwd = passwordInput.type === 'password';
       passwordInput.type = isPwd ? 'text' : 'password';
       togglePasswordBtn.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash text-xs"></i>' : '<i class="fa-solid fa-eye text-xs"></i>';
     });
-
-    function authenticateAndRedirect(userName, userEmail) {
-      const userObj = {
-        name: userName || 'Commander Nivas',
-        email: userEmail || 'operator@nivx.io',
-        token: 'nivx_jwt_' + Math.random().toString(36).substring(2),
-        loggedIn: true,
-        loginTime: Date.now()
-      };
-      localStorage.setItem('nivx_user_session', JSON.stringify(userObj));
-      
-      // Redirect to main command center dashboard
-      window.location.href = 'index.html';
-    }
 
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -323,16 +454,28 @@
       authenticateAndRedirect(name, email);
     });
 
-    document.getElementById('googleLoginBtn').addEventListener('click', () => {
-      authenticateAndRedirect('Google User', 'nivas.network@gmail.com');
-    });
+    // REAL Google Sign-In
+    document.getElementById('googleLoginBtn').addEventListener('click', triggerGoogleSignIn);
 
     document.getElementById('appleLoginBtn').addEventListener('click', () => {
-      authenticateAndRedirect('Apple Operator', 'operator@icloud.com');
+      authenticateAndRedirect('Apple Operator', 'operator@icloud.com', { provider: 'apple' });
     });
 
     document.getElementById('guestAccessBtn').addEventListener('click', () => {
-      authenticateAndRedirect('Guest Operator', 'guest@nivxboost.io');
+      authenticateAndRedirect('Guest Operator', 'guest@nivxboost.io', { provider: 'guest' });
+    });
+
+    // Initialize Google One Tap after GSI loads
+    window.addEventListener('load', () => {
+      if (window.google && window.google.accounts) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCredential,
+          auto_select: false
+        });
+        // Show One Tap prompt automatically
+        google.accounts.id.prompt();
+      }
     });
   </script>
 </body>
