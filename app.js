@@ -2344,14 +2344,30 @@
   const bannerInstallBtn = document.getElementById('bannerInstallBtn');
   const bannerCloseBtn = document.getElementById('bannerCloseBtn');
 
-  // Hide PWA install controls if already running in standalone installed app
-  const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
+  // Check if running in standalone installed PWA app mode
+  const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || 
+                          window.matchMedia('(display-mode: fullscreen)').matches ||
+                          window.navigator.standalone === true || 
+                          document.referrer.includes('android-app://') ||
+                          localStorage.getItem('nivx_is_installed_pwa') === 'true';
+
   if (isStandaloneApp) {
+    // 100% hide all install buttons and banners when inside installed app
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
     if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
+  } else {
+    // On webpage: make install option visible
+    if (pwaInstallBtn) pwaInstallBtn.style.display = 'inline-flex';
+    
+    // Automatically show floating install banner on web after 1.5s (if not dismissed in this session)
+    setTimeout(() => {
+      if (pwaInstallBanner && !sessionStorage.getItem('pwa_banner_dismissed') && !isStandaloneApp) {
+        pwaInstallBanner.classList.add('show');
+      }
+    }, 1500);
   }
 
-  // Register Service Worker for offline capability & mobile installation
+  // Register Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./service-worker.js')
@@ -2367,8 +2383,13 @@
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    if (pwaInstallBanner) pwaInstallBanner.classList.add('show');
-    logTerminal('>>> [MOBILE APP] NivxBoost is ready to install on your device home screen!', 'success');
+    if (!isStandaloneApp && pwaInstallBanner) {
+      pwaInstallBanner.classList.add('show');
+    }
+    if (pwaInstallBtn && !isStandaloneApp) {
+      pwaInstallBtn.style.display = 'inline-flex';
+    }
+    logTerminal('>>> [MOBILE APP] Install prompt ready: Tap "INSTALL APP" to add to device home screen.', 'success');
   });
 
   async function triggerPwaInstall() {
@@ -2377,29 +2398,37 @@
       deferredInstallPrompt.prompt();
       const { outcome } = await deferredInstallPrompt.userChoice;
       if (outcome === 'accepted') {
-        logTerminal('>>> [INSTALLED] NivxBoost added to Home Screen successfully!', 'success');
+        localStorage.setItem('nivx_is_installed_pwa', 'true');
+        if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
+        if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+        logTerminal('>>> [INSTALLED] NivxBoost installed successfully!', 'success');
       }
       deferredInstallPrompt = null;
-      if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
     } else {
-      // Manual instruction alert for iOS Safari & Android browsers
-      logTerminal('>>> To install: Tap browser menu (⋮) -> "Add to Home screen" or "Install App".', 'prefix');
-      alert('📱 How to install NivxBoost on your Mobile:\n\n1. In Chrome / Edge: Tap menu (⋮) -> "Install app" or "Add to Home screen"\n2. In Safari (iPhone): Tap Share (⬆️) -> "Add to Home Screen"\n\nThe app will appear on your phone home screen with its own full-screen icon!');
+      // Step-by-step instructions modal / alert for Chrome, Safari, Android, iOS
+      alert('📱 Install NivxBoost on your Mobile Device:\n\n' +
+            '• Chrome / Edge: Tap browser menu (⋮) -> "Install App" or "Add to Home screen"\n' +
+            '• Safari (iPhone): Tap Share button (⬆️) -> "Add to Home Screen"\n\n' +
+            'The app will install directly to your phone screen as a full-screen standalone application.');
     }
   }
 
   if (pwaInstallBtn) pwaInstallBtn.addEventListener('click', triggerPwaInstall);
   if (bannerInstallBtn) bannerInstallBtn.addEventListener('click', triggerPwaInstall);
   if (bannerCloseBtn) {
-    bannerCloseBtn.addEventListener('click', () => {
+    bannerCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       audio.playClick();
       if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+      sessionStorage.setItem('pwa_banner_dismissed', 'true');
     });
   }
 
   window.addEventListener('appinstalled', () => {
-    logTerminal('>>> [SUCCESS] NivxBoost Application Installed to Device.', 'success');
+    localStorage.setItem('nivx_is_installed_pwa', 'true');
+    if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
     if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+    logTerminal('>>> [SUCCESS] NivxBoost Application Installed to Device.', 'success');
   });
 
   // ==========================================================================
@@ -2790,18 +2819,6 @@
     }
 
     logTerminal(`>>> [AUTH] Signed in via Google as ${user.name} (${user.email}). Pro Tier unlocked.`, 'success');
-
-    // ── Auth button click = show sign-out confirmation ─────────────────────
-    if (authModalBtn) {
-      authModalBtn.addEventListener('click', () => {
-        audio.playClick();
-        const confirmed = confirm(`Signed in as ${user.name} (${user.email})\n\nSign out of NivxBoost?`);
-        if (confirmed) {
-          localStorage.removeItem('nivx_user_session');
-          window.location.replace('login.html');
-        }
-      });
-    }
   })();
 
   startContinuousMonitoring();
