@@ -4,86 +4,184 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Nivxboost - Command Center Login</title>
-  <meta name="description" content="Nivxboost Command Center Authentication Portal">
+  <title>NivxBoost - Sign In</title>
+  <meta name="description" content="NivxBoost Command Center - Sign in with Google">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon.svg">
   <meta name="theme-color" content="#0b141c">
 
-  <!-- Google Fonts & FontAwesome -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
 
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "surface-dim": "#0b141c",
-            "surface": "#0b141c",
-            "surface-container": "#182028",
-            "surface-container-low": "#141c24",
-            "surface-container-high": "#222b33",
-            "surface-container-highest": "#2d363e",
-            "primary": "#c3f5ff",
-            "primary-container": "#00e5ff",
-            "primary-fixed-dim": "#00daf3",
-            "on-primary": "#00363d",
-            "on-surface": "#dae3ee",
-            "on-surface-variant": "#bac9cc",
-            "outline": "#849396",
-            "outline-variant": "#3b494c"
-          },
-          fontFamily: {
-            "display": ["Orbitron", "Inter", "sans-serif"],
-            "body": ["Inter", "sans-serif"],
-            "mono": ["JetBrains Mono", "monospace"]
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background-color: #0b141c;
       color: #dae3ee;
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
-    }
-
-    .glow-cyan {
-      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
-    }
-
-    .glow-card {
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 1px rgba(0, 229, 255, 0.2);
-    }
-
-    .cyber-grid {
-      background-image: linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
       background-size: 32px 32px;
-    }
-
-    /* Google One Tap container override */
-    #g_id_onload { display: none; }
-
-    #googleLoginBtn {
-      position: relative;
       overflow: hidden;
     }
 
-    .google-signin-loading {
+    /* Ambient glows */
+    .glow-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-bg::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 400px;
+      height: 400px;
+      background: #00e5ff;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.08;
+    }
+    .glow-bg::after {
+      content: '';
+      position: absolute;
+      bottom: 20%;
+      right: 20%;
+      width: 450px;
+      height: 450px;
+      background: #00daf3;
+      border-radius: 50%;
+      filter: blur(160px);
+      opacity: 0.06;
+    }
+
+    .card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 380px;
+      background: #182028;
+      border: 1px solid #3b494c;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 229, 255, 0.2);
+      text-align: center;
+    }
+
+    /* Cyan top stripe */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+      border-radius: 20px 20px 0 0;
+      opacity: 0.8;
+    }
+
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: #222b33;
+      border: 1px solid #3b494c;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    .logo-wrap svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #00daf3;
+      margin-bottom: 0.3rem;
+    }
+
+    .subtitle {
+      font-size: 0.72rem;
+      color: #bac9cc;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .tls-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-family: monospace;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #222b33;
+      border: 1px solid #3b494c;
+      color: #00daf3;
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* Real Google button */
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #1f1f1f;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .google-btn:hover {
+      background: #f1f3f4;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .google-btn:active {
+      transform: translateY(0);
+    }
+
+    .google-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .google-btn svg {
+      flex-shrink: 0;
+    }
+
+    .loading-text {
       animation: pulse 1s infinite;
     }
 
@@ -91,221 +189,69 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
+
+    .footer-note {
+      margin-top: 1.5rem;
+      font-size: 0.65rem;
+      color: #849396;
+      line-height: 1.6;
+    }
+
+    .footer-note a {
+      color: #00daf3;
+      text-decoration: none;
+    }
   </style>
 </head>
 
-<body class="bg-surface-dim cyber-grid flex flex-col items-center justify-center p-4 min-h-screen relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
+<body>
+  <div class="glow-bg"></div>
 
-  <!-- Ambient Glow Effects -->
-  <div class="fixed inset-0 pointer-events-none z-0 opacity-25">
-    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container rounded-full blur-[140px]"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-primary-fixed-dim rounded-full blur-[160px] opacity-40"></div>
-  </div>
-
-  <!-- Login Main Container -->
-  <div class="w-full max-w-md relative z-10">
-
-    <!-- Header / Logo -->
-    <div class="text-center mb-6">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant mb-3 shadow-xl glow-cyan">
-        <i class="fa-solid fa-satellite-dish text-3xl text-primary-fixed-dim"></i>
-      </div>
-      <h1 class="font-display text-2xl md:text-3xl font-bold tracking-wider text-primary-fixed-dim">NIVXBOOST</h1>
-      <p class="text-on-surface-variant text-xs md:text-sm mt-1">Quantum Network Engine &bull; Command Center Access</p>
+  <div class="card">
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#00daf3"/>
+        <circle cx="12" cy="12" r="10" stroke="#00daf3" stroke-width="1" fill="none" opacity="0.3"/>
+        <path d="M12 6 L18 10 L18 14 L12 18 L6 14 L6 10 Z" stroke="#00daf3" stroke-width="0.5" fill="none" opacity="0.4"/>
+      </svg>
     </div>
 
-    <!-- Login Card -->
-    <div class="bg-surface-container rounded-2xl p-6 md:p-8 border border-outline-variant glow-card relative backdrop-blur-md">
-      <!-- Cyber Top Stripe -->
-      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-80"></div>
+    <h1>NIVXBOOST</h1>
+    <p class="subtitle">Quantum Network Engine &bull; Command Center Access</p>
 
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="font-display text-lg font-bold text-on-surface flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved text-primary-fixed-dim text-sm"></i>
-          <span id="cardTitle">Authenticate</span>
-        </h2>
-        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant text-primary-fixed-dim">
-          SECURE &bull; TLS 1.3
-        </span>
-      </div>
+    <span class="tls-badge">&#x1F512; SECURE &bull; TLS 1.3</span>
 
-      <!-- Sign In / Sign Up Tabs -->
-      <div class="flex bg-surface-container-low rounded-lg p-1 mb-6 border border-outline-variant">
-        <button id="tabSignIn" class="flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all">
-          SIGN IN
-        </button>
-        <button id="tabSignUp" class="flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all">
-          CREATE ACCOUNT
-        </button>
-      </div>
-
-      <!-- Sign In Form -->
-      <form id="loginForm" class="space-y-4">
-        <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="email">
-            <i class="fa-solid fa-envelope mr-1 text-primary-fixed-dim"></i> Email Address
-          </label>
-          <input
-            id="email"
-            type="email"
-            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
-            placeholder="sysadmin@network.local"
-            value="admin@nivxboost.io"
-            required
-          />
-        </div>
-
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant" for="password">
-              <i class="fa-solid fa-lock mr-1 text-primary-fixed-dim"></i> Password
-            </label>
-            <a href="#" class="text-[11px] font-mono text-primary-fixed-dim hover:underline" onclick="alert('Password reset link sent to registered email.'); return false;">Forgot?</a>
-          </div>
-          <div class="relative">
-            <input
-              id="password"
-              type="password"
-              class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
-              placeholder="••••••••"
-              value="quantum2026"
-              required
-            />
-            <button type="button" id="togglePasswordBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
-              <i class="fa-solid fa-eye text-xs"></i>
-            </button>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          id="submitBtn"
-          class="w-full bg-primary-fixed-dim hover:bg-primary-container text-on-primary font-bold py-3 rounded-lg text-xs md:text-sm tracking-wider uppercase transition-all duration-200 glow-cyan hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 mt-2"
-        >
-          <span>Access Command Center</span>
-          <i class="fa-solid fa-arrow-right-to-bracket text-sm"></i>
-        </button>
-      </form>
-
-      <!-- Sign Up Extra Field (Hidden by default) -->
-      <form id="registerForm" class="space-y-4 hidden">
-        <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regName">
-            <i class="fa-solid fa-user mr-1 text-primary-fixed-dim"></i> Full Name / Callsign
-          </label>
-          <input
-            id="regName"
-            type="text"
-            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
-            placeholder="Commander Nivas"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regEmail">
-            <i class="fa-solid fa-envelope mr-1 text-primary-fixed-dim"></i> Email Address
-          </label>
-          <input
-            id="regEmail"
-            type="email"
-            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
-            placeholder="operator@nivx.io"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regPassword">
-            <i class="fa-solid fa-lock mr-1 text-primary-fixed-dim"></i> Choose Password
-          </label>
-          <input
-            id="regPassword"
-            type="password"
-            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
-            placeholder="Min. 8 characters"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          class="w-full bg-primary-fixed-dim hover:bg-primary-container text-on-primary font-bold py-3 rounded-lg text-xs md:text-sm tracking-wider uppercase transition-all duration-200 glow-cyan hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 mt-2"
-        >
-          <span>Create Operator Profile</span>
-          <i class="fa-solid fa-user-plus text-sm"></i>
-        </button>
-      </form>
-
-      <!-- Divider -->
-      <div class="flex items-center gap-3 my-5">
-        <div class="h-px bg-outline-variant flex-1"></div>
-        <span class="text-[10px] font-mono text-on-surface-variant uppercase tracking-wider">Or authenticate via</span>
-        <div class="h-px bg-outline-variant flex-1"></div>
-      </div>
-
-      <!-- OAuth & Quick Guest Buttons -->
-      <div class="grid grid-cols-2 gap-3">
-        <!-- Real Google Sign-In Button -->
-        <button
-          type="button"
-          id="googleLoginBtn"
-          class="bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
-        >
-          <svg width="14" height="14" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-          </svg>
-          Google ID
-        </button>
-        <button
-          type="button"
-          id="appleLoginBtn"
-          class="bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
-        >
-          <i class="fa-brands fa-apple text-gray-200"></i> Apple ID
-        </button>
-      </div>
-
-      <!-- Hidden Google One Tap -->  
-      <div id="g_id_onload"
-        data-client_id="862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com"
-        data-callback="handleGoogleCredential"
-        data-auto_select="false"
-        data-cancel_on_tap_outside="true"
-        data-context="signin">
-      </div>
-
-      <!-- Quick Guest Access -->
-      <div class="mt-4 pt-3 border-t border-outline-variant text-center">
-        <button
-          type="button"
-          id="guestAccessBtn"
-          class="text-xs font-mono text-primary-fixed-dim hover:text-primary transition-colors flex items-center justify-center gap-1.5 mx-auto"
-        >
-          <i class="fa-solid fa-bolt"></i> Bypass with 1-Click Guest Access &rarr;
-        </button>
-      </div>
-
+    <!-- Google One Tap container -->
+    <div id="g_id_onload"
+      data-client_id="862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com"
+      data-callback="handleGoogleCredential"
+      data-auto_select="false"
+      data-cancel_on_tap_outside="true"
+      data-context="signin"
+      style="display:none;">
     </div>
 
-    <!-- Footer -->
-    <div class="text-center mt-6 text-xs text-on-surface-variant font-mono">
-      <span>NivxBoost Core v4.8.9 &bull; Quantum Node Infrastructure</span>
-    </div>
+    <!-- Google Sign-In Button -->
+    <button class="google-btn" id="googleSignInBtn" onclick="triggerGoogleSignIn()">
+      <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      Continue with Google
+    </button>
 
+    <p class="footer-note">
+      By signing in, you agree to NivxBoost's terms.<br>
+      NivxBoost Core v4.8.9 &bull; Quantum Node Infrastructure
+    </p>
   </div>
 
   <script>
-    // =========================================================================
-    // GOOGLE IDENTITY SERVICES — REAL OAUTH 2.0 AUTHENTICATION
-    // Client ID: 862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com
-    // =========================================================================
     const GOOGLE_CLIENT_ID = '862048123632-vqdvasdfjcgr7et3eg5h8nqj61qbk01e.apps.googleusercontent.com';
 
-    // Decode JWT payload from Google credential
     function parseJwt(token) {
       try {
         const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -315,7 +261,7 @@
       }
     }
 
-    // Called by Google after real sign-in
+    // Called by Google after successful sign-in
     function handleGoogleCredential(response) {
       const payload = parseJwt(response.credential);
       const name = payload.name || 'Google User';
@@ -323,19 +269,22 @@
       const picture = payload.picture || '';
       const googleId = payload.sub || '';
 
-      authenticateAndRedirect(name, email, {
+      const session = {
+        name, email, picture,
         provider: 'google',
-        picture,
         googleId,
-        token: response.credential
-      });
+        token: response.credential,
+        loggedIn: true,
+        loginTime: Date.now()
+      };
+      localStorage.setItem('nivx_user_session', JSON.stringify(session));
+      window.location.href = 'index.html';
     }
 
-    // Trigger Google Sign-In popup
     function triggerGoogleSignIn() {
-      const btn = document.getElementById('googleLoginBtn');
-      btn.innerHTML = '<span class="google-signin-loading">Connecting to Google...</span>';
+      const btn = document.getElementById('googleSignInBtn');
       btn.disabled = true;
+      btn.innerHTML = '<span class="loading-text">Connecting to Google...</span>';
 
       if (window.google && window.google.accounts) {
         google.accounts.id.initialize({
@@ -346,7 +295,7 @@
         });
         google.accounts.id.prompt((notification) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // One Tap was blocked — use popup flow instead
+            // One Tap blocked — use popup OAuth flow
             google.accounts.oauth2.initTokenClient({
               client_id: GOOGLE_CLIENT_ID,
               scope: 'openid email profile',
@@ -357,115 +306,46 @@
                   })
                   .then(r => r.json())
                   .then(userInfo => {
-                    authenticateAndRedirect(
-                      userInfo.name || 'Google User',
-                      userInfo.email || 'user@gmail.com',
-                      { provider: 'google', picture: userInfo.picture, token: tokenResponse.access_token }
-                    );
+                    const session = {
+                      name: userInfo.name || 'Google User',
+                      email: userInfo.email || 'user@gmail.com',
+                      picture: userInfo.picture || '',
+                      provider: 'google',
+                      token: tokenResponse.access_token,
+                      loggedIn: true,
+                      loginTime: Date.now()
+                    };
+                    localStorage.setItem('nivx_user_session', JSON.stringify(session));
+                    window.location.href = 'index.html';
                   })
-                  .catch(() => {
-                    resetGoogleBtn();
-                    alert('Google sign-in failed. Please try again.');
-                  });
+                  .catch(() => resetBtn());
+                } else {
+                  resetBtn();
                 }
               }
             }).requestAccessToken();
           }
         });
       } else {
-        // GSI library not yet loaded
-        resetGoogleBtn();
-        alert('Google Sign-In is loading... please try again in a moment.');
+        setTimeout(() => {
+          resetBtn();
+          alert('Google Sign-In is still loading, please try again.');
+        }, 500);
       }
     }
 
-    function resetGoogleBtn() {
-      const btn = document.getElementById('googleLoginBtn');
+    function resetBtn() {
+      const btn = document.getElementById('googleSignInBtn');
       btn.disabled = false;
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
         <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      </svg> Google ID`;
+      </svg> Continue with Google`;
     }
 
-    // =========================================================================
-    // SESSION & REDIRECT
-    // =========================================================================
-    function authenticateAndRedirect(userName, userEmail, extras = {}) {
-      const userObj = {
-        name: userName || 'Commander Nivas',
-        email: userEmail || 'operator@nivx.io',
-        picture: extras.picture || '',
-        provider: extras.provider || 'email',
-        googleId: extras.googleId || '',
-        token: extras.token || ('nivx_jwt_' + Math.random().toString(36).substring(2)),
-        loggedIn: true,
-        loginTime: Date.now()
-      };
-      localStorage.setItem('nivx_user_session', JSON.stringify(userObj));
-      window.location.href = 'index.html';
-    }
-
-    // =========================================================================
-    // UI CONTROLLERS
-    // =========================================================================
-    const tabSignIn = document.getElementById('tabSignIn');
-    const tabSignUp = document.getElementById('tabSignUp');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const cardTitle = document.getElementById('cardTitle');
-    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-    const passwordInput = document.getElementById('password');
-
-    tabSignIn.addEventListener('click', () => {
-      tabSignIn.className = 'flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all';
-      tabSignUp.className = 'flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all';
-      loginForm.classList.remove('hidden');
-      registerForm.classList.add('hidden');
-      cardTitle.textContent = 'Authenticate';
-    });
-
-    tabSignUp.addEventListener('click', () => {
-      tabSignUp.className = 'flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all';
-      tabSignIn.className = 'flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all';
-      registerForm.classList.remove('hidden');
-      loginForm.classList.add('hidden');
-      cardTitle.textContent = 'Create Profile';
-    });
-
-    togglePasswordBtn.addEventListener('click', () => {
-      const isPwd = passwordInput.type === 'password';
-      passwordInput.type = isPwd ? 'text' : 'password';
-      togglePasswordBtn.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash text-xs"></i>' : '<i class="fa-solid fa-eye text-xs"></i>';
-    });
-
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value || 'sysadmin@network.local';
-      authenticateAndRedirect('Commander Nivas', email);
-    });
-
-    registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('regName').value || 'Operator';
-      const email = document.getElementById('regEmail').value || 'operator@nivx.io';
-      authenticateAndRedirect(name, email);
-    });
-
-    // REAL Google Sign-In
-    document.getElementById('googleLoginBtn').addEventListener('click', triggerGoogleSignIn);
-
-    document.getElementById('appleLoginBtn').addEventListener('click', () => {
-      authenticateAndRedirect('Apple Operator', 'operator@icloud.com', { provider: 'apple' });
-    });
-
-    document.getElementById('guestAccessBtn').addEventListener('click', () => {
-      authenticateAndRedirect('Guest Operator', 'guest@nivxboost.io', { provider: 'guest' });
-    });
-
-    // Initialize Google One Tap after GSI loads
+    // Auto-show Google One Tap on load
     window.addEventListener('load', () => {
       if (window.google && window.google.accounts) {
         google.accounts.id.initialize({
@@ -473,7 +353,6 @@
           callback: handleGoogleCredential,
           auto_select: false
         });
-        // Show One Tap prompt automatically
         google.accounts.id.prompt();
       }
     });

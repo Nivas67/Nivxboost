@@ -2780,10 +2780,75 @@
   // INITIALIZATION ON DOM READY
   // ==========================================================================
   loadSavedSettings();
-  loadSavedUserSession();
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // GOOGLE AUTH ENFORCEMENT
+  // If no valid session → redirect to login.html immediately
+  // ──────────────────────────────────────────────────────────────────────────
+  (function enforceGoogleAuth() {
+    const saved = localStorage.getItem('nivx_user_session');
+    if (!saved) {
+      window.location.replace('login.html');
+      return;
+    }
+
+    let user;
+    try {
+      user = JSON.parse(saved);
+    } catch (e) {
+      localStorage.removeItem('nivx_user_session');
+      window.location.replace('login.html');
+      return;
+    }
+
+    if (!user || !user.loggedIn || !user.name) {
+      localStorage.removeItem('nivx_user_session');
+      window.location.replace('login.html');
+      return;
+    }
+
+    // ── Session is valid: populate header ────────────────────────────────────
+    State.currentUser = user;
+
+    const userAccountLabel = document.getElementById('userAccountLabel');
+    const userAvatarWrap   = document.getElementById('userAvatarWrap');
+    const userAvatarIcon   = document.getElementById('userAvatarIcon');
+    const authModalBtn     = document.getElementById('authModalBtn');
+
+    // Show first name only to keep it compact
+    const firstName = (user.name || 'User').split(' ')[0].toUpperCase();
+    if (userAccountLabel) userAccountLabel.textContent = firstName;
+
+    // Show Google profile picture if available, else fallback icon
+    if (userAvatarWrap && user.picture) {
+      userAvatarWrap.innerHTML = `<img
+        src="${user.picture}"
+        alt="Profile"
+        referrerpolicy="no-referrer"
+        style="width:26px;height:26px;border-radius:50%;border:1.5px solid #00daf3;object-fit:cover;vertical-align:middle;"
+        onerror="this.style.display='none';document.getElementById('userAvatarIcon').style.display='inline';"
+      /><i class="fa-solid fa-user-astronaut" id="userAvatarIcon" style="display:none;color:#00daf3;"></i>`;
+    } else if (userAvatarIcon) {
+      userAvatarIcon.className = 'fa-solid fa-user-astronaut';
+      userAvatarIcon.style.color = '#00daf3';
+    }
+
+    logTerminal(`>>> [AUTH] Signed in via Google as ${user.name} (${user.email}). Pro Tier unlocked.`, 'success');
+
+    // ── Auth button click = show sign-out confirmation ─────────────────────
+    if (authModalBtn) {
+      authModalBtn.addEventListener('click', () => {
+        audio.playClick();
+        const confirmed = confirm(`Signed in as ${user.name} (${user.email})\n\nSign out of NivxBoost?`);
+        if (confirmed) {
+          localStorage.removeItem('nivx_user_session');
+          window.location.replace('login.html');
+        }
+      });
+    }
+  })();
+
   startContinuousMonitoring();
   initRealInteractiveMap();
 
 })();
-
-
