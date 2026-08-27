@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-08-27T10:25:24.928Z",
-  "totalTests": 46,
-  "passed": 46,
+  "timestamp": "2026-08-27T17:31:26.281Z",
+  "totalTests": 57,
+  "passed": 57,
   "failed": 0,
   "passRate": "100.0%",
   "testDetails": [
@@ -203,6 +203,83 @@
     },
     {
       "feature": "Interactive Elements",
+      "test": "Element #authModalBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #authModal wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #onboardingBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #onboardingModal wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #runAiOptimizeBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #clearTrendsHistoryBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #exportTrendsDataBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #chatSendBtn wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #chatInput wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #signInForm wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
+      "test": "Element #signUpForm wired",
+      "status": "PASS",
+      "actual": "HTML & JS Connected",
+      "issue": "None"
+    },
+    {
+      "feature": "Interactive Elements",
       "test": "Element #realMapContainer wired",
       "status": "PASS",
       "actual": "HTML & JS Connected",
@@ -303,21 +380,21 @@
       "feature": "Network Endpoints",
       "test": "Cloudflare Speed Edge [200]",
       "status": "PASS",
-      "actual": "429 ms RTT",
+      "actual": "320 ms RTT",
       "issue": "None"
     },
     {
       "feature": "Network Endpoints",
       "test": "OpenStreetMap Clean Dark Vector Tiles [200]",
       "status": "PASS",
-      "actual": "237 ms RTT",
+      "actual": "195 ms RTT",
       "issue": "None"
     },
     {
       "feature": "Network Endpoints",
       "test": "Google Anycast Edge [204]",
       "status": "PASS",
-      "actual": "175 ms RTT",
+      "actual": "71 ms RTT",
       "issue": "None"
     },
     {

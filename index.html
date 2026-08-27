@@ -120,6 +120,14 @@
           <i class="fa-solid fa-mobile-screen-button"></i>
           <span>INSTALL APP</span>
         </button>
+        <button class="hud-action-btn" id="onboardingBtn" title="Product Walkthrough & Feature Tour" aria-label="Feature Tour">
+          <i class="fa-solid fa-compass"></i>
+          <span>GUIDE</span>
+        </button>
+        <button class="hud-action-btn" id="authModalBtn" title="Account / Command Center Login" aria-label="Sign In">
+          <i class="fa-solid fa-circle-user" id="userAvatarIcon"></i>
+          <span id="userAccountLabel">SIGN IN</span>
+        </button>
         <button class="hud-action-btn primary-glow-btn" id="openSettingsBtn" title="System Configuration"
           aria-label="Open Settings">
           <i class="fa-solid fa-sliders"></i>
@@ -137,9 +145,17 @@
         <i class="fa-solid fa-tachograph-digital"></i>
         <span>SPEED LAB</span>
       </button>
+      <button class="nav-tab-btn" data-tab="tab-ai-insights" role="tab" aria-selected="false">
+        <i class="fa-solid fa-brain"></i>
+        <span>AI INSIGHTS</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-trends" role="tab" aria-selected="false">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>TRENDS</span>
+      </button>
       <button class="nav-tab-btn" data-tab="tab-nodes" role="tab" aria-selected="false">
         <i class="fa-solid fa-earth-americas"></i>
-        <span>GLOBAL NODE HOPPER</span>
+        <span>GLOBAL NODES</span>
       </button>
       <button class="nav-tab-btn" data-tab="tab-dns" role="tab" aria-selected="false">
         <i class="fa-solid fa-server"></i>
@@ -147,7 +163,11 @@
       </button>
       <button class="nav-tab-btn" data-tab="tab-limiter" role="tab" aria-selected="false">
         <i class="fa-solid fa-filter-circle-xmark"></i>
-        <span>BANDWIDTH HOG LIMITER</span>
+        <span>HOG LIMITER</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-support-chat" role="tab" aria-selected="false">
+        <i class="fa-solid fa-comments"></i>
+        <span>AI SUPPORT</span>
       </button>
       <button class="nav-tab-btn" data-tab="tab-terminal" role="tab" aria-selected="false">
         <i class="fa-solid fa-terminal"></i>
@@ -706,6 +726,220 @@
         </div>
       </section>
 
+      <!-- TAB 7: AI INSIGHTS & QUANTUM QOS (FROM STITCH DESIGN) -->
+      <section class="tab-pane" id="tab-ai-insights" role="tabpanel">
+        <div class="ai-insights-layout">
+          
+          <div class="glass-card ai-health-card">
+            <div class="ai-header-flex">
+              <div class="ai-title-wrap">
+                <i class="fa-solid fa-brain cyan-text"></i>
+                <div>
+                  <h3 class="card-title">NetBoost AI Network Intelligence</h3>
+                  <p class="card-subtitle">Real-time machine learning telemetry analysis & predictive QoS</p>
+                </div>
+              </div>
+              <button class="cyber-btn-primary" id="runAiOptimizeBtn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AUTO-OPTIMIZE
+              </button>
+            </div>
+
+            <div class="ai-summary-grid">
+              <div class="ai-score-box">
+                <div class="ai-score-circle">
+                  <span class="ai-score-number" id="aiHealthScore">99%</span>
+                  <span class="ai-score-label">OPTIMAL</span>
+                </div>
+                <span class="ai-score-desc">Network Quality Index</span>
+              </div>
+              
+              <div class="ai-intel-feed">
+                <div class="ai-intel-item active-intel">
+                  <div class="intel-icon green"><i class="fa-solid fa-check-double"></i></div>
+                  <div class="intel-content">
+                    <strong>Socket Preconnects Active</strong>
+                    <p>TCP congestion window expanded to 64KB. Zero packet queueing detected on active route.</p>
+                  </div>
+                </div>
+                <div class="ai-intel-item">
+                  <div class="intel-icon cyan"><i class="fa-solid fa-satellite-dish"></i></div>
+                  <div class="intel-content">
+                    <strong>Anycast Routing Optimization</strong>
+                    <p>Edge node latency evaluated at 11ms. Nearest fiber PoP locked with jitter suppression.</p>
+                  </div>
+                </div>
+                <div class="ai-intel-item">
+                  <div class="intel-icon yellow"><i class="fa-solid fa-shield-virus"></i></div>
+                  <div class="intel-content">
+                    <strong>DNS Resolution Acceleration</strong>
+                    <p>Encrypted DoH cache warm. Resolving queries in &lt;15ms with zero privacy leakage.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card ai-recommendations-card">
+            <h4 class="sub-card-title"><i class="fa-solid fa-microchip"></i> Live Adaptive QoS Channels</h4>
+            <div class="qos-channel-grid">
+              <div class="qos-card">
+                <div class="qos-top">
+                  <span class="qos-name"><i class="fa-solid fa-gamepad"></i> Gaming UDP</span>
+                  <span class="badge green">PRIORITY 1</span>
+                </div>
+                <div class="qos-bar-wrap"><div class="qos-bar-fill" style="width: 100%;"></div></div>
+                <span class="qos-detail">0ms Synthetic Delay &bull; Fast Path</span>
+              </div>
+              <div class="qos-card">
+                <div class="qos-top">
+                  <span class="qos-name"><i class="fa-solid fa-video"></i> 4K/8K Media Stream</span>
+                  <span class="badge cyan">PRIORITY 2</span>
+                </div>
+                <div class="qos-bar-wrap"><div class="qos-bar-fill" style="width: 85%;"></div></div>
+                <span class="qos-detail">Adaptive Buffer Sizing Active</span>
+              </div>
+              <div class="qos-card">
+                <div class="qos-top">
+                  <span class="qos-name"><i class="fa-solid fa-cloud-arrow-down"></i> Background Data</span>
+                  <span class="badge yellow">THROTTLED</span>
+                </div>
+                <div class="qos-bar-wrap"><div class="qos-bar-fill" style="width: 30%;"></div></div>
+                <span class="qos-detail">Low Impact Yielding Active</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 8: TRENDS & HISTORICAL ANALYTICS (FROM STITCH DESIGN) -->
+      <section class="tab-pane" id="tab-trends" role="tabpanel">
+        <div class="trends-layout">
+          
+          <div class="glass-card trends-summary-card">
+            <div class="trends-header">
+              <div class="trends-title-wrap">
+                <i class="fa-solid fa-chart-line green-text"></i>
+                <div>
+                  <h3 class="card-title">Network Performance Trends</h3>
+                  <p class="card-subtitle">Historical diagnostic telemetry across testing sessions</p>
+                </div>
+              </div>
+              <div class="trends-actions">
+                <button class="cyber-btn-outline" id="clearTrendsHistoryBtn" title="Clear recorded history">
+                  <i class="fa-solid fa-trash-can"></i> CLEAR
+                </button>
+                <button class="cyber-btn-primary" id="exportTrendsDataBtn" title="Export CSV summary">
+                  <i class="fa-solid fa-file-csv"></i> EXPORT CSV
+                </button>
+              </div>
+            </div>
+
+            <div class="trends-stats-grid">
+              <div class="trend-stat-box">
+                <span class="stat-lbl">PEAK DOWNLOAD</span>
+                <strong class="stat-val green-text" id="trendPeakDown">48.2 Mbps</strong>
+                <span class="stat-sub"><i class="fa-solid fa-arrow-trend-up"></i> +24% after Turbo</span>
+              </div>
+              <div class="trend-stat-box">
+                <span class="stat-lbl">PEAK UPLOAD</span>
+                <strong class="stat-val cyan-text" id="trendPeakUp">22.4 Mbps</strong>
+                <span class="stat-sub"><i class="fa-solid fa-arrow-trend-up"></i> +18% multi-burst</span>
+              </div>
+              <div class="trend-stat-box">
+                <span class="stat-lbl">MINIMUM PING</span>
+                <strong class="stat-val" id="trendMinPing">11 ms</strong>
+                <span class="stat-sub"><i class="fa-solid fa-bolt green-text"></i> Anycast Edge</span>
+              </div>
+              <div class="trend-stat-box">
+                <span class="stat-lbl">AVERAGE JITTER</span>
+                <strong class="stat-val" id="trendAvgJitter">1.8 ms</strong>
+                <span class="stat-sub"><i class="fa-solid fa-check green-text"></i> Ultra-Stable</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card history-table-card">
+            <h4 class="sub-card-title"><i class="fa-solid fa-clock-rotate-left"></i> Session Test History</h4>
+            <div class="history-table-responsive">
+              <table class="cyber-table" id="trendsHistoryTable">
+                <thead>
+                  <tr>
+                    <th>TIME</th>
+                    <th>NODE / EDGE</th>
+                    <th>DOWNLOAD</th>
+                    <th>UPLOAD</th>
+                    <th>PING</th>
+                    <th>JITTER</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="trendsTableBody">
+                  <!-- Dynamically populated rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 9: AI SUPPORT & NETWORK ASSISTANT CHAT (FROM STITCH DESIGN) -->
+      <section class="tab-pane" id="tab-support-chat" role="tabpanel">
+        <div class="support-chat-layout">
+          
+          <div class="glass-card chat-card">
+            <div class="chat-header">
+              <div class="chat-bot-info">
+                <div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                  <h3 class="card-title">NetBoost AI Support Assistant</h3>
+                  <span class="chat-status-pill"><i class="fa-solid fa-circle green-text"></i> Online &bull; Diagnostic Engine Linked</span>
+                </div>
+              </div>
+              <button class="cyber-btn-outline" id="clearChatBtn" style="padding: 4px 10px; font-size: 0.7rem;">
+                <i class="fa-solid fa-rotate-right"></i> RESET CHAT
+              </button>
+            </div>
+
+            <div class="chat-messages-container" id="supportChatMessages">
+              <div class="chat-msg bot-msg">
+                <div class="msg-bubble">
+                  <strong><i class="fa-solid fa-sparkles cyan-text"></i> NetBoost AI:</strong>
+                  <p>Welcome to NivxBoost Command Center! I am your real-time network diagnostics AI assistant. How can I optimize your connection today?</p>
+                </div>
+                <span class="msg-time">Just now</span>
+              </div>
+            </div>
+
+            <!-- Quick Suggestion Prompt Chips -->
+            <div class="chat-prompt-chips">
+              <button class="prompt-chip" data-query="How do I reduce ping in PUBG / BGMI?">
+                <i class="fa-solid fa-helmet-safety"></i> Optimize PUBG / BGMI
+              </button>
+              <button class="prompt-chip" data-query="Why is my upload speed slower than download?">
+                <i class="fa-solid fa-upload"></i> Fix Slow Upload
+              </button>
+              <button class="prompt-chip" data-query="Which DNS server gives the lowest gaming latency?">
+                <i class="fa-solid fa-server"></i> Best DNS for Gaming
+              </button>
+              <button class="prompt-chip" data-query="What is Bufferbloat and how does NivxBoost fix it?">
+                <i class="fa-solid fa-shield-halved"></i> Explain Bufferbloat
+              </button>
+            </div>
+
+            <div class="chat-input-row">
+              <input type="text" id="chatInput" class="chat-input-field" placeholder="Ask AI network assistant anything (e.g. 'Optimize my Free Fire connection')..." autocomplete="off">
+              <button class="cyber-btn-primary chat-send-btn" id="chatSendBtn">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
     </main>
 
     <!-- Bottom HUD Footer Bar -->
@@ -963,6 +1197,151 @@ WebViewWidget(
       <div class="modal-footer">
         <button class="cyber-btn-primary" id="openLiveSiteBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i>
           TEST LIVE LINK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: AUTHENTICATION & COMMAND CENTER ACCESS (STITCH DESIGN) -->
+  <div class="cyber-modal" id="authModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="authBackdrop"></div>
+    <div class="glass-card modal-content auth-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-shield-halved cyan-text"></i>
+          <h3 id="authModalTitle">Nivxboost Command Center Access</h3>
+        </div>
+        <button class="modal-close-btn" id="closeAuthBtn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Logged Out State View -->
+        <div id="authFormsContainer">
+          <div class="auth-tabs">
+            <button class="auth-tab-btn active" id="authTabSignIn">SIGN IN</button>
+            <button class="auth-tab-btn" id="authTabSignUp">CREATE ACCOUNT</button>
+          </div>
+
+          <!-- Sign In Form -->
+          <form id="signInForm" class="auth-form active">
+            <div class="auth-input-group">
+              <label for="authEmail"><i class="fa-solid fa-envelope"></i> EMAIL ADDRESS</label>
+              <input type="email" id="authEmail" class="cyber-input" placeholder="sysadmin@network.local" required>
+            </div>
+            <div class="auth-input-group">
+              <div class="label-flex">
+                <label for="authPassword"><i class="fa-solid fa-lock"></i> PASSWORD</label>
+                <a href="#" class="forgot-pwd-link" id="forgotPwdLink">Forgot?</a>
+              </div>
+              <div class="password-input-wrap">
+                <input type="password" id="authPassword" class="cyber-input" placeholder="••••••••" required>
+                <button type="button" class="pwd-toggle-btn" id="togglePwdVisibility"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+            <button type="submit" class="cyber-btn-primary auth-submit-btn">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> AUTHENTICATE
+            </button>
+          </form>
+
+          <!-- Sign Up Form -->
+          <form id="signUpForm" class="auth-form">
+            <div class="auth-input-group">
+              <label for="signUpName"><i class="fa-solid fa-user"></i> FULL NAME / CALLSIGN</label>
+              <input type="text" id="signUpName" class="cyber-input" placeholder="Commander Nivas" required>
+            </div>
+            <div class="auth-input-group">
+              <label for="signUpEmail"><i class="fa-solid fa-envelope"></i> EMAIL ADDRESS</label>
+              <input type="email" id="signUpEmail" class="cyber-input" placeholder="operator@nivx.io" required>
+            </div>
+            <div class="auth-input-group">
+              <label for="signUpPassword"><i class="fa-solid fa-lock"></i> CHOOSE PASSWORD</label>
+              <input type="password" id="signUpPassword" class="cyber-input" placeholder="Min. 8 characters" required>
+            </div>
+            <button type="submit" class="cyber-btn-primary auth-submit-btn">
+              <i class="fa-solid fa-user-plus"></i> REGISTER PROFILE
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span>OR CONNECT VIA</span>
+          </div>
+
+          <div class="social-auth-grid">
+            <button type="button" class="social-auth-btn" id="googleAuthBtn">
+              <i class="fa-brands fa-google"></i> Google Identity
+            </button>
+            <button type="button" class="social-auth-btn" id="appleAuthBtn">
+              <i class="fa-brands fa-apple"></i> Apple ID
+            </button>
+          </div>
+        </div>
+
+        <!-- Logged In State View -->
+        <div id="authProfileContainer" style="display: none;">
+          <div class="auth-profile-card">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+              <div class="profile-meta">
+                <h4 id="profileDisplayName">Commander Nivas</h4>
+                <span class="profile-email" id="profileDisplayEmail">operator@nivx.io</span>
+                <span class="profile-badge"><i class="fa-solid fa-shield-check green-text"></i> Command Level 1 &bull; Pro Tier</span>
+              </div>
+            </div>
+            <div class="profile-stats-mini">
+              <div class="p-stat"><span>BOOST SESSIONS</span><strong>142</strong></div>
+              <div class="p-stat"><span>OPTIMIZATION RATIO</span><strong class="green-text">99.4%</strong></div>
+            </div>
+            <button class="cyber-btn-danger" id="signOutBtn" style="width: 100%; margin-top: 16px;">
+              <i class="fa-solid fa-power-off"></i> SIGN OUT
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ONBOARDING WALKTHROUGH (STITCH DESIGN) -->
+  <div class="cyber-modal" id="onboardingModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="onboardingBackdrop"></div>
+    <div class="glass-card modal-content onboarding-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-compass cyan-text"></i>
+          <h3>Welcome to NivxBoost</h3>
+        </div>
+        <button class="modal-close-btn" id="closeOnboardingBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="onboarding-step active" id="onboardStep1">
+          <div class="onboard-icon"><i class="fa-solid fa-bolt cyan-text"></i></div>
+          <h4>Quantum Turbo Acceleration</h4>
+          <p>Instantly tune TCP window scaling, clamp MTU buffer queues, and eliminate packet bottlenecks with one click.</p>
+        </div>
+
+        <div class="onboarding-step" id="onboardStep2">
+          <div class="onboard-icon"><i class="fa-solid fa-earth-americas green-text"></i></div>
+          <h4>Global Anycast Edge Routing</h4>
+          <p>Lock on to the lowest-latency edge server worldwide. Visualize real GPS radar and eliminate routing hops for PUBG, BGMI, and CS2.</p>
+        </div>
+
+        <div class="onboarding-step" id="onboardStep3">
+          <div class="onboard-icon"><i class="fa-solid fa-brain yellow-text"></i></div>
+          <h4>NetBoost AI Intelligence</h4>
+          <p>Real-time channel congestion detection, DoH DNS acceleration, and 24/7 AI Network Support Chat.</p>
+        </div>
+
+        <div class="onboard-dots">
+          <span class="onboard-dot active" data-step="1"></span>
+          <span class="onboard-dot" data-step="2"></span>
+          <span class="onboard-dot" data-step="3"></span>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button class="cyber-btn-outline" id="onboardPrevBtn" style="visibility: hidden;">BACK</button>
+        <button class="cyber-btn-primary" id="onboardNextBtn">NEXT <i class="fa-solid fa-arrow-right"></i></button>
       </div>
     </div>
   </div>

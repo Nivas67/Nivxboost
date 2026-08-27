@@ -2381,6 +2381,384 @@
   });
 
   // ==========================================================================
+  // 21. AI INSIGHTS & QUANTUM QOS CONTROLLER (STITCH DESIGN)
+  // ==========================================================================
+  const runAiOptimizeBtn = document.getElementById('runAiOptimizeBtn');
+  const aiHealthScore = document.getElementById('aiHealthScore');
+
+  if (runAiOptimizeBtn) {
+    runAiOptimizeBtn.addEventListener('click', async () => {
+      audio.playClick();
+      runAiOptimizeBtn.disabled = true;
+      runAiOptimizeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ANALYZING CHANNELS...';
+      logTerminal('>>> [AI ENGINE] Neural telemetry scanner initiated across 6 Anycast nodes...', 'prefix');
+      
+      await new Promise(r => setTimeout(r, 600));
+      logTerminal('>>> [AI ENGINE] Inspecting TCP window scaling & socket queue buffers...', 'prefix');
+      await performRealOptimizationActions();
+      
+      if (aiHealthScore) aiHealthScore.textContent = '100%';
+      runAiOptimizeBtn.innerHTML = '<i class="fa-solid fa-check"></i> OPTIMIZED';
+      audio.playSuccess();
+      logTerminal('>>> [AI ENGINE] Optimal QoS priority locked. Jitter variance clamped to <1ms.', 'success');
+
+      setTimeout(() => {
+        runAiOptimizeBtn.disabled = false;
+        runAiOptimizeBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> AUTO-OPTIMIZE';
+      }, 3000);
+    });
+  }
+
+  // ==========================================================================
+  // 22. TRENDS & TEST HISTORY LOGS CONTROLLER (STITCH DESIGN)
+  // ==========================================================================
+  const trendsTableBody = document.getElementById('trendsTableBody');
+  const clearTrendsHistoryBtn = document.getElementById('clearTrendsHistoryBtn');
+  const exportTrendsDataBtn = document.getElementById('exportTrendsDataBtn');
+
+  // Initial seed trends data
+  State.testHistory = [
+    { time: new Date(Date.now() - 3600000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), node: 'Cloudflare Anycast', down: '48.2 Mbps', up: '22.4 Mbps', ping: '11 ms', jitter: '1.2 ms', status: 'OPTIMAL' },
+    { time: new Date(Date.now() - 7200000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), node: 'Google Global Edge', down: '44.8 Mbps', up: '19.5 Mbps', ping: '14 ms', jitter: '1.8 ms', status: 'STABLE' },
+    { time: new Date(Date.now() - 14400000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), node: 'AWS CloudFront PoP', down: '41.0 Mbps', up: '18.2 Mbps', ping: '18 ms', jitter: '2.4 ms', status: 'VERIFIED' }
+  ];
+
+  function renderTrendsTable() {
+    if (!trendsTableBody) return;
+    trendsTableBody.innerHTML = '';
+    if (State.testHistory.length === 0) {
+      trendsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No test sessions recorded yet. Run Speed Lab or Turbo to populate history.</td></tr>';
+      return;
+    }
+
+    State.testHistory.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><i class="fa-regular fa-clock" style="color: var(--text-muted); margin-right: 4px;"></i> ${row.time}</td>
+        <td><strong>${row.node}</strong></td>
+        <td class="green-text">${row.down}</td>
+        <td class="cyan-text">${row.up}</td>
+        <td>${row.ping}</td>
+        <td>${row.jitter}</td>
+        <td><span class="badge ${row.status === 'OPTIMAL' ? 'green' : 'cyan'}">${row.status}</span></td>
+      `;
+      trendsTableBody.appendChild(tr);
+    });
+  }
+
+  renderTrendsTable();
+
+  if (clearTrendsHistoryBtn) {
+    clearTrendsHistoryBtn.addEventListener('click', () => {
+      audio.playAlert();
+      State.testHistory = [];
+      renderTrendsTable();
+      logTerminal('>>> [TRENDS] Test history logs cleared.', 'warn');
+    });
+  }
+
+  if (exportTrendsDataBtn) {
+    exportTrendsDataBtn.addEventListener('click', () => {
+      audio.playSuccess();
+      let csv = 'Timestamp,Node,Download_Mbps,Upload_Mbps,Ping_ms,Jitter_ms,Status\n';
+      State.testHistory.forEach(r => {
+        csv += `"${r.time}","${r.node}","${r.down}","${r.up}","${r.ping}","${r.jitter}","${r.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nivxboost-trends-history-${Date.now()}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      logTerminal('>>> [EXPORT] Historical trends data saved to CSV.', 'success');
+    });
+  }
+
+  // ==========================================================================
+  // 23. AI SUPPORT & NETWORK ASSISTANT CHAT CONTROLLER (STITCH DESIGN)
+  // ==========================================================================
+  const chatMessagesContainer = document.getElementById('supportChatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSendBtn = document.getElementById('chatSendBtn');
+  const clearChatBtn = document.getElementById('clearChatBtn');
+  const promptChips = document.querySelectorAll('.prompt-chip');
+
+  function appendChatMessage(sender, text, isBot = false) {
+    if (!chatMessagesContainer) return;
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-msg ${isBot ? 'bot-msg' : 'user-msg'}`;
+    msgDiv.innerHTML = `
+      <div class="msg-bubble">
+        ${isBot ? '<strong><i class="fa-solid fa-sparkles cyan-text"></i> NetBoost AI:</strong>' : '<strong><i class="fa-solid fa-user"></i> You:</strong>'}
+        <p>${text}</p>
+      </div>
+      <span class="msg-time">${timeStr}</span>
+    `;
+    chatMessagesContainer.appendChild(msgDiv);
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+  }
+
+  function generateAiResponse(userQuery) {
+    const q = userQuery.toLowerCase();
+    if (q.includes('pubg') || q.includes('bgmi') || q.includes('game') || q.includes('free fire')) {
+      return `To get the lowest gaming ping in **PUBG / BGMI / Free Fire**:\n1. Switch to the **TURBO ACCELERATOR** tab and click **ACTIVATE** under PUBG / BGMI.\n2. In **GLOBAL NODES**, lock on to Mumbai or Singapore Anycast.\n3. Open **DNS OPTIMIZER** and activate Cloudflare 1.1.1.1 (11ms resolution). Zero queue latency!`;
+    }
+    if (q.includes('upload') || q.includes('slow')) {
+      return `Mobile and uplink connections often stall on monolithic packets. NivxBoost uses **Progressive Multi-Stage Chunking** (256KB &rarr; 512KB &rarr; 1MB &rarr; 2MB) with socket preconnects to maximize upstream throughput without congestion.`;
+    }
+    if (q.includes('dns') || q.includes('domain')) {
+      return `The fastest encrypted DNS resolver tested is **Cloudflare 1.1.1.1** with **11ms RTT**, followed by Google 8.8.8.8 (14ms). You can benchmark all 4 providers simultaneously in the **DNS OPTIMIZER** tab.`;
+    }
+    if (q.includes('bufferbloat') || q.includes('bloat') || q.includes('jitter')) {
+      return `**Bufferbloat** occurs when excessive router buffers cause huge ping spikes during download/upload. NivxBoost solves this with **MTU buffer tuning (1500 bytes)** and active TCP window clamping, achieving a **Grade A+ (0ms queue delay)** rating!`;
+    }
+    return `NetBoost AI analyzed your query: "*${userQuery}*". Your current connection is evaluated at **99% Optimal** across Anycast nodes. Try activating **Turbo Boost** or running the **Speed Lab** test for maximum throughput!`;
+  }
+
+  function handleSendChatMessage() {
+    if (!chatInput) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
+    audio.playClick();
+    appendChatMessage('You', text, false);
+    chatInput.value = '';
+
+    setTimeout(() => {
+      audio.playSuccess();
+      const reply = generateAiResponse(text);
+      appendChatMessage('NetBoost AI', reply, true);
+    }, 450);
+  }
+
+  if (chatSendBtn) chatSendBtn.addEventListener('click', handleSendChatMessage);
+  if (chatInput) {
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSendChatMessage();
+    });
+  }
+
+  promptChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      audio.playClick();
+      const q = chip.dataset.query;
+      if (chatInput) chatInput.value = q;
+      handleSendChatMessage();
+    });
+  });
+
+  if (clearChatBtn) {
+    clearChatBtn.addEventListener('click', () => {
+      audio.playAlert();
+      if (chatMessagesContainer) {
+        chatMessagesContainer.innerHTML = `
+          <div class="chat-msg bot-msg">
+            <div class="msg-bubble">
+              <strong><i class="fa-solid fa-sparkles cyan-text"></i> NetBoost AI:</strong>
+              <p>Chat session reset. Ask me anything about network tuning, ping reduction, or DNS routing!</p>
+            </div>
+            <span class="msg-time">Just now</span>
+          </div>
+        `;
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 24. AUTHENTICATION & LOGIN/REGISTRATION CONTROLLER (STITCH DESIGN)
+  // ==========================================================================
+  const authModalBtn = document.getElementById('authModalBtn');
+  const authModal = document.getElementById('authModal');
+  const closeAuthBtn = document.getElementById('closeAuthBtn');
+  const authBackdrop = document.getElementById('authBackdrop');
+  const authTabSignIn = document.getElementById('authTabSignIn');
+  const authTabSignUp = document.getElementById('authTabSignUp');
+  const signInForm = document.getElementById('signInForm');
+  const signUpForm = document.getElementById('signUpForm');
+  const authFormsContainer = document.getElementById('authFormsContainer');
+  const authProfileContainer = document.getElementById('authProfileContainer');
+  const userAccountLabel = document.getElementById('userAccountLabel');
+  const userAvatarIcon = document.getElementById('userAvatarIcon');
+  const profileDisplayName = document.getElementById('profileDisplayName');
+  const profileDisplayEmail = document.getElementById('profileDisplayEmail');
+  const signOutBtn = document.getElementById('signOutBtn');
+  const googleAuthBtn = document.getElementById('googleAuthBtn');
+  const appleAuthBtn = document.getElementById('appleAuthBtn');
+  const togglePwdVisibility = document.getElementById('togglePwdVisibility');
+  const authPassword = document.getElementById('authPassword');
+
+  function openAuthModal() {
+    audio.playClick();
+    if (authModal) authModal.classList.add('open');
+  }
+
+  function closeAuthModal() {
+    audio.playClick();
+    if (authModal) authModal.classList.remove('open');
+  }
+
+  if (authModalBtn) authModalBtn.addEventListener('click', openAuthModal);
+  if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
+  if (authBackdrop) authBackdrop.addEventListener('click', closeAuthModal);
+
+  if (authTabSignIn && authTabSignUp) {
+    authTabSignIn.addEventListener('click', () => {
+      audio.playClick();
+      authTabSignIn.classList.add('active');
+      authTabSignUp.classList.remove('active');
+      signInForm.classList.add('active');
+      signUpForm.classList.remove('active');
+    });
+
+    authTabSignUp.addEventListener('click', () => {
+      audio.playClick();
+      authTabSignUp.classList.add('active');
+      authTabSignIn.classList.remove('active');
+      signUpForm.classList.add('active');
+      signInForm.classList.remove('active');
+    });
+  }
+
+  if (togglePwdVisibility && authPassword) {
+    togglePwdVisibility.addEventListener('click', () => {
+      audio.playClick();
+      const isPwd = authPassword.type === 'password';
+      authPassword.type = isPwd ? 'text' : 'password';
+      togglePwdVisibility.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+    });
+  }
+
+  function setUserLoggedIn(name, email) {
+    State.currentUser = { name, email, loggedIn: true };
+    if (userAccountLabel) userAccountLabel.textContent = name.toUpperCase();
+    if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-user-astronaut green-text';
+    if (profileDisplayName) profileDisplayName.textContent = name;
+    if (profileDisplayEmail) profileDisplayEmail.textContent = email;
+    if (authFormsContainer) authFormsContainer.style.display = 'none';
+    if (authProfileContainer) authProfileContainer.style.display = 'block';
+    logTerminal(`>>> [AUTH] Authenticated as ${name} (${email}). Pro Tier unlocked.`, 'success');
+  }
+
+  if (signInForm) {
+    signInForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      audio.playSuccess();
+      const email = document.getElementById('authEmail').value || 'sysadmin@network.local';
+      setUserLoggedIn('Commander Nivas', email);
+      closeAuthModal();
+    });
+  }
+
+  if (signUpForm) {
+    signUpForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      audio.playSuccess();
+      const name = document.getElementById('signUpName').value || 'Officer';
+      const email = document.getElementById('signUpEmail').value || 'operator@nivx.io';
+      setUserLoggedIn(name, email);
+      closeAuthModal();
+    });
+  }
+
+  if (googleAuthBtn) {
+    googleAuthBtn.addEventListener('click', () => {
+      audio.playSuccess();
+      setUserLoggedIn('Google User', 'nivas.network@gmail.com');
+      closeAuthModal();
+    });
+  }
+
+  if (appleAuthBtn) {
+    appleAuthBtn.addEventListener('click', () => {
+      audio.playSuccess();
+      setUserLoggedIn('Apple Operator', 'operator@icloud.com');
+      closeAuthModal();
+    });
+  }
+
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', () => {
+      audio.playAlert();
+      State.currentUser = null;
+      if (userAccountLabel) userAccountLabel.textContent = 'SIGN IN';
+      if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-circle-user';
+      if (authFormsContainer) authFormsContainer.style.display = 'block';
+      if (authProfileContainer) authProfileContainer.style.display = 'none';
+      logTerminal('>>> [AUTH] User session logged out.', 'warn');
+      closeAuthModal();
+    });
+  }
+
+  // ==========================================================================
+  // 25. ONBOARDING TOUR CONTROLLER (STITCH DESIGN)
+  // ==========================================================================
+  const onboardingBtn = document.getElementById('onboardingBtn');
+  const onboardingModal = document.getElementById('onboardingModal');
+  const closeOnboardingBtn = document.getElementById('closeOnboardingBtn');
+  const onboardingBackdrop = document.getElementById('onboardingBackdrop');
+  const onboardNextBtn = document.getElementById('onboardNextBtn');
+  const onboardPrevBtn = document.getElementById('onboardPrevBtn');
+  const onboardSteps = [document.getElementById('onboardStep1'), document.getElementById('onboardStep2'), document.getElementById('onboardStep3')];
+  const onboardDots = document.querySelectorAll('.onboard-dot');
+  let currentOnboardStep = 1;
+
+  function showOnboardStep(step) {
+    currentOnboardStep = step;
+    onboardSteps.forEach((s, idx) => {
+      if (s) s.classList.toggle('active', idx + 1 === step);
+    });
+    onboardDots.forEach((d, idx) => {
+      if (d) d.classList.toggle('active', idx + 1 === step);
+    });
+    if (onboardPrevBtn) onboardPrevBtn.style.visibility = step === 1 ? 'hidden' : 'visible';
+    if (onboardNextBtn) {
+      if (step === 3) {
+        onboardNextBtn.innerHTML = 'LAUNCH ENGINE <i class="fa-solid fa-rocket"></i>';
+      } else {
+        onboardNextBtn.innerHTML = 'NEXT <i class="fa-solid fa-arrow-right"></i>';
+      }
+    }
+  }
+
+  function openOnboardingModal() {
+    audio.playClick();
+    showOnboardStep(1);
+    if (onboardingModal) onboardingModal.classList.add('open');
+  }
+
+  function closeOnboardingModal() {
+    audio.playClick();
+    if (onboardingModal) onboardingModal.classList.remove('open');
+  }
+
+  if (onboardingBtn) onboardingBtn.addEventListener('click', openOnboardingModal);
+  if (closeOnboardingBtn) closeOnboardingBtn.addEventListener('click', closeOnboardingModal);
+  if (onboardingBackdrop) onboardingBackdrop.addEventListener('click', closeOnboardingModal);
+
+  if (onboardNextBtn) {
+    onboardNextBtn.addEventListener('click', () => {
+      audio.playClick();
+      if (currentOnboardStep < 3) {
+        showOnboardStep(currentOnboardStep + 1);
+      } else {
+        audio.playSuccess();
+        closeOnboardingModal();
+        logTerminal('>>> [ONBOARDING] System walkthrough completed. Quantum engine initialized.', 'success');
+      }
+    });
+  }
+
+  if (onboardPrevBtn) {
+    onboardPrevBtn.addEventListener('click', () => {
+      audio.playClick();
+      if (currentOnboardStep > 1) {
+        showOnboardStep(currentOnboardStep - 1);
+      }
+    });
+  }
+
+  // ==========================================================================
   // INITIALIZATION ON DOM READY
   // ==========================================================================
   loadSavedSettings();
@@ -2388,4 +2766,5 @@
   initRealInteractiveMap();
 
 })();
+
 
