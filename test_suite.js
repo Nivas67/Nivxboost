@@ -148,9 +148,11 @@ async function runAllTests() {
   const hasManifest = fs.existsSync(path.join(__dirname, 'manifest.json'));
   const hasServiceWorker = fs.existsSync(path.join(__dirname, 'service-worker.js'));
   const hasIcon = fs.existsSync(path.join(__dirname, 'icon.svg'));
+  const hasLoginPage = fs.existsSync(path.join(__dirname, 'login.html'));
   assertTest('PWA Mobile App', 'manifest.json present', hasManifest, hasManifest ? 'Valid PWA Manifest' : 'Missing manifest');
   assertTest('PWA Mobile App', 'service-worker.js present', hasServiceWorker, hasServiceWorker ? 'Service Worker Active' : 'Missing Service Worker');
   assertTest('PWA Mobile App', 'icon.svg present', hasIcon, hasIcon ? 'High-Res App Icon' : 'Missing Icon');
+  assertTest('Authentication System', 'login.html present & valid', hasLoginPage, hasLoginPage ? 'Login Portal Active' : 'Missing login.html');
 
   // Check Game Accelerator Presets
   const requiredGames = ['freefire', 'pubg', 'cs2', 'valorant', 'fortnite', 'warzone'];

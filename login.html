@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Nivxboost - Command Center Login</title>
+  <meta name="description" content="Nivxboost Command Center Authentication Portal">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="theme-color" content="#0b141c">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#0b141c",
+            "surface": "#0b141c",
+            "surface-container": "#182028",
+            "surface-container-low": "#141c24",
+            "surface-container-high": "#222b33",
+            "surface-container-highest": "#2d363e",
+            "primary": "#c3f5ff",
+            "primary-container": "#00e5ff",
+            "primary-fixed-dim": "#00daf3",
+            "on-primary": "#00363d",
+            "on-surface": "#dae3ee",
+            "on-surface-variant": "#bac9cc",
+            "outline": "#849396",
+            "outline-variant": "#3b494c"
+          },
+          fontFamily: {
+            "display": ["Orbitron", "Inter", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b141c;
+      color: #dae3ee;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glow-cyan {
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+    }
+
+    .glow-card {
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 1px rgba(0, 229, 255, 0.2);
+    }
+
+    .cyber-grid {
+      background-image: linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+
+<body class="bg-surface-dim cyber-grid flex flex-col items-center justify-center p-4 min-h-screen relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
+
+  <!-- Ambient Glow Effects -->
+  <div class="fixed inset-0 pointer-events-none z-0 opacity-25">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container rounded-full blur-[140px]"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-primary-fixed-dim rounded-full blur-[160px] opacity-40"></div>
+  </div>
+
+  <!-- Login Main Container -->
+  <div class="w-full max-w-md relative z-10">
+
+    <!-- Header / Logo -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant mb-3 shadow-xl glow-cyan">
+        <i class="fa-solid fa-satellite-dish text-3xl text-primary-fixed-dim"></i>
+      </div>
+      <h1 class="font-display text-2xl md:text-3xl font-bold tracking-wider text-primary-fixed-dim">NIVXBOOST</h1>
+      <p class="text-on-surface-variant text-xs md:text-sm mt-1">Quantum Network Engine &bull; Command Center Access</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-surface-container rounded-2xl p-6 md:p-8 border border-outline-variant glow-card relative backdrop-blur-md">
+      <!-- Cyber Top Stripe -->
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-80"></div>
+
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-display text-lg font-bold text-on-surface flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-primary-fixed-dim text-sm"></i>
+          <span id="cardTitle">Authenticate</span>
+        </h2>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant text-primary-fixed-dim">
+          SECURE &bull; TLS 1.3
+        </span>
+      </div>
+
+      <!-- Sign In / Sign Up Tabs -->
+      <div class="flex bg-surface-container-low rounded-lg p-1 mb-6 border border-outline-variant">
+        <button id="tabSignIn" class="flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all">
+          SIGN IN
+        </button>
+        <button id="tabSignUp" class="flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all">
+          CREATE ACCOUNT
+        </button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="email">
+            <i class="fa-solid fa-envelope mr-1 text-primary-fixed-dim"></i> Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
+            placeholder="sysadmin@network.local"
+            value="admin@nivxboost.io"
+            required
+          />
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant" for="password">
+              <i class="fa-solid fa-lock mr-1 text-primary-fixed-dim"></i> Password
+            </label>
+            <a href="#" class="text-[11px] font-mono text-primary-fixed-dim hover:underline" onclick="alert('Password reset link sent to registered email.'); return false;">Forgot?</a>
+          </div>
+          <div class="relative">
+            <input
+              id="password"
+              type="password"
+              class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
+              placeholder="••••••••"
+              value="quantum2026"
+              required
+            />
+            <button type="button" id="togglePasswordBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
+              <i class="fa-solid fa-eye text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          id="submitBtn"
+          class="w-full bg-primary-fixed-dim hover:bg-primary-container text-on-primary font-bold py-3 rounded-lg text-xs md:text-sm tracking-wider uppercase transition-all duration-200 glow-cyan hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 mt-2"
+        >
+          <span>Access Command Center</span>
+          <i class="fa-solid fa-arrow-right-to-bracket text-sm"></i>
+        </button>
+      </form>
+
+      <!-- Sign Up Extra Field (Hidden by default) -->
+      <form id="registerForm" class="space-y-4 hidden">
+        <div>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regName">
+            <i class="fa-solid fa-user mr-1 text-primary-fixed-dim"></i> Full Name / Callsign
+          </label>
+          <input
+            id="regName"
+            type="text"
+            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
+            placeholder="Commander Nivas"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regEmail">
+            <i class="fa-solid fa-envelope mr-1 text-primary-fixed-dim"></i> Email Address
+          </label>
+          <input
+            id="regEmail"
+            type="email"
+            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
+            placeholder="operator@nivx.io"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-mono uppercase tracking-wider text-on-surface-variant mb-1" for="regPassword">
+            <i class="fa-solid fa-lock mr-1 text-primary-fixed-dim"></i> Choose Password
+          </label>
+          <input
+            id="regPassword"
+            type="password"
+            class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2.5 px-3 text-sm text-on-surface placeholder:text-outline focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim outline-none transition-colors font-mono"
+            placeholder="Min. 8 characters"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-primary-fixed-dim hover:bg-primary-container text-on-primary font-bold py-3 rounded-lg text-xs md:text-sm tracking-wider uppercase transition-all duration-200 glow-cyan hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 mt-2"
+        >
+          <span>Create Operator Profile</span>
+          <i class="fa-solid fa-user-plus text-sm"></i>
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-3 my-5">
+        <div class="h-px bg-outline-variant flex-1"></div>
+        <span class="text-[10px] font-mono text-on-surface-variant uppercase tracking-wider">Or authenticate via</span>
+        <div class="h-px bg-outline-variant flex-1"></div>
+      </div>
+
+      <!-- OAuth & Quick Guest Buttons -->
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          id="googleLoginBtn"
+          class="bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
+        >
+          <i class="fa-brands fa-google text-red-400"></i> Google ID
+        </button>
+        <button
+          type="button"
+          id="appleLoginBtn"
+          class="bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
+        >
+          <i class="fa-brands fa-apple text-gray-200"></i> Apple ID
+        </button>
+      </div>
+
+      <!-- Quick Guest Access -->
+      <div class="mt-4 pt-3 border-t border-outline-variant text-center">
+        <button
+          type="button"
+          id="guestAccessBtn"
+          class="text-xs font-mono text-primary-fixed-dim hover:text-primary transition-colors flex items-center justify-center gap-1.5 mx-auto"
+        >
+          <i class="fa-solid fa-bolt"></i> Bypass with 1-Click Guest Access &rarr;
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-6 text-xs text-on-surface-variant font-mono">
+      <span>NivxBoost Core v4.8.9 &bull; Quantum Node Infrastructure</span>
+    </div>
+
+  </div>
+
+  <script>
+    // Authentication Logic
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabSignUp = document.getElementById('tabSignUp');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const cardTitle = document.getElementById('cardTitle');
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const passwordInput = document.getElementById('password');
+
+    // Tab Switching
+    tabSignIn.addEventListener('click', () => {
+      tabSignIn.className = 'flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all';
+      tabSignUp.className = 'flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all';
+      loginForm.classList.remove('hidden');
+      registerForm.classList.add('hidden');
+      cardTitle.textContent = 'Authenticate';
+    });
+
+    tabSignUp.addEventListener('click', () => {
+      tabSignUp.className = 'flex-1 py-1.5 text-xs font-bold rounded-md bg-primary-container text-on-primary transition-all';
+      tabSignIn.className = 'flex-1 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface transition-all';
+      registerForm.classList.remove('hidden');
+      loginForm.classList.add('hidden');
+      cardTitle.textContent = 'Create Profile';
+    });
+
+    // Toggle Password Visibility
+    togglePasswordBtn.addEventListener('click', () => {
+      const isPwd = passwordInput.type === 'password';
+      passwordInput.type = isPwd ? 'text' : 'password';
+      togglePasswordBtn.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash text-xs"></i>' : '<i class="fa-solid fa-eye text-xs"></i>';
+    });
+
+    function authenticateAndRedirect(userName, userEmail) {
+      const userObj = {
+        name: userName || 'Commander Nivas',
+        email: userEmail || 'operator@nivx.io',
+        token: 'nivx_jwt_' + Math.random().toString(36).substring(2),
+        loggedIn: true,
+        loginTime: Date.now()
+      };
+      localStorage.setItem('nivx_user_session', JSON.stringify(userObj));
+      
+      // Redirect to main command center dashboard
+      window.location.href = 'index.html';
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value || 'sysadmin@network.local';
+      authenticateAndRedirect('Commander Nivas', email);
+    });
+
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value || 'Operator';
+      const email = document.getElementById('regEmail').value || 'operator@nivx.io';
+      authenticateAndRedirect(name, email);
+    });
+
+    document.getElementById('googleLoginBtn').addEventListener('click', () => {
+      authenticateAndRedirect('Google User', 'nivas.network@gmail.com');
+    });
+
+    document.getElementById('appleLoginBtn').addEventListener('click', () => {
+      authenticateAndRedirect('Apple Operator', 'operator@icloud.com');
+    });
+
+    document.getElementById('guestAccessBtn').addEventListener('click', () => {
+      authenticateAndRedirect('Guest Operator', 'guest@nivxboost.io');
+    });
+  </script>
+</body>
+
+</html>

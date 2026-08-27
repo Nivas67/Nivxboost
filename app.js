@@ -2629,8 +2629,11 @@
     });
   }
 
-  function setUserLoggedIn(name, email) {
+  function setUserLoggedIn(name, email, save = true) {
     State.currentUser = { name, email, loggedIn: true };
+    if (save) {
+      localStorage.setItem('nivx_user_session', JSON.stringify(State.currentUser));
+    }
     if (userAccountLabel) userAccountLabel.textContent = name.toUpperCase();
     if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-user-astronaut green-text';
     if (profileDisplayName) profileDisplayName.textContent = name;
@@ -2638,6 +2641,20 @@
     if (authFormsContainer) authFormsContainer.style.display = 'none';
     if (authProfileContainer) authProfileContainer.style.display = 'block';
     logTerminal(`>>> [AUTH] Authenticated as ${name} (${email}). Pro Tier unlocked.`, 'success');
+  }
+
+  function loadSavedUserSession() {
+    const saved = localStorage.getItem('nivx_user_session');
+    if (saved) {
+      try {
+        const u = JSON.parse(saved);
+        if (u && u.name) {
+          setUserLoggedIn(u.name, u.email || 'operator@nivx.io', false);
+          return true;
+        }
+      } catch (e) {}
+    }
+    return false;
   }
 
   if (signInForm) {
@@ -2681,6 +2698,7 @@
     signOutBtn.addEventListener('click', () => {
       audio.playAlert();
       State.currentUser = null;
+      localStorage.removeItem('nivx_user_session');
       if (userAccountLabel) userAccountLabel.textContent = 'SIGN IN';
       if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-circle-user';
       if (authFormsContainer) authFormsContainer.style.display = 'block';
@@ -2762,6 +2780,7 @@
   // INITIALIZATION ON DOM READY
   // ==========================================================================
   loadSavedSettings();
+  loadSavedUserSession();
   startContinuousMonitoring();
   initRealInteractiveMap();
 
