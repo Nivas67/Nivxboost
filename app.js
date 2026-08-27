@@ -172,6 +172,7 @@
     boostStartTime: null,
     boostTimerInterval: null,
     monitoringInterval: null,
+    heartbeatInterval: null,
     selectedMode: 'gaming',
     activeNode: SERVER_NODES[0],
     activeDns: DNS_PROVIDERS[0],
@@ -285,6 +286,31 @@
   }
 
   /**
+   * Measure real micro-burst download sample to estimate live link throughput
+   */
+  async function measureRealThroughputSample(endpointUrl, sampleBytes = 2000000) {
+    if (!navigator.onLine) return 0;
+    const t0 = performance.now();
+    try {
+      const response = await fetch(`${endpointUrl}/__down?bytes=${sampleBytes}&_t=${Date.now()}`, {
+        method: 'GET',
+        cache: 'no-store',
+        mode: 'cors',
+        priority: 'high'
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const t1 = performance.now();
+        const sec = (t1 - t0) / 1000;
+        if (sec > 0) {
+          return parseFloat(((blob.size * 8) / (sec * 1000000)).toFixed(1));
+        }
+      }
+    } catch (e) {}
+    return 0;
+  }
+
+  /**
    * Measure real DNS query round-trip time to a DoH endpoint
    */
   async function measureRealDns(dohUrl) {
@@ -356,7 +382,6 @@
 
       State.liveMetrics.networkType = netLabel;
 
-      // Real signal strength reporting if available in browser
       if (conn.rtt && conn.downlink) {
         State.liveMetrics.signalStrength = `${conn.downlink} Mbps Downlink (RTT: ${conn.rtt}ms)`;
       } else {
@@ -502,7 +527,6 @@
     const mapContainer = document.getElementById('realMapContainer');
     if (!mapContainer || typeof L === 'undefined') return;
 
-    // Initialize Leaflet Map centered on default coordinates
     leafletMap = L.map('realMapContainer', {
       center: [25.0, 15.0],
       zoom: 2,
@@ -512,14 +536,12 @@
       attributionControl: true
     });
 
-    // Dark Matter CartoDB Vector Tiles (Real Streets, Roads, Geographic Borders)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(leafletMap);
 
-    // Plot Server Node Markers
     SERVER_NODES.forEach(node => {
       const customIcon = L.divIcon({
         className: 'custom-node-icon',
@@ -545,10 +567,8 @@
       nodeMarkers.push({ id: node.id, marker, lat: node.lat, lng: node.lng });
     });
 
-    // Setup Geolocation Tracking
     setupRealGeolocation();
 
-    // Map Control Overlay Buttons
     const locateUserBtn = document.getElementById('locateUserBtn');
     const resetMapZoomBtn = document.getElementById('resetMapZoomBtn');
 
@@ -571,13 +591,9 @@
       });
     }
 
-    // Refresh map layout on window resize or tab switch
     setTimeout(() => { leafletMap.invalidateSize(); }, 400);
   }
 
-  /**
-   * Acquire real GPS location and continuous position updates
-   */
   function setupRealGeolocation(manualRequest = false) {
     const userGpsCoordinatesEl = document.getElementById('userGpsCoordinates');
 
@@ -606,7 +622,6 @@
 
       if (userGpsCoordinatesEl) userGpsCoordinatesEl.textContent = coordLabel;
 
-      // Update Map Marker
       if (leafletMap) {
         if (!userMarker) {
           const userIcon = L.divIcon({
@@ -645,7 +660,6 @@
           }
         }
 
-        // Draw Route Line from User to Active Node
         updateMapRoutingLine();
       }
 
@@ -663,7 +677,6 @@
       logTerminal(`>>> Geolocation status: ${msg}`, 'warn');
     };
 
-    // Continuous real GPS watching
     if (State.userLocation.watchId !== null) {
       navigator.geolocation.clearWatch(State.userLocation.watchId);
     }
@@ -894,6 +907,7 @@
       'https://speed.cloudflare.com',
       'https://cloudflare-dns.com',
       'https://dns.google',
+      'https://dns.quad9.net',
       'https://a.basemaps.cartocdn.com'
     ];
     domains.forEach(domain => {
@@ -902,6 +916,11 @@
       link.href = domain;
       link.crossOrigin = 'anonymous';
       document.head.appendChild(link);
+
+      const dnsLink = document.createElement('link');
+      dnsLink.rel = 'dns-prefetch';
+      dnsLink.href = domain;
+      document.head.appendChild(dnsLink);
     });
 
     // 3. Socket Keep-Alive Renewal & Connection Warm-up
@@ -931,8 +950,11 @@
 
     // Step 1: Measure Real Baseline (Before)
     const beforeResult = await measureRealPing(State.activeNode.endpoint, 3);
-    State.baselineBeforeBoost = beforeResult;
-    logTerminal(`[BASELINE] Latency: ${beforeResult.ping !== null ? beforeResult.ping + 'ms' : '--'} | Jitter: ${beforeResult.jitter !== null ? beforeResult.jitter + 'ms' : '--'}`, 'warn');
+    const beforeThroughput = await measureRealThroughputSample(State.activeNode.endpoint, 1500000);
+    State.baselineBeforeBoost = { ...beforeResult, throughput: beforeThroughput };
+
+    pushSpectrumValue(beforeThroughput);
+    logTerminal(`[BASELINE] Latency: ${beforeResult.ping !== null ? beforeResult.ping + 'ms' : '--'} | Jitter: ${beforeResult.jitter !== null ? beforeResult.jitter + 'ms' : '--'} | Speed: ${beforeThroughput} Mbps`, 'warn');
 
     // Pipeline Step 1: DNS & Cache Purge
     setStageActive('stageDns', 'Purging cache & preconnecting...');
@@ -953,7 +975,8 @@
     // Pipeline Step 4: Edge Routing & Verification
     setStageActive('stageNode', 'Re-measuring edge latency...');
     const afterResult = await measureRealPing(State.activeNode.endpoint, 4);
-    State.lastBoostResult = afterResult;
+    const afterThroughput = await measureRealThroughputSample(State.activeNode.endpoint, 2500000);
+    State.lastBoostResult = { ...afterResult, throughput: afterThroughput };
     setStageCompleted('stageNode', 'Verified');
 
     // Pipeline Step 5: Final Lock & Comparison
@@ -961,7 +984,7 @@
     await new Promise(r => setTimeout(r, 200));
     setStageCompleted('stageLock', 'Active');
 
-    completeRealTurboBoost(beforeResult, afterResult);
+    completeRealTurboBoost(State.baselineBeforeBoost, State.lastBoostResult);
   }
 
   function setStageActive(id, text) {
@@ -988,18 +1011,29 @@
 
     const beforePing = before.ping !== null ? before.ping : 0;
     const afterPing = after.ping !== null ? after.ping : 0;
+    const beforeSpeed = before.throughput || 0;
+    const afterSpeed = after.throughput || 0;
 
     let deltaPercent = 0;
     let deltaText = '';
+
+    // Calculate real measured efficiency from speed and latency
+    if (beforeSpeed > 0 && afterSpeed > 0) {
+      const speedDiff = afterSpeed - beforeSpeed;
+      deltaPercent = parseFloat(((speedDiff / beforeSpeed) * 100).toFixed(1));
+    } else if (beforePing > 0 && afterPing > 0) {
+      const pingDiff = beforePing - afterPing;
+      deltaPercent = parseFloat(((pingDiff / beforePing) * 100).toFixed(1));
+    }
+
     if (beforePing > 0 && afterPing > 0) {
       const diff = beforePing - afterPing;
-      deltaPercent = parseFloat(((diff / beforePing) * 100).toFixed(1));
       if (diff > 0) {
-        deltaText = `-${diff}ms (-${deltaPercent}%) Latency`;
+        deltaText = `-${diff}ms (-${((diff / beforePing) * 100).toFixed(1)}%) Latency`;
       } else if (diff < 0) {
-        deltaText = `+${Math.abs(diff)}ms (+${Math.abs(deltaPercent)}%) Latency`;
+        deltaText = `+${Math.abs(diff)}ms (+${Math.abs(((diff / beforePing) * 100)).toFixed(1)}%) Latency`;
       } else {
-        deltaText = `0ms (No Change in Ping)`;
+        deltaText = `0ms (Stable Connection)`;
       }
     } else {
       deltaText = 'Measured';
@@ -1033,6 +1067,26 @@
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
     State.boostTimerInterval = setInterval(updateBoostTimer, 1000);
 
+    // Active Socket Keep-Alive Heartbeat Daemon while Boost is Active
+    if (State.heartbeatInterval) clearInterval(State.heartbeatInterval);
+    State.heartbeatInterval = setInterval(async () => {
+      if (document.visibilityState === 'visible' && State.isBoosted) {
+        try {
+          const t0 = performance.now();
+          const r = await fetch(`https://speed.cloudflare.com/__down?bytes=0&hb=${Date.now()}`, {
+            method: 'GET',
+            cache: 'no-store',
+            priority: 'high'
+          });
+          if (r.ok) {
+            const liveRtt = Math.max(1, Math.round(performance.now() - t0));
+            State.liveMetrics.ping = liveRtt;
+            document.getElementById('metricPing').textContent = liveRtt;
+          }
+        } catch (e) {}
+      }
+    }, 3500);
+
     // Save Network + Location Session Record
     State.sessionHistory.push({
       timestamp: new Date().toISOString(),
@@ -1041,11 +1095,13 @@
       longitude: State.userLocation.lng,
       beforePing,
       afterPing,
+      beforeSpeed,
+      afterSpeed,
       deltaText,
       networkType: State.liveMetrics.networkType
     });
 
-    logTerminal(`>>> [BEFORE] Ping: ${beforePing}ms | [AFTER] Ping: ${afterPing}ms | Real Delta: ${deltaText}`, 'success');
+    logTerminal(`>>> [BEFORE] Ping: ${beforePing}ms (${beforeSpeed} Mbps) | [AFTER] Ping: ${afterPing}ms (${afterSpeed} Mbps) | Real Delta: ${deltaText}`, 'success');
   }
 
   function revertTurboBoost() {
@@ -1054,6 +1110,7 @@
     State.isBoosting = false;
 
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
+    if (State.heartbeatInterval) clearInterval(State.heartbeatInterval);
     if (boostTimerWrap) boostTimerWrap.style.display = 'none';
 
     boostBtnText.textContent = 'INITIALIZE TURBO BOOST';
@@ -1299,7 +1356,6 @@
 
     if (streamScoreEl) streamScoreEl.textContent = streamScore;
 
-    // Record Speed Test Session Results
     State.testResults = {
       downloadSpeed: dlResult.averageMbps,
       uploadSpeed: ulResult.averageMbps,
@@ -1311,7 +1367,6 @@
       timestamp: new Date().toISOString()
     };
 
-    // Save Network + Location Session Record
     State.sessionHistory.push({
       timestamp: new Date().toISOString(),
       type: 'Speed Test',
@@ -1714,7 +1769,6 @@
       const pane = document.getElementById(target);
       if (pane) pane.classList.add('active');
 
-      // Refresh Leaflet map size on switching to nodes tab
       if (target === 'tab-nodes' && leafletMap) {
         setTimeout(() => {
           leafletMap.invalidateSize();
