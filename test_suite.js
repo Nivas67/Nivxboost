@@ -168,7 +168,7 @@ async function runAllTests() {
   }
 
   await testHttpEndpoint('Cloudflare Speed Edge', 'https://speed.cloudflare.com/__down?bytes=0');
-  await testHttpEndpoint('Esri Clean Dark Vector Map Tiles', 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/2/1/1');
+  await testHttpEndpoint('OpenStreetMap Clean Dark Vector Tiles', 'https://tile.openstreetmap.org/2/1/1.png');
   await testHttpEndpoint('Google Anycast Edge', 'https://www.google.com/generate_204');
 
   // --------------------------------------------------------------------------

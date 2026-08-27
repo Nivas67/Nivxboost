@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-27T08:48:16.403Z",
+  "timestamp": "2026-08-27T09:10:53.626Z",
   "totalTests": 40,
   "passed": 40,
   "failed": 0,
@@ -261,21 +261,21 @@
       "feature": "Network Endpoints",
       "test": "Cloudflare Speed Edge [200]",
       "status": "PASS",
-      "actual": "130 ms RTT",
+      "actual": "280 ms RTT",
       "issue": "None"
     },
     {
       "feature": "Network Endpoints",
-      "test": "Esri Clean Dark Vector Map Tiles [200]",
+      "test": "OpenStreetMap Clean Dark Vector Tiles [200]",
       "status": "PASS",
-      "actual": "144 ms RTT",
+      "actual": "337 ms RTT",
       "issue": "None"
     },
     {
       "feature": "Network Endpoints",
       "test": "Google Anycast Edge [204]",
       "status": "PASS",
-      "actual": "65 ms RTT",
+      "actual": "252 ms RTT",
       "issue": "None"
     },
     {

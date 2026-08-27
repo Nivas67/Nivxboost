@@ -593,20 +593,16 @@
       center: [25.0, 15.0],
       zoom: 2,
       minZoom: 2,
-      maxZoom: 18,
+      maxZoom: 19,
       zoomControl: true,
       attributionControl: true
     });
 
-    // Clean, High-Resolution, Watermark-Free Dark Vector Map Layers (No API Key Required)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/" target="_blank">Esri</a> &mdash; Global Vector Basemap',
-      maxZoom: 18
-    }).addTo(leafletMap);
-
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 18,
-      opacity: 0.95
+    // High-Resolution OpenStreetMap Tiles (Full World Coverage up to Zoom 19, No API Key, No Missing Tiles)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      maxNativeZoom: 19
     }).addTo(leafletMap);
 
     SERVER_NODES.forEach(node => {

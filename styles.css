@@ -1321,6 +1321,10 @@ body.cyber-body {
   font-family: var(--font-body) !important;
 }
 
+.leaflet-tile-pane {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
 .leaflet-control-zoom {
   border: 1px solid var(--border-glass) !important;
   border-radius: var(--border-radius-xs) !important;

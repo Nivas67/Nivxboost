@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NivxBoost — Ultra-Premium Quantum Network Speed & Latency Accelerator</title>
-  <meta name="description" content="NivxBoost: Next-generation network speed accelerator, ping stabilizer, DNS optimizer, and gaming packet prioritizer. Unlock maximum bandwidth with one click.">
-  <meta name="keywords" content="network booster, internet speed test, ping reducer, lag fix, DNS optimizer, bandwidth accelerator, gaming latency">
+  <meta name="description"
+    content="NivxBoost: Next-generation network speed accelerator, ping stabilizer, DNS optimizer, and gaming packet prioritizer. Unlock maximum bandwidth with one click.">
+  <meta name="keywords"
+    content="network booster, internet speed test, ping reducer, lag fix, DNS optimizer, bandwidth accelerator, gaming latency">
   <meta name="theme-color" content="#050813">
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -14,22 +17,29 @@
 
   <!-- OpenGraph Meta Tags -->
   <meta property="og:title" content="NivxBoost — Quantum Network Speed Accelerator">
-  <meta property="og:description" content="Accelerate your internet speed, eliminate jitter, optimize DNS routing, and lock in ultra-low gaming latency.">
+  <meta property="og:description"
+    content="Accelerate your internet speed, eliminate jitter, optimize DNS routing, and lock in ultra-low gaming latency.">
   <meta property="og:type" content="website">
 
   <!-- Google Fonts: Orbitron, Outfit, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <!-- FontAwesome Icons for High-Tech HUD UI -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Leaflet Real Interactive Map CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-  <link rel="stylesheet" href="styles.css?v=4.8.6">
+  <link rel="stylesheet" href="styles.css?v=4.8.7">
 </head>
+
 <body class="cyber-body">
   <div class="ambient-glow ambient-1"></div>
   <div class="ambient-glow ambient-2"></div>
@@ -39,7 +49,7 @@
 
   <!-- Main App Shell -->
   <div class="app-container">
-    
+
     <!-- Top Navigation HUD Bar -->
     <header class="hud-header">
       <div class="header-left">
@@ -79,18 +89,21 @@
       </div>
 
       <div class="header-right">
-        <button class="hud-action-btn" id="soundToggleBtn" title="Toggle Futuristic Audio SFX" aria-label="Toggle Sound Effects">
+        <button class="hud-action-btn" id="soundToggleBtn" title="Toggle Futuristic Audio SFX"
+          aria-label="Toggle Sound Effects">
           <i class="fa-solid fa-volume-high" id="soundIcon"></i>
           <span class="btn-tooltip">SFX ON</span>
         </button>
         <button class="hud-action-btn" id="themeGlowBtn" title="Cycle Ambient Aura Glow" aria-label="Cycle Glow Theme">
           <i class="fa-solid fa-wand-magic-sparkles"></i>
         </button>
-        <button class="hud-action-btn" id="exportAuditBtn" title="Export Diagnostics Report" aria-label="Export Audit Report">
+        <button class="hud-action-btn" id="exportAuditBtn" title="Export Diagnostics Report"
+          aria-label="Export Audit Report">
           <i class="fa-solid fa-file-shield"></i>
           <span>AUDIT CERT</span>
         </button>
-        <button class="hud-action-btn primary-glow-btn" id="openSettingsBtn" title="System Configuration" aria-label="Open Settings">
+        <button class="hud-action-btn primary-glow-btn" id="openSettingsBtn" title="System Configuration"
+          aria-label="Open Settings">
           <i class="fa-solid fa-sliders"></i>
         </button>
       </div>
@@ -126,11 +139,11 @@
 
     <!-- Content Sections Container -->
     <main class="hud-main-content">
-      
+
       <!-- TAB 1: TURBO ACCELERATOR (HERO ENGINE) -->
       <section class="tab-pane active" id="tab-turbo" role="tabpanel">
         <div class="turbo-grid">
-          
+
           <!-- Left Column: Primary Speed Accelerator Engine -->
           <div class="glass-card turbo-engine-card">
             <div class="card-header">
@@ -139,17 +152,20 @@
                 <h2 class="card-title">Network Optimization Matrix</h2>
               </div>
               <div class="mode-pills">
-                <button class="mode-pill active" data-mode="gaming"><i class="fa-solid fa-gamepad"></i> Ultra Gaming</button>
+                <button class="mode-pill active" data-mode="gaming"><i class="fa-solid fa-gamepad"></i> Ultra
+                  Gaming</button>
                 <button class="mode-pill" data-mode="streaming"><i class="fa-solid fa-film"></i> 8K Stream</button>
-                <button class="mode-pill" data-mode="download"><i class="fa-solid fa-download"></i> Max Bandwidth</button>
-                <button class="mode-pill" data-mode="balanced"><i class="fa-solid fa-scale-balanced"></i> Balanced</button>
+                <button class="mode-pill" data-mode="download"><i class="fa-solid fa-download"></i> Max
+                  Bandwidth</button>
+                <button class="mode-pill" data-mode="balanced"><i class="fa-solid fa-scale-balanced"></i>
+                  Balanced</button>
               </div>
             </div>
 
             <!-- Central Booster Display Gauge -->
             <div class="dial-container">
               <canvas id="boosterCanvas" width="420" height="420" class="booster-canvas"></canvas>
-              
+
               <div class="dial-center-overlay">
                 <div class="quantum-core" id="quantumCore">
                   <div class="core-rings"></div>
@@ -227,7 +243,8 @@
                 <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Default ISP Stack
               </button>
               <div class="live-boost-timer" id="boostTimerWrap" style="display: none;">
-                <i class="fa-solid fa-clock-rotate-left"></i> BOOST DURATION: <span id="boostTimeCounter">00:00:00</span>
+                <i class="fa-solid fa-clock-rotate-left"></i> BOOST DURATION: <span
+                  id="boostTimeCounter">00:00:00</span>
               </div>
             </div>
 
@@ -235,7 +252,7 @@
 
           <!-- Right Column: Live Metrics, Telemetry & Gaming Presets -->
           <div class="turbo-side-column">
-            
+
             <!-- Real-Time Impact Metric Cards -->
             <div class="metrics-grid">
               <div class="glass-card mini-metric-card">
@@ -248,7 +265,8 @@
                     <span class="metric-val" id="metricPing">--</span>
                     <span class="metric-unit">ms</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaPing"><i class="fa-solid fa-signal"></i> Measuring...</span>
+                  <span class="metric-delta positive" id="deltaPing"><i class="fa-solid fa-signal"></i>
+                    Measuring...</span>
                 </div>
               </div>
 
@@ -262,7 +280,8 @@
                     <span class="metric-val" id="metricJitter">--</span>
                     <span class="metric-unit">ms</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaJitter"><i class="fa-solid fa-signal"></i> Measuring...</span>
+                  <span class="metric-delta positive" id="deltaJitter"><i class="fa-solid fa-signal"></i>
+                    Measuring...</span>
                 </div>
               </div>
 
@@ -276,7 +295,8 @@
                     <span class="metric-val" id="metricBloat">--</span>
                     <span class="metric-unit">Grade</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaBloat"><i class="fa-solid fa-shield"></i> Live Queue</span>
+                  <span class="metric-delta positive" id="deltaBloat"><i class="fa-solid fa-shield"></i> Live
+                    Queue</span>
                 </div>
               </div>
 
@@ -290,7 +310,8 @@
                     <span class="metric-val" id="metricLoss">--</span>
                     <span class="metric-unit">%</span>
                   </div>
-                  <span class="metric-delta positive" id="deltaLoss"><i class="fa-solid fa-check-double"></i> Live Loss Rate</span>
+                  <span class="metric-delta positive" id="deltaLoss"><i class="fa-solid fa-check-double"></i> Live Loss
+                    Rate</span>
                 </div>
               </div>
             </div>
@@ -370,7 +391,8 @@
               <div class="spectrum-footer">
                 <div class="spec-stat"><span>PEAK:</span> <strong id="specPeak">-- Mbps</strong></div>
                 <div class="spec-stat"><span>CURRENT:</span> <strong id="specCurrent">-- Mbps</strong></div>
-                <div class="spec-stat"><span>OPTIMIZED:</span> <strong class="green-text" id="specEff">Ready</strong></div>
+                <div class="spec-stat"><span>OPTIMIZED:</span> <strong class="green-text" id="specEff">Ready</strong>
+                </div>
               </div>
             </div>
 
@@ -383,7 +405,7 @@
       <section class="tab-pane" id="tab-speedtest" role="tabpanel">
         <div class="speedlab-layout">
           <div class="glass-card speedtest-main-card">
-            
+
             <div class="speedtest-header">
               <div>
                 <span class="card-tag"><i class="fa-solid fa-flask-vial"></i> PRECISION MULTI-STREAM BENCHMARK</span>
@@ -404,7 +426,7 @@
 
             <!-- Dual Gauge Display (Download & Upload) -->
             <div class="dual-gauges-container">
-              
+
               <!-- Download Gauge -->
               <div class="gauge-column">
                 <div class="gauge-title-badge download-theme">
@@ -490,7 +512,7 @@
       <!-- TAB 3: GLOBAL NODE HOPPER (SERVER MESH & ROUTING) -->
       <section class="tab-pane" id="tab-nodes" role="tabpanel">
         <div class="nodes-layout">
-          
+
           <div class="glass-card radar-map-card">
             <div class="card-header">
               <div>
@@ -511,14 +533,17 @@
                   <span>CURRENT ACTIVE TUNNEL: <strong id="activeNodeName">Detecting live node...</strong></span>
                 </div>
                 <div class="node-security-status">
-                  <i class="fa-solid fa-location-crosshairs"></i> <span id="userGpsCoordinates">GPS: Requesting permission...</span>
+                  <i class="fa-solid fa-location-crosshairs"></i> <span id="userGpsCoordinates">GPS: Requesting
+                    permission...</span>
                 </div>
               </div>
               <div class="map-controls-overlay">
-                <button class="map-ctrl-btn" id="locateUserBtn" title="Locate Current Position" aria-label="Locate User Position">
+                <button class="map-ctrl-btn" id="locateUserBtn" title="Locate Current Position"
+                  aria-label="Locate User Position">
                   <i class="fa-solid fa-location-arrow"></i>
                 </button>
-                <button class="map-ctrl-btn" id="resetMapZoomBtn" title="Fit Global Network View" aria-label="Fit Global Network">
+                <button class="map-ctrl-btn" id="resetMapZoomBtn" title="Fit Global Network View"
+                  aria-label="Fit Global Network">
                   <i class="fa-solid fa-earth-americas"></i>
                 </button>
               </div>
@@ -537,7 +562,7 @@
       <!-- TAB 4: DNS OPTIMIZER & BENCHMARK -->
       <section class="tab-pane" id="tab-dns" role="tabpanel">
         <div class="dns-layout">
-          
+
           <div class="glass-card dns-main-card">
             <div class="card-header">
               <div>
@@ -571,7 +596,8 @@
             <div class="dns-card-footer">
               <div class="dns-tip">
                 <i class="fa-solid fa-circle-info"></i>
-                <span>Nivx Quantum DNS employs AI-assisted lookahead caching and anycast DNS routing to reduce initial connection handshakes by up to <strong>75%</strong>.</span>
+                <span>Nivx Quantum DNS employs AI-assisted lookahead caching and anycast DNS routing to reduce initial
+                  connection handshakes by up to <strong>75%</strong>.</span>
               </div>
               <button class="cyber-btn-primary" id="flushDnsCacheOnlyBtn">
                 <i class="fa-solid fa-broom"></i> FLUSH LOCAL DNS CACHE
@@ -586,11 +612,12 @@
       <!-- TAB 5: BANDWIDTH HOG LIMITER -->
       <section class="tab-pane" id="tab-limiter" role="tabpanel">
         <div class="limiter-layout">
-          
+
           <div class="glass-card limiter-main-card">
             <div class="card-header">
               <div>
-                <span class="card-tag"><i class="fa-solid fa-filter-circle-xmark"></i> BACKGROUND PROCESS TELEMETRY</span>
+                <span class="card-tag"><i class="fa-solid fa-filter-circle-xmark"></i> BACKGROUND PROCESS
+                  TELEMETRY</span>
                 <h2 class="card-title">Bandwidth Hog Inspector & QOS Allocator</h2>
               </div>
               <div class="limiter-actions">
@@ -627,7 +654,7 @@
       <!-- TAB 6: TELEMETRY & DIAGNOSTIC TERMINAL -->
       <section class="tab-pane" id="tab-terminal" role="tabpanel">
         <div class="terminal-layout">
-          
+
           <div class="glass-card terminal-card">
             <div class="terminal-window-header">
               <div class="terminal-dots">
@@ -637,8 +664,10 @@
               </div>
               <div class="terminal-title">nivx-quantum-telemetry-cli &bull; root@nivx-accel-v4.8</div>
               <div class="terminal-actions">
-                <button class="term-btn" id="clearTerminalBtn" title="Clear console"><i class="fa-solid fa-eraser"></i> Clear</button>
-                <button class="term-btn" id="copyLogsBtn" title="Copy logs"><i class="fa-solid fa-copy"></i> Copy</button>
+                <button class="term-btn" id="clearTerminalBtn" title="Clear console"><i class="fa-solid fa-eraser"></i>
+                  Clear</button>
+                <button class="term-btn" id="copyLogsBtn" title="Copy logs"><i class="fa-solid fa-copy"></i>
+                  Copy</button>
               </div>
             </div>
 
@@ -648,7 +677,9 @@
 
             <div class="terminal-input-bar">
               <span class="term-prompt">nivx@quantum:~$</span>
-              <input type="text" id="terminalInput" class="term-cmd-input" placeholder="Type command (e.g., 'ping', 'turbo', 'dns', 'traceroute', 'help')..." autocomplete="off" spellcheck="false">
+              <input type="text" id="terminalInput" class="term-cmd-input"
+                placeholder="Type command (e.g., 'ping', 'turbo', 'dns', 'traceroute', 'help')..." autocomplete="off"
+                spellcheck="false">
               <button class="term-send-btn" id="terminalSubmitBtn"><i class="fa-solid fa-arrow-turn-down"></i></button>
             </div>
 
@@ -662,10 +693,12 @@
     <!-- Bottom HUD Footer Bar -->
     <footer class="hud-footer">
       <div class="footer-left">
-        <span class="build-info"><i class="fa-solid fa-code-branch"></i> NivxBoost Core v4.8.2 &bull; Engine Status: <strong class="green-text">OPTIMAL</strong></span>
+        <span class="build-info"><i class="fa-solid fa-code-branch"></i> NivxBoost Core v4.8.2 &bull; Engine Status:
+          <strong class="green-text">OPTIMAL</strong></span>
       </div>
       <div class="footer-center">
-        <span class="webrtc-shield"><i class="fa-solid fa-shield-check green-text"></i> WebRTC Leak Prevention: <strong>ACTIVE</strong></span>
+        <span class="webrtc-shield"><i class="fa-solid fa-shield-check green-text"></i> WebRTC Leak Prevention:
+          <strong>ACTIVE</strong></span>
       </div>
       <div class="footer-right">
         <a href="https://github.com/Nivas67/Nivxboost" target="_blank" rel="noopener noreferrer" class="footer-link">
@@ -735,7 +768,8 @@
         <div class="setting-row">
           <div class="setting-info">
             <span class="setting-title">Bluetooth / BLE Device Connection</span>
-            <span class="setting-desc" id="bleDeviceStatusLabel">Pair nearby hardware network device or Bluetooth adapter</span>
+            <span class="setting-desc" id="bleDeviceStatusLabel">Pair nearby hardware network device or Bluetooth
+              adapter</span>
           </div>
           <button class="cyber-btn-outline" id="pairBleDeviceBtn" style="padding: 6px 12px; font-size: 0.72rem;">
             <i class="fa-brands fa-bluetooth-b"></i> <span id="bleBtnText">SCAN & PAIR</span>
@@ -784,16 +818,19 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="cyber-btn-outline" id="downloadJsonCertBtn"><i class="fa-solid fa-download"></i> DOWNLOAD JSON AUDIT</button>
+        <button class="cyber-btn-outline" id="downloadJsonCertBtn"><i class="fa-solid fa-download"></i> DOWNLOAD JSON
+          AUDIT</button>
         <button class="cyber-btn-primary" id="printCertBtn"><i class="fa-solid fa-print"></i> PRINT / SAVE PDF</button>
       </div>
     </div>
   </div>
 
   <!-- Leaflet Map Library -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Audio Synthesizer & Main Script -->
   <script src="app.js?v=4.8.6"></script>
 </body>
+
 </html>
