@@ -2189,6 +2189,76 @@
   }
 
   // ==========================================================================
+  // 19. EMBED & SHARE MODAL CONTROLLERS
+  // ==========================================================================
+  const shareEmbedBtn = document.getElementById('shareEmbedBtn');
+  const shareEmbedModal = document.getElementById('shareEmbedModal');
+  const closeShareEmbedBtn = document.getElementById('closeShareEmbedBtn');
+  const shareEmbedBackdrop = document.getElementById('shareEmbedBackdrop');
+  const openLiveSiteBtn = document.getElementById('openLiveSiteBtn');
+
+  function openShareEmbedModal() {
+    audio.playClick();
+    if (shareEmbedModal) shareEmbedModal.classList.add('open');
+  }
+
+  function closeShareEmbedModal() {
+    audio.playClick();
+    if (shareEmbedModal) shareEmbedModal.classList.remove('open');
+  }
+
+  if (shareEmbedBtn) shareEmbedBtn.addEventListener('click', openShareEmbedModal);
+  if (closeShareEmbedBtn) closeShareEmbedBtn.addEventListener('click', closeShareEmbedModal);
+  if (shareEmbedBackdrop) shareEmbedBackdrop.addEventListener('click', closeShareEmbedModal);
+  if (openLiveSiteBtn) {
+    openLiveSiteBtn.addEventListener('click', () => {
+      window.open('https://nivas67.github.io/Nivxboost/', '_blank');
+    });
+  }
+
+  // Embed Platform Tab Switcher
+  const embedTabBtns = document.querySelectorAll('.embed-tab-btn');
+  const embedPanes = document.querySelectorAll('.embed-pane');
+
+  embedTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      audio.playClick();
+      embedTabBtns.forEach(b => b.classList.remove('active'));
+      embedPanes.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const targetPane = document.getElementById(`pane-${btn.dataset.embedTab}`);
+      if (targetPane) targetPane.classList.add('active');
+    });
+  });
+
+  // Copy Code / Snippet Buttons
+  const copyCodeBtns = document.querySelectorAll('.copy-code-btn');
+  copyCodeBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      audio.playSuccess();
+      const targetId = btn.dataset.target;
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        const textToCopy = targetEl.textContent;
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> COPIED!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('copied');
+          }, 1800);
+          logTerminal(`>>> Copied embed code snippet for ${targetId} to clipboard.`, 'success');
+        } catch (err) {
+          logTerminal('>>> Failed to copy code to clipboard.', 'warn');
+        }
+      }
+    });
+  });
+
+  // ==========================================================================
   // INITIALIZATION ON DOM READY
   // ==========================================================================
   loadSavedSettings();

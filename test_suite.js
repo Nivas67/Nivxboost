@@ -117,6 +117,8 @@ async function runAllTests() {
     'pairBleDeviceBtn',
     'downloadJsonCertBtn',
     'printCertBtn',
+    'shareEmbedBtn',
+    'shareEmbedModal',
     'realMapContainer',
     'liveSpectrumCanvas',
     'boosterCanvas',

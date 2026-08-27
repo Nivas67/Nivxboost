@@ -2177,6 +2177,128 @@ input:checked + .slider:before {
   margin-top: 3px;
 }
 
+/* Embed & Mobile Link Modal */
+.embed-share-modal {
+  max-width: 680px;
+}
+
+.embed-modal-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.embed-platform-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 8px;
+}
+
+.embed-tab-btn {
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--border-radius-xs);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.embed-tab-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.embed-tab-btn.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.embed-pane {
+  display: none;
+}
+
+.embed-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.embed-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.copy-code-btn {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--border-radius-xs);
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-fast);
+}
+
+.copy-code-btn:hover {
+  background: var(--accent-primary);
+  color: var(--text-dark);
+}
+
+.copy-code-btn.copied {
+  background: var(--accent-success);
+  border-color: var(--accent-success);
+  color: #000;
+}
+
+.embed-code-block {
+  background: #040810;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--border-radius-xs);
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #38bdf8;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0 0 10px;
+  line-height: 1.45;
+}
+
+.embed-info-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--border-radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-primary);
+}
+
 /* ==========================================================================
    HUD Footer Bar
    ========================================================================== */
