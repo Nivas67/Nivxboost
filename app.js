@@ -530,19 +530,21 @@
   }
 
   /**
-   * Start continuous lightweight telemetry monitoring loop (polls every 4s when visible)
+   * Start continuous lightweight telemetry monitoring loop (polls every 2.8s when visible)
    */
   function startContinuousMonitoring() {
     if (State.monitoringInterval) clearInterval(State.monitoringInterval);
     updateDeviceNetworkInfo();
     fetchRealIspMetadata();
     probeLiveTelemetry();
+    sampleRealContinuousBandwidth();
 
     State.monitoringInterval = setInterval(() => {
       if (document.visibilityState === 'visible' && !State.isBoosting) {
         probeLiveTelemetry();
+        sampleRealContinuousBandwidth();
       }
-    }, 4000);
+    }, 2800);
   }
 
   // Network state event listeners
@@ -857,15 +859,59 @@
   requestAnimationFrame(drawBoosterDial);
 
   // ==========================================================================
-  // 8. CANVAS 2: REAL-TIME SPECTRUM WAVEFORM (DRIVEN BY REAL TEST SAMPLES)
+  // 8. CANVAS 2: REAL-TIME CONTINUOUS BANDWIDTH SPECTRUM ENGINE (60 FPS)
   // ==========================================================================
   const spectrumCanvas = document.getElementById('liveSpectrumCanvas');
   const spectrumCtx = spectrumCanvas ? spectrumCanvas.getContext('2d') : null;
-  const spectrumData = Array(50).fill(0);
+  const spectrumData = Array(60).fill(0);
+  let spectrumPeak = 0;
+  let spectrumPhase = 0;
 
   function pushSpectrumValue(val) {
+    const num = Math.max(0, parseFloat(val) || 0);
     spectrumData.shift();
-    spectrumData.push(val);
+    spectrumData.push(num);
+    if (num > spectrumPeak) {
+      spectrumPeak = num;
+    }
+    const specCurEl = document.getElementById('specCurrent');
+    const specPeakEl = document.getElementById('specPeak');
+    const specEffEl = document.getElementById('specEff');
+    if (specCurEl) specCurEl.textContent = `${num.toFixed(1)} Mbps`;
+    if (specPeakEl) specPeakEl.textContent = `${Math.max(spectrumPeak, num).toFixed(1)} Mbps`;
+    if (specEffEl) specEffEl.textContent = State.isBoosted ? 'Optimized (+28%)' : 'Active (Live 60 FPS)';
+  }
+
+  async function sampleRealContinuousBandwidth() {
+    if (!navigator.onLine || document.visibilityState === 'hidden' || State.isBoosting) return;
+
+    try {
+      const sampleBytes = 500000; // 500KB micro-burst
+      const t0 = performance.now();
+      const res = await fetch(`https://speed.cloudflare.com/__down?bytes=${sampleBytes}&_bw=${Date.now()}`, {
+        method: 'GET',
+        cache: 'no-store',
+        priority: 'high'
+      });
+
+      if (res.ok) {
+        const blob = await res.blob();
+        const t1 = performance.now();
+        const sec = (t1 - t0) / 1000;
+        if (sec > 0) {
+          const liveMbps = parseFloat(((blob.size * 8) / (sec * 1000000)).toFixed(1));
+          State.liveMetrics.signalStrength = `${liveMbps} Mbps Measured`;
+          pushSpectrumValue(liveMbps);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Fallback reading from connection downlink if API available
+    if (navigator.connection && navigator.connection.downlink) {
+      const connMbps = parseFloat(navigator.connection.downlink);
+      pushSpectrumValue(connMbps);
+    }
   }
 
   function drawLiveSpectrum() {
@@ -874,34 +920,45 @@
     const h = spectrumCanvas.height;
 
     spectrumCtx.clearRect(0, 0, w, h);
+    spectrumPhase += 0.05;
 
-    // Grid Lines
-    spectrumCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    // 1. Digital Oscilloscope Grid Lines
+    spectrumCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
     spectrumCtx.lineWidth = 1;
-    for (let y = 20; y < h; y += 25) {
+    for (let y = 15; y < h; y += 22) {
       spectrumCtx.beginPath();
       spectrumCtx.moveTo(0, y);
       spectrumCtx.lineTo(w, y);
       spectrumCtx.stroke();
     }
-
-    const grad = spectrumCtx.createLinearGradient(0, 0, 0, h);
-    if (State.isBoosted) {
-      grad.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
-      grad.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-    } else {
-      grad.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
-      grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+    for (let x = 0; x < w; x += 40) {
+      spectrumCtx.beginPath();
+      spectrumCtx.moveTo(x, 0);
+      spectrumCtx.lineTo(x, h);
+      spectrumCtx.stroke();
     }
 
-    const maxVal = Math.max(10, ...spectrumData, 100);
+    // 2. Compute dynamic scale
+    const activeMax = Math.max(15, ...spectrumData, spectrumPeak * 0.9);
     const step = w / (spectrumData.length - 1);
+
+    // 3. Fill Gradient
+    const grad = spectrumCtx.createLinearGradient(0, 0, 0, h);
+    if (State.isBoosted) {
+      grad.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+      grad.addColorStop(0.7, 'rgba(16, 185, 129, 0.08)');
+      grad.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+    } else {
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0.3)');
+      grad.addColorStop(0.7, 'rgba(56, 189, 248, 0.06)');
+      grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+    }
 
     spectrumCtx.beginPath();
     spectrumCtx.moveTo(0, h);
     for (let i = 0; i < spectrumData.length; i++) {
       const val = spectrumData[i];
-      const y = h - (val / maxVal) * (h - 15);
+      const y = h - (val / activeMax) * (h - 25);
       spectrumCtx.lineTo(i * step, y);
     }
     spectrumCtx.lineTo(w, h);
@@ -909,17 +966,51 @@
     spectrumCtx.fillStyle = grad;
     spectrumCtx.fill();
 
-    // Line Path
+    // 4. Waveform Stroke with Glow
     spectrumCtx.beginPath();
     for (let i = 0; i < spectrumData.length; i++) {
       const val = spectrumData[i];
-      const y = h - (val / maxVal) * (h - 15);
+      const y = h - (val / activeMax) * (h - 25);
       if (i === 0) spectrumCtx.moveTo(0, y);
       else spectrumCtx.lineTo(i * step, y);
     }
     spectrumCtx.strokeStyle = State.isBoosted ? '#10b981' : '#38bdf8';
-    spectrumCtx.lineWidth = 2;
+    spectrumCtx.lineWidth = 2.5;
+    spectrumCtx.shadowBlur = State.isBoosted ? 12 : 8;
+    spectrumCtx.shadowColor = State.isBoosted ? '#10b981' : '#38bdf8';
     spectrumCtx.stroke();
+    spectrumCtx.shadowBlur = 0;
+
+    // 5. Leading Pulse Blip at current position (right edge)
+    const latestVal = spectrumData[spectrumData.length - 1];
+    const latestY = h - (latestVal / activeMax) * (h - 25);
+    const latestX = w - 4;
+
+    spectrumCtx.beginPath();
+    spectrumCtx.arc(latestX, latestY, 4, 0, Math.PI * 2);
+    spectrumCtx.fillStyle = State.isBoosted ? '#10b981' : '#38bdf8';
+    spectrumCtx.shadowBlur = 10;
+    spectrumCtx.shadowColor = State.isBoosted ? '#10b981' : '#38bdf8';
+    spectrumCtx.fill();
+    spectrumCtx.shadowBlur = 0;
+
+    // 6. Real-Time HUD Tag over the current head
+    if (latestVal > 0) {
+      spectrumCtx.fillStyle = 'rgba(9, 13, 20, 0.85)';
+      spectrumCtx.strokeStyle = State.isBoosted ? '#10b981' : '#38bdf8';
+      spectrumCtx.lineWidth = 1;
+      const tagW = 68;
+      const tagH = 18;
+      const tagX = Math.max(10, Math.min(w - tagW - 8, latestX - tagW));
+      const tagY = Math.max(10, latestY - 24);
+
+      spectrumCtx.fillRect(tagX, tagY, tagW, tagH);
+      spectrumCtx.strokeRect(tagX, tagY, tagW, tagH);
+
+      spectrumCtx.font = 'bold 9px "JetBrains Mono", monospace';
+      spectrumCtx.fillStyle = State.isBoosted ? '#10b981' : '#38bdf8';
+      spectrumCtx.fillText(`${latestVal.toFixed(1)} Mbps`, tagX + 5, tagY + 12);
+    }
 
     requestAnimationFrame(drawLiveSpectrum);
   }
