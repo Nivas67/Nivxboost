@@ -3262,3 +3262,246 @@ input:checked + .slider:before {
   border-radius: 9999px;
 }
 
+/* ==========================================================================
+   MOBILE PWA — Full-Screen Native App Layout
+   Targets phones (≤480px) installed as PWA or opened in mobile browser
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  /* ── Root layout fills the entire phone screen ── */
+  html, body {
+    width: 100%;
+    min-height: 100svh;   /* safe-area aware on iOS */
+    overflow-x: hidden;
+  }
+
+  body.cyber-body {
+    padding: 0;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .app-container {
+    padding: 8px 10px 20px;
+    gap: 10px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* ── Header: compact 2-row mobile layout ── */
+  .hud-header {
+    padding: 10px 12px;
+    border-radius: 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Row 1: Logo (left) + Status badge (right) */
+  .header-left {
+    flex: 1;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .logo-wrapper {
+    gap: 8px;
+  }
+
+  .logo-icon-box {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .logo-brand {
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+  }
+
+  .logo-tagline {
+    font-size: 0.55rem;
+  }
+
+  .network-badge {
+    padding: 4px 10px;
+    font-size: 0.65rem;
+  }
+
+  /* Hide center telemetry on mobile — too cramped */
+  .header-center {
+    display: none !important;
+  }
+
+  /* Row 2: Action buttons — icon-only, compact */
+  .header-right {
+    width: 100%;
+    gap: 6px;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .header-right::-webkit-scrollbar { display: none; }
+
+  .hud-action-btn {
+    padding: 7px 10px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  /* Hide text labels on small buttons, keep icons */
+  .hud-action-btn > span:not(#userAccountLabel) {
+    display: none;
+  }
+
+  /* Keep user name label visible */
+  #userAccountLabel {
+    display: inline !important;
+    font-size: 0.65rem;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Navigation tabs: scrollable icon row ── */
+  .hud-nav-tabs {
+    padding: 4px;
+    gap: 4px;
+    border-radius: 10px;
+  }
+
+  .nav-tab-btn {
+    min-width: 80px;
+    padding: 8px 10px;
+    font-size: 0.65rem;
+    letter-spacing: 0.3px;
+    gap: 5px;
+    border-radius: 7px;
+  }
+
+  .nav-tab-btn i {
+    font-size: 0.8rem;
+  }
+
+  /* ── Cards & content — full width ── */
+  .hud-card {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .turbo-grid,
+  .dual-gauges-container,
+  .metrics-bar-grid,
+  .quick-stats-bar,
+  .game-presets-grid,
+  .dns-results-grid,
+  .speed-summary-grid,
+  .server-node-cards-grid,
+  .hog-stats-banner,
+  .trends-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+  }
+
+  /* Very wide grids go single-column */
+  .turbo-grid,
+  .server-node-cards-grid,
+  .hog-stats-banner {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Booster dial ── */
+  .dial-container {
+    width: 100% !important;
+    max-width: 280px;
+    height: 280px;
+    margin: 0 auto;
+  }
+
+  .dial-huge-value {
+    font-size: 2rem;
+  }
+
+  /* ── Game preset cards — 2 per row ── */
+  .game-presets-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* ── Stat mini cards ── */
+  .stat-mini-card,
+  .metric-card {
+    padding: 10px 12px;
+  }
+
+  /* ── TCP/IP param strip ── */
+  .param-strip {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .param-strip::-webkit-scrollbar { display: none; }
+
+  /* ── Map container ── */
+  #realMapContainer,
+  .map-container {
+    height: 220px !important;
+    border-radius: 12px;
+  }
+
+  /* ── Terminal ── */
+  .terminal-output {
+    height: 180px;
+    font-size: 0.7rem;
+  }
+
+  /* ── Modals: full-screen on mobile ── */
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal-card,
+  .settings-panel,
+  .share-modal-card,
+  .auth-modal-card,
+  .onboarding-modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    margin: 0 !important;
+    max-height: 88svh;
+    overflow-y: auto;
+  }
+
+  /* ── PWA install banner ── */
+  #pwaInstallBanner {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    width: auto !important;
+  }
+
+  /* ── Footer ── */
+  .hud-footer {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+    font-size: 0.6rem;
+  }
+}
+
+/* Extra-small phones (≤360px) */
+@media (max-width: 360px) {
+  .logo-brand { font-size: 0.9rem; }
+  .nav-tab-btn { min-width: 68px; font-size: 0.6rem; padding: 7px 8px; }
+  .hud-action-btn { padding: 6px 8px; }
+  .game-presets-grid { grid-template-columns: 1fr !important; }
+}
