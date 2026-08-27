@@ -2326,6 +2326,9 @@ input:checked + .slider:before {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%) translateY(140%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   width: calc(100% - 32px);
   max-width: 460px;
   background: rgba(9, 13, 20, 0.95);
@@ -2340,11 +2343,14 @@ input:checked + .slider:before {
   gap: 12px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.25);
   z-index: 9999;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .pwa-install-banner.show {
   transform: translateX(-50%) translateY(0%);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .banner-icon-wrap {
@@ -3295,9 +3301,9 @@ input:checked + .slider:before {
     overflow-x: hidden;
   }
 
-  /* ── Header: Sleek Native App Bar (1 Clean Row) ── */
+  /* ── Header: Premium Mobile App Bar (1 Clean Row) ── */
   .hud-header {
-    padding: 8px 12px !important;
+    padding: 10px 14px !important;
     border-radius: 16px;
     display: flex !important;
     flex-direction: row !important;
@@ -3306,10 +3312,11 @@ input:checked + .slider:before {
     gap: 8px !important;
     width: 100% !important;
     box-sizing: border-box;
-    background: rgba(12, 16, 23, 0.88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(12, 16, 23, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border-glass);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
 
   .header-left {
@@ -3323,22 +3330,23 @@ input:checked + .slider:before {
   .logo-wrapper {
     gap: 8px;
     min-width: 0;
+    cursor: pointer;
   }
 
   .logo-icon-box {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     flex-shrink: 0;
   }
 
   .logo-brand {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     letter-spacing: 0.8px;
     white-space: nowrap;
   }
 
   .logo-tagline {
-    display: none; /* Hide tagline for super compact mobile title */
+    display: none;
   }
 
   .network-badge {
@@ -3348,12 +3356,10 @@ input:checked + .slider:before {
     white-space: nowrap;
   }
 
-  /* Hide center telemetry on mobile header — visible in bottom stats */
   .header-center {
     display: none !important;
   }
 
-  /* Header Right: Keep Google Profile Avatar, Settings Gear, and Prominent Web Install Button */
   .header-right {
     display: flex;
     align-items: center;
@@ -3361,13 +3367,17 @@ input:checked + .slider:before {
     flex-shrink: 0;
   }
 
-  /* Hide secondary desktop buttons from mobile header */
-  #soundToggleBtn,
   #themeGlowBtn,
   #shareEmbedBtn,
   #exportAuditBtn,
   #onboardingBtn {
     display: none !important;
+  }
+
+  #soundToggleBtn {
+    display: inline-flex !important;
+    padding: 7px 9px !important;
+    border-radius: 10px !important;
   }
 
   /* PWA Install Button on Web: Glowing prominent pill */
@@ -3378,7 +3388,7 @@ input:checked + .slider:before {
     padding: 6px 11px !important;
     font-size: 0.72rem !important;
     border-radius: 9999px !important;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(16, 185, 129, 0.22)) !important;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(16, 185, 129, 0.25)) !important;
     border: 1px solid var(--accent-primary) !important;
     color: var(--accent-primary) !important;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
@@ -3391,8 +3401,8 @@ input:checked + .slider:before {
   }
 
   .hud-action-btn {
-    padding: 6px 10px;
-    font-size: 0.72rem;
+    padding: 7px 10px;
+    font-size: 0.75rem;
     border-radius: 10px;
     gap: 5px;
     white-space: nowrap;
@@ -3404,7 +3414,7 @@ input:checked + .slider:before {
 
   #userAccountLabel {
     display: inline-block !important;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     font-weight: 700;
     max-width: 65px;
     overflow: hidden;
@@ -3412,9 +3422,49 @@ input:checked + .slider:before {
     white-space: nowrap;
   }
 
-  /* ── Hide Bulky Desktop Nav Tabs on Mobile ── */
+  /* ── Sleek Horizontal Scrollable Tabs on Mobile ── */
   .hud-nav-tabs {
-    display: none !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 6px 6px !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
+    background: rgba(10, 14, 22, 0.8) !important;
+    border: 1px solid var(--border-glass) !important;
+  }
+
+  .hud-nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-tab-btn {
+    flex: 0 0 auto !important;
+    padding: 8px 14px !important;
+    font-size: 0.72rem !important;
+    border-radius: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    color: var(--text-secondary) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid transparent !important;
+  }
+
+  .nav-tab-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(16, 185, 129, 0.18)) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    box-shadow: 0 0 12px var(--accent-primary-glow) !important;
+  }
+
+  .nav-tab-btn i {
+    font-size: 0.85rem !important;
   }
 
   /* ── INSTAGRAM-STYLE NATIVE BOTTOM NAVIGATION DOCK ── */
@@ -3490,10 +3540,11 @@ input:checked + .slider:before {
     max-width: 100% !important;
     border-radius: 18px !important;
     padding: 18px 14px !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 14px !important;
     box-sizing: border-box !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    background: rgba(14, 20, 30, 0.8) !important;
+    background: rgba(14, 20, 30, 0.85) !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4) !important;
   }
 
   .card-header {
@@ -3661,6 +3712,22 @@ input:checked + .slider:before {
     font-size: 3rem !important;
   }
 
+  .dual-gauges-container {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .gauge-column {
+    width: 100% !important;
+    padding: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .gauge-canvas-box {
+    width: min(72vw, 240px) !important;
+    height: min(72vw, 240px) !important;
+  }
+
   /* ── Support Chat Console on Mobile ── */
   .chat-messages-box {
     height: 260px !important;
@@ -3741,7 +3808,7 @@ button:active,
 /* ── Extra-Compact Phones (≤375px like iPhone SE) ── */
 @media (max-width: 375px) {
   .logo-brand { font-size: 0.95rem; }
-  .network-badge { display: none; } /* Hide status badge on extra tiny screens to prevent wrap */
+  .network-badge { display: none; }
   .metrics-bar-grid,
   .game-presets-grid {
     grid-template-columns: 1fr !important;
