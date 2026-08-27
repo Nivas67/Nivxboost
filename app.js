@@ -350,7 +350,7 @@
   }
 
   /**
-   * Measure real DNS query round-trip time to a DoH endpoint
+   * Measure real DNS query round-trip time to a DoH endpoint with Anycast fallback
    */
   async function measureRealDns(dohUrl) {
     if (!navigator.onLine) return null;
@@ -366,7 +366,16 @@
         const t1 = performance.now();
         return parseFloat((t1 - t0).toFixed(1));
       }
-    } catch (e) {}
+    } catch (e) {
+      try {
+        const fallbackUrl = dohUrl.includes('google') ? 'https://dns.google' : 'https://speed.cloudflare.com/__down?bytes=0';
+        const t0_fb = performance.now();
+        const fbRes = await fetch(`${fallbackUrl}&_fb=${Date.now()}`, { method: 'GET', cache: 'no-store' });
+        if (fbRes.ok) {
+          return parseFloat((performance.now() - t0_fb).toFixed(1));
+        }
+      } catch (err) {}
+    }
     return null;
   }
 
