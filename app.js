@@ -1685,23 +1685,32 @@
   gamePresetItems.forEach(item => {
     const btn = item.querySelector('.game-opt-btn');
     const pingEl = item.querySelector('.game-ping');
-    if (btn) {
-      btn.addEventListener('click', async () => {
-        audio.playClick();
-        gamePresetItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const game = item.dataset.game;
-        if (pingEl) pingEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locking Route...';
-        logTerminal(`>>> Optimizing network socket preconnects for ${game.toUpperCase()}...`, 'prefix');
-        await performRealOptimizationActions();
-        const res = await measureRealPing(State.activeNode.endpoint, 2);
-        if (pingEl) {
-          pingEl.innerHTML = `<i class="fa-solid fa-bolt"></i> ${res.ping !== null ? res.ping + 'ms' : 'Direct Node'}`;
-        }
-        audio.playSuccess();
-        logTerminal(`>>> [LOCK] Low-latency socket preconnects active for ${game.toUpperCase()} [Ping: ${res.ping !== null ? res.ping + 'ms' : '--'}].`, 'success');
+
+    const activateGamePreset = async (e) => {
+      if (e) e.stopPropagation();
+      audio.playClick();
+      gamePresetItems.forEach(i => {
+        i.classList.remove('active');
+        const b = i.querySelector('.game-opt-btn');
+        if (b) b.textContent = 'ACTIVATE';
       });
-    }
+
+      item.classList.add('active');
+      if (btn) btn.textContent = 'ACTIVE';
+      const game = item.dataset.game;
+      if (pingEl) pingEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locking Route...';
+      logTerminal(`>>> Optimizing network socket preconnects for ${game.toUpperCase()}...`, 'prefix');
+      await performRealOptimizationActions();
+      const res = await measureRealPing(State.activeNode.endpoint, 2);
+      if (pingEl) {
+        pingEl.innerHTML = `<i class="fa-solid fa-bolt"></i> ${res.ping !== null ? res.ping + 'ms' : 'Direct Node'}`;
+      }
+      audio.playSuccess();
+      logTerminal(`>>> [LOCK] Low-latency socket preconnects active for ${game.toUpperCase()} [Ping: ${res.ping !== null ? res.ping + 'ms' : '--'}].`, 'success');
+    };
+
+    item.addEventListener('click', activateGamePreset);
+    if (btn) btn.addEventListener('click', activateGamePreset);
   });
 
   // ==========================================================================

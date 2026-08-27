@@ -935,16 +935,18 @@ body.cyber-body {
   border: 1px solid var(--border-glass);
   border-radius: var(--border-radius-sm);
   transition: var(--transition-fast);
+  cursor: pointer;
 }
 
 .game-preset-item:hover {
   border-color: var(--accent-primary);
-  background: rgba(56, 189, 248, 0.05);
+  background: rgba(56, 189, 248, 0.08);
 }
 
 .game-preset-item.active {
   border-color: var(--accent-success);
-  background: rgba(16, 185, 129, 0.08);
+  background: rgba(16, 185, 129, 0.12);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
 }
 
 .game-icon {
@@ -996,6 +998,13 @@ body.cyber-body {
   background: var(--accent-primary);
   color: var(--text-dark);
   border-color: var(--accent-primary);
+}
+
+.game-preset-item.active .game-opt-btn {
+  background: var(--accent-success);
+  color: var(--text-dark);
+  border-color: var(--accent-success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
 }
 
 .game-preset-item.active .game-opt-btn {
