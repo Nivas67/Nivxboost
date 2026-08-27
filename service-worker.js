@@ -1,9 +1,9 @@
 /**
  * NivxBoost Progressive Web App (PWA) Service Worker
- * v5.0.2 - Instant Responsive Buttons & Mobile Precision Layout
+ * v5.0.3 - Fixed Mobile Header Collisions & Clean Bottom Dock
  */
 
-const CACHE_NAME = 'nivxboost-pwa-v5.0.2';
+const CACHE_NAME = 'nivxboost-pwa-v5.0.3';
 
 // Only cache static assets (CSS, JS, icons) — NOT HTML pages
 // HTML pages (index.html, login.html) are always fetched fresh from network

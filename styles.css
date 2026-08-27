@@ -3301,9 +3301,9 @@ input:checked + .slider:before {
     overflow-x: hidden;
   }
 
-  /* ── Header: Premium Mobile App Bar (1 Clean Row) ── */
+  /* ── Header: Clean Native App Bar (Zero Collisions / Zero Overlaps) ── */
   .hud-header {
-    padding: 10px 14px !important;
+    padding: 8px 12px !important;
     border-radius: 16px;
     display: flex !important;
     flex-direction: row !important;
@@ -3320,42 +3320,37 @@ input:checked + .slider:before {
   }
 
   .header-left {
-    flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex: 0 1 auto;
     min-width: 0;
   }
 
   .logo-wrapper {
-    gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     min-width: 0;
     cursor: pointer;
   }
 
   .logo-icon-box {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
   }
 
   .logo-brand {
-    font-size: 1.1rem;
-    letter-spacing: 0.8px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
     white-space: nowrap;
   }
 
-  .logo-tagline {
-    display: none;
-  }
-
-  .network-badge {
-    padding: 3px 8px;
-    font-size: 0.62rem;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-  }
-
+  /* Hide tagline and status badge from header on mobile to prevent overlapping */
+  .logo-tagline,
+  .network-badge,
   .header-center {
     display: none !important;
   }
@@ -3367,6 +3362,7 @@ input:checked + .slider:before {
     flex-shrink: 0;
   }
 
+  #soundToggleBtn,
   #themeGlowBtn,
   #shareEmbedBtn,
   #exportAuditBtn,
@@ -3374,24 +3370,19 @@ input:checked + .slider:before {
     display: none !important;
   }
 
-  #soundToggleBtn {
-    display: inline-flex !important;
-    padding: 7px 9px !important;
-    border-radius: 10px !important;
-  }
-
-  /* PWA Install Button on Web: Glowing prominent pill */
+  /* PWA Install Button on Web: Compact glowing pill */
   #pwaInstallBtn {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 5px !important;
-    padding: 6px 11px !important;
+    gap: 4px !important;
+    padding: 6px 10px !important;
     font-size: 0.72rem !important;
     border-radius: 9999px !important;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(16, 185, 129, 0.25)) !important;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(16, 185, 129, 0.22)) !important;
     border: 1px solid var(--accent-primary) !important;
     color: var(--accent-primary) !important;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
+    white-space: nowrap !important;
   }
 
   #pwaInstallBtn span {
@@ -3401,8 +3392,8 @@ input:checked + .slider:before {
   }
 
   .hud-action-btn {
-    padding: 7px 10px;
-    font-size: 0.75rem;
+    padding: 6px 10px;
+    font-size: 0.72rem;
     border-radius: 10px;
     gap: 5px;
     white-space: nowrap;
@@ -3416,55 +3407,15 @@ input:checked + .slider:before {
     display: inline-block !important;
     font-size: 0.68rem;
     font-weight: 700;
-    max-width: 65px;
+    max-width: 60px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  /* ── Sleek Horizontal Scrollable Tabs on Mobile ── */
+  /* ── Hide Top Nav Tabs on Mobile (Instagram Bottom Nav handles all tabs) ── */
   .hud-nav-tabs {
-    display: flex !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding: 6px 6px !important;
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    border-radius: 14px !important;
-    background: rgba(10, 14, 22, 0.8) !important;
-    border: 1px solid var(--border-glass) !important;
-  }
-
-  .hud-nav-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .nav-tab-btn {
-    flex: 0 0 auto !important;
-    padding: 8px 14px !important;
-    font-size: 0.72rem !important;
-    border-radius: 10px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    white-space: nowrap !important;
-    color: var(--text-secondary) !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid transparent !important;
-  }
-
-  .nav-tab-btn.active {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(16, 185, 129, 0.18)) !important;
-    border-color: var(--accent-primary) !important;
-    color: var(--accent-primary) !important;
-    box-shadow: 0 0 12px var(--accent-primary-glow) !important;
-  }
-
-  .nav-tab-btn i {
-    font-size: 0.85rem !important;
+    display: none !important;
   }
 
   /* ── INSTAGRAM-STYLE NATIVE BOTTOM NAVIGATION DOCK ── */
