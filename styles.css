@@ -2300,6 +2300,106 @@ input:checked + .slider:before {
 }
 
 /* ==========================================================================
+   PWA Mobile App Installation Banner & Button
+   ========================================================================== */
+.pwa-install-header-btn {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2)) !important;
+  border-color: var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3) !important;
+}
+
+.pwa-install-header-btn:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-success)) !important;
+  color: var(--text-dark) !important;
+  transform: translateY(-2px);
+}
+
+.pwa-install-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(140%);
+  width: calc(100% - 32px);
+  max-width: 460px;
+  background: rgba(9, 13, 20, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.25);
+  z-index: 9999;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pwa-install-banner.show {
+  transform: translateX(-50%) translateY(0%);
+}
+
+.banner-icon-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pwa-banner-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-glass);
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-text strong {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.banner-text span {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-install-btn {
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: var(--border-radius-xs);
+  white-space: nowrap;
+}
+
+.banner-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.banner-close-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
    HUD Footer Bar
    ========================================================================== */
 

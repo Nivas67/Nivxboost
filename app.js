@@ -2321,6 +2321,66 @@
   });
 
   // ==========================================================================
+  // 20. PWA MOBILE APP INSTALLATION & SERVICE WORKER
+  // ==========================================================================
+  let deferredInstallPrompt = null;
+  const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+  const pwaInstallBanner = document.getElementById('pwaInstallBanner');
+  const bannerInstallBtn = document.getElementById('bannerInstallBtn');
+  const bannerCloseBtn = document.getElementById('bannerCloseBtn');
+
+  // Register Service Worker for offline capability & mobile installation
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => {
+          console.log('[PWA] Service Worker registered:', reg.scope);
+        })
+        .catch(err => {
+          console.warn('[PWA] Service Worker registration failed:', err);
+        });
+    });
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    if (pwaInstallBanner) pwaInstallBanner.classList.add('show');
+    logTerminal('>>> [MOBILE APP] NivxBoost is ready to install on your device home screen!', 'success');
+  });
+
+  async function triggerPwaInstall() {
+    audio.playClick();
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === 'accepted') {
+        logTerminal('>>> [INSTALLED] NivxBoost added to Home Screen successfully!', 'success');
+      }
+      deferredInstallPrompt = null;
+      if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+    } else {
+      // Manual instruction alert for iOS Safari & Android browsers
+      logTerminal('>>> To install: Tap browser menu (⋮) -> "Add to Home screen" or "Install App".', 'prefix');
+      alert('📱 How to install NivxBoost on your Mobile:\n\n1. In Chrome / Edge: Tap menu (⋮) -> "Install app" or "Add to Home screen"\n2. In Safari (iPhone): Tap Share (⬆️) -> "Add to Home Screen"\n\nThe app will appear on your phone home screen with its own full-screen icon!');
+    }
+  }
+
+  if (pwaInstallBtn) pwaInstallBtn.addEventListener('click', triggerPwaInstall);
+  if (bannerInstallBtn) bannerInstallBtn.addEventListener('click', triggerPwaInstall);
+  if (bannerCloseBtn) {
+    bannerCloseBtn.addEventListener('click', () => {
+      audio.playClick();
+      if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    logTerminal('>>> [SUCCESS] NivxBoost Application Installed to Device.', 'success');
+    if (pwaInstallBanner) pwaInstallBanner.classList.remove('show');
+  });
+
+  // ==========================================================================
   // INITIALIZATION ON DOM READY
   // ==========================================================================
   loadSavedSettings();
@@ -2328,3 +2388,4 @@
   initRealInteractiveMap();
 
 })();
+

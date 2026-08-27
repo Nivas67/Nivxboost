@@ -33,11 +33,19 @@
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- PWA & Mobile App Installation Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NivxBoost">
+  <meta name="mobile-web-app-capable" content="yes">
+
   <!-- Leaflet Real Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-  <link rel="stylesheet" href="styles.css?v=4.8.8">
+  <link rel="stylesheet" href="styles.css?v=4.8.9">
 </head>
 
 <body class="cyber-body">
@@ -106,6 +114,11 @@
           aria-label="Export Audit Report">
           <i class="fa-solid fa-file-shield"></i>
           <span>AUDIT CERT</span>
+        </button>
+        <button class="hud-action-btn pwa-install-header-btn" id="pwaInstallBtn" title="Install NivxBoost Mobile App on Device"
+          aria-label="Install App">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>INSTALL APP</span>
         </button>
         <button class="hud-action-btn primary-glow-btn" id="openSettingsBtn" title="System Configuration"
           aria-label="Open Settings">
@@ -843,23 +856,30 @@
       </div>
       <div class="modal-body">
         <p class="embed-modal-desc">
-          Insert the full real-time NivxBoost network optimizer into your website, blog, dashboard, or any Android/iOS mobile application.
+          Insert the full real-time NivxBoost network optimizer into your website, blog, dashboard, or any Android/iOS
+          mobile application.
         </p>
 
         <!-- Platform Tabs -->
         <div class="embed-platform-tabs">
-          <button class="embed-tab-btn active" data-embed-tab="tab-web-iframe"><i class="fa-brands fa-html5"></i> Web IFrame</button>
-          <button class="embed-tab-btn" data-embed-tab="tab-mobile-link"><i class="fa-solid fa-mobile-screen"></i> Universal Mobile Link</button>
-          <button class="embed-tab-btn" data-embed-tab="tab-android-app"><i class="fa-brands fa-android"></i> Android WebView</button>
-          <button class="embed-tab-btn" data-embed-tab="tab-flutter-app"><i class="fa-solid fa-feather"></i> Flutter Mobile</button>
-          <button class="embed-tab-btn" data-embed-tab="tab-react-native"><i class="fa-brands fa-react"></i> React Native</button>
+          <button class="embed-tab-btn active" data-embed-tab="tab-web-iframe"><i class="fa-brands fa-html5"></i> Web
+            IFrame</button>
+          <button class="embed-tab-btn" data-embed-tab="tab-mobile-link"><i class="fa-solid fa-mobile-screen"></i>
+            Universal Mobile Link</button>
+          <button class="embed-tab-btn" data-embed-tab="tab-android-app"><i class="fa-brands fa-android"></i> Android
+            WebView</button>
+          <button class="embed-tab-btn" data-embed-tab="tab-flutter-app"><i class="fa-solid fa-feather"></i> Flutter
+            Mobile</button>
+          <button class="embed-tab-btn" data-embed-tab="tab-react-native"><i class="fa-brands fa-react"></i> React
+            Native</button>
         </div>
 
         <!-- Tab 1: Web Iframe -->
         <div class="embed-pane active" id="pane-tab-web-iframe">
           <div class="embed-code-header">
             <span>HTML &lt;iframe&gt; Embed Code (Paste in any HTML, WordPress, React, Webflow page)</span>
-            <button class="copy-code-btn" data-target="codeWebIframe"><i class="fa-regular fa-copy"></i> COPY CODE</button>
+            <button class="copy-code-btn" data-target="codeWebIframe"><i class="fa-regular fa-copy"></i> COPY
+              CODE</button>
           </div>
           <pre class="embed-code-block"><code id="codeWebIframe">&lt;!-- NivxBoost Real-Time Network Optimizer --&gt;
 &lt;iframe 
@@ -877,7 +897,8 @@
         <div class="embed-pane" id="pane-tab-mobile-link">
           <div class="embed-code-header">
             <span>Direct Mobile Browser URL (Open in Chrome, Safari, Samsung Internet, Edge)</span>
-            <button class="copy-code-btn" data-target="codeMobileLink"><i class="fa-regular fa-copy"></i> COPY LINK</button>
+            <button class="copy-code-btn" data-target="codeMobileLink"><i class="fa-regular fa-copy"></i> COPY
+              LINK</button>
           </div>
           <pre class="embed-code-block"><code id="codeMobileLink">https://nivas67.github.io/Nivxboost/</code></pre>
           <div class="embed-info-box">
@@ -890,7 +911,8 @@
         <div class="embed-pane" id="pane-tab-android-app">
           <div class="embed-code-header">
             <span>Android Studio (Kotlin / Java WebView Component)</span>
-            <button class="copy-code-btn" data-target="codeAndroid"><i class="fa-regular fa-copy"></i> COPY KOTLIN</button>
+            <button class="copy-code-btn" data-target="codeAndroid"><i class="fa-regular fa-copy"></i> COPY
+              KOTLIN</button>
           </div>
           <pre class="embed-code-block"><code id="codeAndroid">// In your Android Activity / Fragment (Kotlin):
 val webView = findViewById&lt;WebView&gt;(R.id.nivxWebView)
@@ -909,7 +931,8 @@ webView.loadUrl("https://nivas67.github.io/Nivxboost/")</code></pre>
         <div class="embed-pane" id="pane-tab-flutter-app">
           <div class="embed-code-header">
             <span>Flutter App (package:webview_flutter)</span>
-            <button class="copy-code-btn" data-target="codeFlutter"><i class="fa-regular fa-copy"></i> COPY FLUTTER</button>
+            <button class="copy-code-btn" data-target="codeFlutter"><i class="fa-regular fa-copy"></i> COPY
+              FLUTTER</button>
           </div>
           <pre class="embed-code-block"><code id="codeFlutter">// Flutter Widget (iOS & Android):
 WebViewWidget(
@@ -923,7 +946,8 @@ WebViewWidget(
         <div class="embed-pane" id="pane-tab-react-native">
           <div class="embed-code-header">
             <span>React Native (react-native-webview)</span>
-            <button class="copy-code-btn" data-target="codeReactNative"><i class="fa-regular fa-copy"></i> COPY REACT</button>
+            <button class="copy-code-btn" data-target="codeReactNative"><i class="fa-regular fa-copy"></i> COPY
+              REACT</button>
           </div>
           <pre class="embed-code-block"><code id="codeReactNative">import { WebView } from 'react-native-webview';
 
@@ -937,8 +961,26 @@ WebViewWidget(
         </div>
       </div>
       <div class="modal-footer">
-        <button class="cyber-btn-primary" id="openLiveSiteBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> TEST LIVE LINK</button>
+        <button class="cyber-btn-primary" id="openLiveSiteBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i>
+          TEST LIVE LINK</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Floating Mobile App Install Banner -->
+  <div class="pwa-install-banner" id="pwaInstallBanner">
+    <div class="banner-icon-wrap">
+      <img src="icon.svg" alt="NivxBoost App Icon" class="pwa-banner-icon">
+      <div class="banner-text">
+        <strong>Install NivxBoost App</strong>
+        <span>Real-time mobile network accelerator & booster</span>
+      </div>
+    </div>
+    <div class="banner-actions">
+      <button class="cyber-btn-primary banner-install-btn" id="bannerInstallBtn">
+        <i class="fa-solid fa-download"></i> INSTALL
+      </button>
+      <button class="banner-close-btn" id="bannerCloseBtn">&times;</button>
     </div>
   </div>
 
@@ -947,7 +989,7 @@ WebViewWidget(
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Audio Synthesizer & Main Script -->
-  <script src="app.js?v=4.8.8"></script>
+  <script src="app.js?v=4.8.9"></script>
 </body>
 
 </html>

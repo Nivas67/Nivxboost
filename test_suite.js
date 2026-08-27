@@ -119,6 +119,7 @@ async function runAllTests() {
     'printCertBtn',
     'shareEmbedBtn',
     'shareEmbedModal',
+    'pwaInstallBtn',
     'realMapContainer',
     'liveSpectrumCanvas',
     'boosterCanvas',
@@ -131,6 +132,14 @@ async function runAllTests() {
     const inJs = appJsCode.includes(`'${id}'`) || appJsCode.includes(`"${id}"`);
     assertTest('Interactive Elements', `Element #${id} wired`, inHtml && inJs, inHtml && inJs ? 'HTML & JS Connected' : 'Missing wiring');
   });
+
+  // PWA & Mobile Installation Files
+  const hasManifest = fs.existsSync(path.join(__dirname, 'manifest.json'));
+  const hasServiceWorker = fs.existsSync(path.join(__dirname, 'service-worker.js'));
+  const hasIcon = fs.existsSync(path.join(__dirname, 'icon.svg'));
+  assertTest('PWA Mobile App', 'manifest.json present', hasManifest, hasManifest ? 'Valid PWA Manifest' : 'Missing manifest');
+  assertTest('PWA Mobile App', 'service-worker.js present', hasServiceWorker, hasServiceWorker ? 'Service Worker Active' : 'Missing Service Worker');
+  assertTest('PWA Mobile App', 'icon.svg present', hasIcon, hasIcon ? 'High-Res App Icon' : 'Missing Icon');
 
   // Check Game Accelerator Presets
   const requiredGames = ['freefire', 'pubg', 'cs2', 'valorant', 'fortnite', 'warzone'];
