@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * NIVXBOOST — ULTRA-PREMIUM REAL-TIME NETWORK & LATENCY ACCELERATOR
- * 100% Real-Time Measurement, Real Interactive Map & Geolocation Engine
+ * NIVXBOOST — PRODUCTION REAL-TIME NETWORK MONITORING & OPTIMIZATION OS
+ * 100% Real Measurements, Device Bluetooth Pairing, Leaflet GPS & Speed Engine
  * ============================================================================
  */
 
@@ -173,6 +173,7 @@
     boostTimerInterval: null,
     monitoringInterval: null,
     heartbeatInterval: null,
+    highLatencyCount: 0,
     selectedMode: 'gaming',
     activeNode: SERVER_NODES[0],
     activeDns: DNS_PROVIDERS[0],
@@ -214,6 +215,17 @@
       watchId: null
     },
 
+    // Connected Bluetooth / BLE Device
+    connectedDevice: null,
+
+    // System Settings Preferences
+    settings: {
+      autoBoost: true,
+      gpuAccel: true,
+      tcpTuning: true,
+      sfxSound: true
+    },
+
     // Network Session Log (Network + Location Association)
     sessionHistory: [],
 
@@ -231,6 +243,33 @@
     ],
     currentAuraIndex: 0
   };
+
+  // Load Saved Preferences from localStorage
+  function loadSavedSettings() {
+    try {
+      const saved = localStorage.getItem('nivx_settings');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        State.settings = { ...State.settings, ...parsed };
+      }
+    } catch (e) {}
+
+    const elAuto = document.getElementById('settingAutoBoost');
+    const elGpu = document.getElementById('settingGpu');
+    const elTcp = document.getElementById('settingTcp');
+    const elSfx = document.getElementById('settingSfx');
+
+    if (elAuto) elAuto.checked = State.settings.autoBoost;
+    if (elGpu) elGpu.checked = State.settings.gpuAccel;
+    if (elTcp) elTcp.checked = State.settings.tcpTuning;
+    if (elSfx) elSfx.checked = State.settings.sfxSound;
+
+    audio.enabled = State.settings.sfxSound;
+    const soundIcon = document.getElementById('soundIcon');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    if (soundIcon) soundIcon.className = audio.enabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+    if (soundToggleBtn) soundToggleBtn.querySelector('.btn-tooltip').textContent = audio.enabled ? 'SFX ON' : 'SFX OFF';
+  }
 
   // ==========================================================================
   // 5. REAL NETWORK MEASUREMENT FUNCTIONS
@@ -469,6 +508,18 @@
 
       if (deltaPingEl && !State.isBoosted) {
         deltaPingEl.innerHTML = `<i class="fa-solid fa-signal"></i> Measured: ${result.ping}ms`;
+      }
+
+      // Auto-Boost on High Latency if enabled in Settings
+      if (State.settings.autoBoost && !State.isBoosted && !State.isBoosting && result.ping > 60) {
+        State.highLatencyCount++;
+        if (State.highLatencyCount >= 2) {
+          State.highLatencyCount = 0;
+          logTerminal(`>>> High latency detected (${result.ping}ms > 60ms). Triggering Auto-Boost...`, 'warn');
+          runRealTurboBoost();
+        }
+      } else {
+        State.highLatencyCount = 0;
       }
     } else {
       document.getElementById('metricPing').textContent = '--';
@@ -1017,7 +1068,6 @@
     let deltaPercent = 0;
     let deltaText = '';
 
-    // Calculate real measured efficiency from speed and latency
     if (beforeSpeed > 0 && afterSpeed > 0) {
       const speedDiff = afterSpeed - beforeSpeed;
       deltaPercent = parseFloat(((speedDiff / beforeSpeed) * 100).toFixed(1));
@@ -1039,7 +1089,6 @@
       deltaText = 'Measured';
     }
 
-    // Update Dial Multiplier with the REAL calculated delta
     const sign = deltaPercent > 0 ? '+' : '';
     dialThroughputMultiplier.textContent = `${sign}${deltaPercent}%`;
     dialActionLabel.textContent = 'OPTIMIZATION APPLIED';
@@ -1052,7 +1101,6 @@
     statusBadge.className = 'network-badge status-boosted';
     statusBadgeText.innerHTML = '<i class="fa-solid fa-bolt"></i> OPTIMIZED &bull; ACTIVE';
 
-    // Update real metrics
     document.getElementById('metricPing').textContent = after.ping !== null ? after.ping : '--';
     document.getElementById('metricJitter').textContent = after.jitter !== null ? after.jitter : '--';
     document.getElementById('metricLoss').textContent = after.loss !== null ? after.loss.toFixed(2) : '--';
@@ -1067,7 +1115,6 @@
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
     State.boostTimerInterval = setInterval(updateBoostTimer, 1000);
 
-    // Active Socket Keep-Alive Heartbeat Daemon while Boost is Active
     if (State.heartbeatInterval) clearInterval(State.heartbeatInterval);
     State.heartbeatInterval = setInterval(async () => {
       if (document.visibilityState === 'visible' && State.isBoosted) {
@@ -1087,7 +1134,6 @@
       }
     }, 3500);
 
-    // Save Network + Location Session Record
     State.sessionHistory.push({
       timestamp: new Date().toISOString(),
       type: 'Network Boost',
@@ -1652,7 +1698,79 @@
   });
 
   // ==========================================================================
-  // 15. TELEMETRY TERMINAL INTERACTION
+  // 15. BLUETOOTH / BLE DEVICE CONNECTIVITY HANDLER
+  // ==========================================================================
+  const pairBleDeviceBtn = document.getElementById('pairBleDeviceBtn');
+  const bleDeviceStatusLabel = document.getElementById('bleDeviceStatusLabel');
+  const bleBtnText = document.getElementById('bleBtnText');
+
+  async function handleBluetoothPairing() {
+    if (State.connectedDevice) {
+      // Disconnect active device
+      audio.playAlert();
+      if (State.connectedDevice.gatt && State.connectedDevice.gatt.connected) {
+        State.connectedDevice.gatt.disconnect();
+      }
+      State.connectedDevice = null;
+      if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'Pair nearby hardware network device or Bluetooth adapter';
+      if (bleBtnText) bleBtnText.textContent = 'SCAN & PAIR';
+      logTerminal('>>> Bluetooth Device Disconnected.', 'warn');
+      return;
+    }
+
+    if (!('bluetooth' in navigator)) {
+      audio.playAlert();
+      if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'Web Bluetooth is not supported in this browser/environment.';
+      logTerminal('>>> Web Bluetooth API is unavailable on this device/browser context.', 'warn');
+      return;
+    }
+
+    try {
+      audio.playClick();
+      if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'Scanning for nearby BLE devices...';
+      logTerminal('>>> Scanning for nearby Bluetooth LE network devices...', 'prefix');
+
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: ['battery_service', 'device_information']
+      });
+
+      if (!device) {
+        if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'No device selected.';
+        return;
+      }
+
+      device.addEventListener('gattserverdisconnected', () => {
+        State.connectedDevice = null;
+        if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'Device disconnected.';
+        if (bleBtnText) bleBtnText.textContent = 'SCAN & PAIR';
+        logTerminal(`>>> BLE device disconnected: ${device.name || 'Unknown'}`, 'warn');
+      });
+
+      if (device.gatt) {
+        if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = `Connecting to ${device.name || 'Device'}...`;
+        await device.gatt.connect();
+      }
+
+      State.connectedDevice = device;
+      if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = `Connected: ${device.name || 'Bluetooth Device'} (${device.id.substring(0, 8)}...)`;
+      if (bleBtnText) bleBtnText.textContent = 'DISCONNECT';
+      audio.playSuccess();
+      logTerminal(`>>> [PAIRED] Bluetooth Device Connected: ${device.name || 'BLE Device'}`, 'success');
+    } catch (err) {
+      if (err.name === 'NotFoundError') {
+        if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = 'Device scan cancelled by user.';
+      } else {
+        if (bleDeviceStatusLabel) bleDeviceStatusLabel.textContent = `Bluetooth Error: ${err.message}`;
+        logTerminal(`>>> Bluetooth Pairing error: ${err.message}`, 'warn');
+      }
+    }
+  }
+
+  if (pairBleDeviceBtn) pairBleDeviceBtn.addEventListener('click', handleBluetoothPairing);
+
+  // ==========================================================================
+  // 16. TELEMETRY TERMINAL INTERACTION
   // ==========================================================================
   const terminalLogs = document.getElementById('terminalLogs');
   const terminalInput = document.getElementById('terminalInput');
@@ -1692,7 +1810,7 @@
 
     switch (cmd) {
       case 'help':
-        logTerminal('Available commands: ping, speed, dns, gps, turbo, status, nodes, hogs, clear, audit, help', 'prefix');
+        logTerminal('Available commands: ping, speed, dns, gps, bluetooth, turbo, status, nodes, hogs, clear, audit, help', 'prefix');
         break;
       case 'turbo':
       case 'boost':
@@ -1705,6 +1823,10 @@
         logTerminal(`Pinging live Anycast edge: ${State.activeNode.name}...`, 'prefix');
         const res = await measureRealPing(State.activeNode.endpoint, 4);
         logTerminal(`Round-trip result: time=${res.ping}ms | jitter=${res.jitter}ms | packet_loss=${res.loss}%`, 'success');
+        break;
+      case 'bluetooth':
+      case 'pair':
+        handleBluetoothPairing();
         break;
       case 'gps':
       case 'location':
@@ -1748,10 +1870,19 @@
   }
 
   // ==========================================================================
-  // 16. TAB NAVIGATION CONTROLLER
+  // 17. TAB NAVIGATION & LOGO CONTROLLERS
   // ==========================================================================
   const navTabs = document.querySelectorAll('.nav-tab-btn');
   const tabPanes = document.querySelectorAll('.tab-pane');
+  const logoWrapper = document.querySelector('.logo-wrapper');
+
+  if (logoWrapper) {
+    logoWrapper.addEventListener('click', () => {
+      audio.playClick();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      probeLiveTelemetry();
+    });
+  }
 
   navTabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1789,13 +1920,14 @@
   });
 
   // ==========================================================================
-  // 17. MODALS & REAL CERTIFICATE EXPORT
+  // 18. MODALS & SYSTEM SETTINGS PREFERENCES
   // ==========================================================================
   const settingsModal = document.getElementById('settingsModal');
   const auditModal = document.getElementById('auditModal');
   const openSettingsBtn = document.getElementById('openSettingsBtn');
   const closeSettingsBtn = document.getElementById('closeSettingsBtn');
   const settingsBackdrop = document.getElementById('settingsBackdrop');
+  const saveSettingsBtn = document.getElementById('saveSettingsBtn');
   const exportAuditBtn = document.getElementById('exportAuditBtn');
   const closeAuditBtn = document.getElementById('closeAuditBtn');
   const auditBackdrop = document.getElementById('auditBackdrop');
@@ -1813,6 +1945,30 @@
   function closeSettings() {
     audio.playClick();
     if (settingsModal) settingsModal.classList.remove('open');
+  }
+
+  function saveSettingsPreferences() {
+    const elAuto = document.getElementById('settingAutoBoost');
+    const elGpu = document.getElementById('settingGpu');
+    const elTcp = document.getElementById('settingTcp');
+    const elSfx = document.getElementById('settingSfx');
+
+    State.settings.autoBoost = elAuto ? elAuto.checked : true;
+    State.settings.gpuAccel = elGpu ? elGpu.checked : true;
+    State.settings.tcpTuning = elTcp ? elTcp.checked : true;
+    State.settings.sfxSound = elSfx ? elSfx.checked : true;
+
+    audio.enabled = State.settings.sfxSound;
+    if (soundIcon) soundIcon.className = audio.enabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+    if (soundToggleBtn) soundToggleBtn.querySelector('.btn-tooltip').textContent = audio.enabled ? 'SFX ON' : 'SFX OFF';
+
+    try {
+      localStorage.setItem('nivx_settings', JSON.stringify(State.settings));
+    } catch (e) {}
+
+    audio.playSuccess();
+    closeSettings();
+    logTerminal('>>> [SAVED] System Optimization Preferences stored.', 'success');
   }
 
   function openAuditModal() {
@@ -1833,6 +1989,8 @@
   if (openSettingsBtn) openSettingsBtn.addEventListener('click', openSettingsModal);
   if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
   if (settingsBackdrop) settingsBackdrop.addEventListener('click', closeSettings);
+  if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettingsPreferences);
+
   if (exportAuditBtn) exportAuditBtn.addEventListener('click', openAuditModal);
   if (closeAuditBtn) closeAuditBtn.addEventListener('click', closeAudit);
   if (auditBackdrop) auditBackdrop.addEventListener('click', closeAudit);
@@ -1840,8 +1998,12 @@
   if (soundToggleBtn) {
     soundToggleBtn.addEventListener('click', () => {
       const active = audio.toggle();
+      State.settings.sfxSound = active;
       soundIcon.className = active ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
       soundToggleBtn.querySelector('.btn-tooltip').textContent = active ? 'SFX ON' : 'SFX OFF';
+      const elSfx = document.getElementById('settingSfx');
+      if (elSfx) elSfx.checked = active;
+      try { localStorage.setItem('nivx_settings', JSON.stringify(State.settings)); } catch (e) {}
     });
   }
 
@@ -1868,6 +2030,7 @@
         status: State.isBoosted ? 'OPTIMIZED' : 'STANDARD',
         activeNode: State.activeNode,
         activeDns: State.activeDns,
+        connectedHardwareDevice: State.connectedDevice ? { name: State.connectedDevice.name, id: State.connectedDevice.id } : 'None',
         deviceLocation: {
           latitude: State.userLocation.lat,
           longitude: State.userLocation.lng,
@@ -1911,6 +2074,7 @@
   // ==========================================================================
   // INITIALIZATION ON DOM READY
   // ==========================================================================
+  loadSavedSettings();
   startContinuousMonitoring();
   initRealInteractiveMap();
 
