@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * NIVXBOOST — REAL-TIME NETWORK SPEED & LATENCY ACCELERATOR
- * 100% Real-Time Measurement & Legitimate Optimization Engine
+ * NIVXBOOST — ULTRA-PREMIUM REAL-TIME NETWORK & LATENCY ACCELERATOR
+ * 100% Real-Time Measurement, Real Interactive Map & Geolocation Engine
  * ============================================================================
  */
 
@@ -141,73 +141,19 @@
   const audio = new CyberAudioEngine();
 
   // ==========================================================================
-  // 2. STATE & REAL METRICS REPOSITORY
-  // ==========================================================================
-  const State = {
-    isBoosted: false,
-    isBoosting: false,
-    boostStartTime: null,
-    boostTimerInterval: null,
-    selectedMode: 'gaming',
-    activeNode: {
-      id: 'fra',
-      name: 'Frankfurt IXP Edge',
-      code: 'FRA-01',
-      endpoint: 'https://speed.cloudflare.com',
-      ping: null,
-      x: 480,
-      y: 160
-    },
-    activeDns: {
-      id: 'cf',
-      name: 'Cloudflare DNS-over-HTTPS',
-      ip: '1.1.1.1',
-      endpoint: 'https://cloudflare-dns.com/dns-query',
-      ping: null
-    },
-    realMetrics: {
-      ping: null,
-      jitter: null,
-      bufferbloat: null,
-      packetLoss: 0.0,
-      downloadSpeed: null,
-      uploadSpeed: null,
-      effectiveType: '--',
-      downlinkEstimate: null,
-      rttEstimate: null,
-      signalStrength: '--',
-      quality: '--'
-    },
-    baselineBeforeBoost: null,
-    lastBoostResult: null,
-    processes: [
-      { id: 1, name: 'Browser Tab Media Streams', pid: 14082, usage: 0.0, icon: 'fa-solid fa-film', throttled: false },
-      { id: 2, name: 'Service Worker Background Sync', pid: 9821, usage: 0.0, icon: 'fa-solid fa-gears', throttled: false },
-      { id: 3, name: 'WebRTC Peer Sockets', pid: 21904, usage: 0.0, icon: 'fa-solid fa-network-wired', throttled: false },
-      { id: 4, name: 'HTTP Cache Storage Manager', pid: 4812, usage: 0.0, icon: 'fa-solid fa-database', throttled: false }
-    ],
-    auraThemes: [
-      { name: 'Electric Azure', color1: '#38bdf8', color2: '#818cf8' },
-      { name: 'Mint Emerald', color1: '#10b981', color2: '#38bdf8' },
-      { name: 'Royal Indigo', color1: '#818cf8', color2: '#f59e0b' }
-    ],
-    currentAuraIndex: 0
-  };
-
-  // ==========================================================================
-  // 3. SERVER NODES DEFINITIONS (REAL MEASURED ENDPOINTS)
+  // 2. SERVER NODES DEFINITION (REAL GEOGRAPHIC COORDINATES & ENDPOINTS)
   // ==========================================================================
   const SERVER_NODES = [
-    { id: 'fra', name: 'Frankfurt IXP Edge', code: 'FRA-01', endpoint: 'https://speed.cloudflare.com', flag: '🇩🇪', bandwidth: 'Anycast Tier-1', ping: null, x: 480, y: 160 },
-    { id: 'lon', name: 'London Telehouse Node', code: 'LON-03', endpoint: 'https://speed.cloudflare.com', flag: '🇬🇧', bandwidth: 'Anycast Tier-1', ping: null, x: 450, y: 150 },
-    { id: 'ash', name: 'US-East Ashburn Hypernode', code: 'IAD-07', endpoint: 'https://speed.cloudflare.com', flag: '🇺🇸', bandwidth: 'Anycast Tier-1', ping: null, x: 260, y: 190 },
-    { id: 'tok', name: 'Tokyo Anycast Central', code: 'NRT-02', endpoint: 'https://speed.cloudflare.com', flag: '🇯🇵', bandwidth: 'Anycast Tier-1', ping: null, x: 790, y: 200 },
-    { id: 'sin', name: 'Singapore Equinix Node', code: 'SIN-05', endpoint: 'https://speed.cloudflare.com', flag: '🇸🇬', bandwidth: 'Anycast Tier-1', ping: null, x: 710, y: 260 },
-    { id: 'bom', name: 'Mumbai Direct Peering', code: 'BOM-04', endpoint: 'https://speed.cloudflare.com', flag: '🇮🇳', bandwidth: 'Anycast Tier-1', ping: null, x: 630, y: 230 }
+    { id: 'fra', name: 'Frankfurt IXP Edge', code: 'FRA-01', lat: 50.1109, lng: 8.6821, endpoint: 'https://speed.cloudflare.com', flag: '🇩🇪', bandwidth: 'Anycast Tier-1', ping: null },
+    { id: 'lon', name: 'London Telehouse Node', code: 'LON-03', lat: 51.5074, lng: -0.1278, endpoint: 'https://speed.cloudflare.com', flag: '🇬🇧', bandwidth: 'Anycast Tier-1', ping: null },
+    { id: 'ash', name: 'US-East Ashburn Hypernode', code: 'IAD-07', lat: 39.0438, lng: -77.4874, endpoint: 'https://speed.cloudflare.com', flag: '🇺🇸', bandwidth: 'Anycast Tier-1', ping: null },
+    { id: 'tok', name: 'Tokyo Anycast Central', code: 'NRT-02', lat: 35.6762, lng: 139.6503, endpoint: 'https://speed.cloudflare.com', flag: '🇯🇵', bandwidth: 'Anycast Tier-1', ping: null },
+    { id: 'sin', name: 'Singapore Equinix Node', code: 'SIN-05', lat: 1.3521, lng: 103.8198, endpoint: 'https://speed.cloudflare.com', flag: '🇸🇬', bandwidth: 'Anycast Tier-1', ping: null },
+    { id: 'bom', name: 'Mumbai Direct Peering', code: 'BOM-04', lat: 19.0760, lng: 72.8777, endpoint: 'https://speed.cloudflare.com', flag: '🇮🇳', bandwidth: 'Anycast Tier-1', ping: null }
   ];
 
   // ==========================================================================
-  // 4. DNS PROVIDERS DEFINITION (REAL DOH QUERY TARGETS)
+  // 3. DNS PROVIDERS DEFINITION (REAL DOH QUERY TARGETS)
   // ==========================================================================
   const DNS_PROVIDERS = [
     { id: 'cf', name: 'Cloudflare 1.1.1.1 (DoH)', ip: '1.1.1.1', endpoint: 'https://cloudflare-dns.com/dns-query?name=cloudflare.com&type=A', protocol: 'DoH / HTTPS', ping: null, security: 'DNSSEC + Zero Logging', active: true },
@@ -217,13 +163,86 @@
   ];
 
   // ==========================================================================
-  // 5. REAL NETWORK MEASUREMENT ENGINE
+  // 4. GLOBAL STATE & TELEMETRY REGISTRY
+  // ==========================================================================
+  const State = {
+    isOnline: navigator.onLine,
+    isBoosted: false,
+    isBoosting: false,
+    boostStartTime: null,
+    boostTimerInterval: null,
+    monitoringInterval: null,
+    selectedMode: 'gaming',
+    activeNode: SERVER_NODES[0],
+    activeDns: DNS_PROVIDERS[0],
+    
+    // Live Network State (Continuous Telemetry)
+    liveMetrics: {
+      ping: null,
+      jitter: null,
+      bufferbloat: null,
+      packetLoss: 0.0,
+      networkType: '--',
+      signalStrength: '--',
+      connectionQuality: '--',
+      ispInfo: 'Detecting live network...'
+    },
+
+    // Speed Test Results (Last Active Benchmark Session)
+    testResults: {
+      downloadSpeed: null,
+      uploadSpeed: null,
+      peakDownload: null,
+      peakUpload: null,
+      idlePing: null,
+      loadedPing: null,
+      streamScore: '--',
+      timestamp: null
+    },
+
+    // Baseline Metrics (Recorded immediately prior to Boost)
+    baselineBeforeBoost: null,
+    lastBoostResult: null,
+
+    // Real Device Geolocation
+    userLocation: {
+      lat: null,
+      lng: null,
+      accuracy: null,
+      status: 'Requesting permission...',
+      watchId: null
+    },
+
+    // Network Session Log (Network + Location Association)
+    sessionHistory: [],
+
+    processes: [
+      { id: 1, name: 'Browser Tab Media Streams', pid: 14082, usage: 0.0, icon: 'fa-solid fa-film', throttled: false },
+      { id: 2, name: 'Service Worker Background Sync', pid: 9821, usage: 0.0, icon: 'fa-solid fa-gears', throttled: false },
+      { id: 3, name: 'WebRTC Peer Sockets', pid: 21904, usage: 0.0, icon: 'fa-solid fa-network-wired', throttled: false },
+      { id: 4, name: 'HTTP Cache Storage Manager', pid: 4812, usage: 0.0, icon: 'fa-solid fa-database', throttled: false }
+    ],
+
+    auraThemes: [
+      { name: 'Electric Azure', color1: '#38bdf8', color2: '#818cf8' },
+      { name: 'Mint Emerald', color1: '#10b981', color2: '#38bdf8' },
+      { name: 'Royal Indigo', color1: '#818cf8', color2: '#f59e0b' }
+    ],
+    currentAuraIndex: 0
+  };
+
+  // ==========================================================================
+  // 5. REAL NETWORK MEASUREMENT FUNCTIONS
   // ==========================================================================
 
   /**
    * Measure real RTT / Latency to a designated endpoint using performance.now()
    */
   async function measureRealPing(endpointUrl, iterations = 3) {
+    if (!navigator.onLine) {
+      return { ping: null, jitter: null, loss: 100.0 };
+    }
+
     const samples = [];
     let failures = 0;
 
@@ -269,6 +288,7 @@
    * Measure real DNS query round-trip time to a DoH endpoint
    */
   async function measureRealDns(dohUrl) {
+    if (!navigator.onLine) return null;
     const t0 = performance.now();
     try {
       const response = await fetch(`${dohUrl}&_=${Date.now()}`, {
@@ -286,32 +306,71 @@
   }
 
   /**
-   * Retrieve real device network information from browser APIs
+   * Determine connection quality classification from real measured latency & jitter
+   */
+  function evaluateConnectionQuality(ping, jitter, loss) {
+    if (ping === null) return '--';
+    if (loss > 20) return 'Degraded (High Loss)';
+    if (ping < 25 && jitter < 3 && loss === 0) return 'Excellent (Ultra Low Latency)';
+    if (ping < 50 && jitter < 8) return 'Good (Stable)';
+    if (ping < 100) return 'Fair';
+    return 'High Latency / Congested';
+  }
+
+  /**
+   * Update real device network type and connection status
    */
   function updateDeviceNetworkInfo() {
     const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const hudProtocolEl = document.getElementById('hudProtocol');
     const hudMtuEl = document.getElementById('hudMtu');
+    const statusBadge = document.getElementById('networkStatusBadge');
+    const statusBadgeText = document.getElementById('statusBadgeText');
+
+    if (!navigator.onLine) {
+      State.isOnline = false;
+      State.liveMetrics.networkType = 'Disconnected';
+      State.liveMetrics.connectionQuality = 'Offline';
+      if (statusBadge) statusBadge.className = 'network-badge status-idle';
+      if (statusBadgeText) statusBadgeText.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> OFFLINE &bull; DISCONNECTED';
+      if (hudProtocolEl) hudProtocolEl.textContent = 'Disconnected';
+      return;
+    }
+
+    State.isOnline = true;
+    if (statusBadge && !State.isBoosted) {
+      statusBadge.className = 'network-badge status-idle';
+      statusBadgeText.innerHTML = '<span class="status-dot"></span> SYSTEM IDLE &bull; READY';
+    }
 
     if (conn) {
-      const effectiveType = (conn.effectiveType || '--').toUpperCase();
+      const effectiveType = (conn.effectiveType || '').toUpperCase();
       const type = conn.type ? conn.type.toUpperCase() : '';
-      const netLabel = type ? `${type} (${effectiveType})` : `${effectiveType} Cellular/Broadband`;
-      State.realMetrics.effectiveType = netLabel;
+      let netLabel = '';
 
-      if (conn.downlink) {
-        State.realMetrics.downlinkEstimate = conn.downlink;
+      if (type === 'WIFI') netLabel = 'Wi-Fi High-Speed';
+      else if (type === 'CELLULAR') netLabel = effectiveType ? `${effectiveType} Cellular` : 'Cellular';
+      else if (type === 'ETHERNET') netLabel = 'Gigabit Ethernet';
+      else if (effectiveType) netLabel = `${effectiveType} Broadband`;
+      else netLabel = 'Broadband Connected';
+
+      State.liveMetrics.networkType = netLabel;
+
+      // Real signal strength reporting if available in browser
+      if (conn.rtt && conn.downlink) {
+        State.liveMetrics.signalStrength = `${conn.downlink} Mbps Downlink (RTT: ${conn.rtt}ms)`;
+      } else {
+        State.liveMetrics.signalStrength = '-- (API Unavailable)';
       }
-      if (conn.rtt) {
-        State.realMetrics.rttEstimate = conn.rtt;
-      }
+
       if (hudProtocolEl) {
         hudProtocolEl.textContent = `Type: ${netLabel}`;
       }
     } else {
-      State.realMetrics.effectiveType = '-- (API Unavailable)';
+      State.liveMetrics.networkType = 'Broadband (Connected)';
+      State.liveMetrics.signalStrength = '-- (API Unavailable)';
       if (hudProtocolEl) {
-        hudProtocolEl.textContent = `HTTP/2 &bull; Direct`;
+        hudProtocolEl.textContent = 'HTTP/2 &bull; Direct';
       }
     }
 
@@ -321,10 +380,15 @@
   }
 
   /**
-   * Fetch real ISP and Point-of-Presence info from Cloudflare meta headers
+   * Fetch real ISP and Point-of-Presence info from Cloudflare metadata headers
    */
   async function fetchRealIspMetadata() {
     const hudIspEl = document.getElementById('hudIsp');
+    if (!navigator.onLine) {
+      if (hudIspEl) hudIspEl.textContent = 'Network Disconnected';
+      return;
+    }
+
     try {
       const res = await fetch(`https://speed.cloudflare.com/__down?bytes=0&r=${Date.now()}`, {
         method: 'GET',
@@ -338,9 +402,11 @@
 
       if (city || colo || country) {
         const ispStr = [city, country, colo ? `[${colo}]` : '', asn ? `AS${asn}` : ''].filter(Boolean).join(' ');
+        State.liveMetrics.ispInfo = ispStr;
         if (hudIspEl) hudIspEl.textContent = ispStr;
       } else {
-        if (hudIspEl) hudIspEl.textContent = 'Detected Cloudflare Anycast Edge';
+        State.liveMetrics.ispInfo = 'Cloudflare Anycast Edge';
+        if (hudIspEl) hudIspEl.textContent = 'Cloudflare Anycast Edge';
       }
     } catch (e) {
       if (hudIspEl) hudIspEl.textContent = '-- (Local Network)';
@@ -348,60 +414,289 @@
   }
 
   /**
-   * Run real initial baseline measurement
+   * Execute real live ping probe and update UI cards
    */
-  async function runInitialTelemetry() {
-    updateDeviceNetworkInfo();
-    fetchRealIspMetadata();
+  async function probeLiveTelemetry() {
+    if (!navigator.onLine || document.visibilityState === 'hidden') return;
 
-    logTerminal('>>> Measuring live network latency and stability...', 'prefix');
-    const result = await measureRealPing('https://speed.cloudflare.com', 4);
+    const result = await measureRealPing(State.activeNode.endpoint, 3);
+    State.liveMetrics.ping = result.ping;
+    State.liveMetrics.jitter = result.jitter;
+    State.liveMetrics.packetLoss = result.loss;
 
-    State.realMetrics.ping = result.ping;
-    State.realMetrics.jitter = result.jitter;
-    State.realMetrics.packetLoss = result.loss;
-
-    // Bufferbloat Estimation based on idle latency variance
     if (result.ping !== null) {
       let grade = 'A+';
       if (result.jitter > 15) grade = 'B';
       else if (result.jitter > 5) grade = 'A';
-      State.realMetrics.bufferbloat = grade;
+      State.liveMetrics.bufferbloat = grade;
+      State.liveMetrics.connectionQuality = evaluateConnectionQuality(result.ping, result.jitter, result.loss);
 
-      // Update UI elements with strictly measured values
-      document.getElementById('metricPing').textContent = result.ping;
-      document.getElementById('metricJitter').textContent = result.jitter;
-      document.getElementById('metricBloat').textContent = grade;
-      document.getElementById('metricLoss').textContent = result.loss.toFixed(2);
-
+      const metricPing = document.getElementById('metricPing');
+      const metricJitter = document.getElementById('metricJitter');
+      const metricBloat = document.getElementById('metricBloat');
+      const metricLoss = document.getElementById('metricLoss');
       const deltaPingEl = document.getElementById('deltaPing');
-      if (deltaPingEl) {
+
+      if (metricPing) metricPing.textContent = result.ping;
+      if (metricJitter) metricJitter.textContent = result.jitter;
+      if (metricBloat) metricBloat.textContent = grade;
+      if (metricLoss) metricLoss.textContent = result.loss.toFixed(2);
+
+      if (deltaPingEl && !State.isBoosted) {
         deltaPingEl.innerHTML = `<i class="fa-solid fa-signal"></i> Measured: ${result.ping}ms`;
       }
-
-      logTerminal(`[LIVE DATA] Idle Ping: ${result.ping}ms | Jitter: ${result.jitter}ms | Loss: ${result.loss}%`, 'success');
     } else {
       document.getElementById('metricPing').textContent = '--';
       document.getElementById('metricJitter').textContent = '--';
       document.getElementById('metricBloat').textContent = '--';
       document.getElementById('metricLoss').textContent = '--';
-      logTerminal('>>> Latency test endpoint unavailable or offline.', 'warn');
     }
-
-    // Ping all server nodes to get real latencies
-    updateAllNodeLatencies();
   }
 
-  async function updateAllNodeLatencies() {
-    for (const node of SERVER_NODES) {
-      const res = await measureRealPing(node.endpoint, 2);
-      node.ping = res.ping;
-    }
-    renderServerNodes();
+  /**
+   * Start continuous lightweight telemetry monitoring loop (polls every 4s when visible)
+   */
+  function startContinuousMonitoring() {
+    if (State.monitoringInterval) clearInterval(State.monitoringInterval);
+    updateDeviceNetworkInfo();
+    fetchRealIspMetadata();
+    probeLiveTelemetry();
+
+    State.monitoringInterval = setInterval(() => {
+      if (document.visibilityState === 'visible' && !State.isBoosting) {
+        probeLiveTelemetry();
+      }
+    }, 4000);
+  }
+
+  // Network state event listeners
+  window.addEventListener('online', () => {
+    logTerminal('>>> Network state changed: CONNECTED.', 'success');
+    updateDeviceNetworkInfo();
+    probeLiveTelemetry();
+  });
+
+  window.addEventListener('offline', () => {
+    logTerminal('>>> Network state changed: DISCONNECTED / OFFLINE.', 'warn');
+    updateDeviceNetworkInfo();
+  });
+
+  if (navigator.connection) {
+    navigator.connection.addEventListener('change', () => {
+      logTerminal('>>> Network adapter connection parameters updated.', 'prefix');
+      updateDeviceNetworkInfo();
+      probeLiveTelemetry();
+    });
   }
 
   // ==========================================================================
-  // 6. CANVAS 1: TURBO BOOSTER DIAL & REAL ACCELERATOR WAVE
+  // 6. REAL INTERACTIVE MAP & LIVE GEOLOCATION (LEAFLET ENGINE)
+  // ==========================================================================
+  let leafletMap = null;
+  let userMarker = null;
+  let accuracyCircle = null;
+  let routePolyline = null;
+  const nodeMarkers = [];
+
+  function initRealInteractiveMap() {
+    const mapContainer = document.getElementById('realMapContainer');
+    if (!mapContainer || typeof L === 'undefined') return;
+
+    // Initialize Leaflet Map centered on default coordinates
+    leafletMap = L.map('realMapContainer', {
+      center: [25.0, 15.0],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 18,
+      zoomControl: true,
+      attributionControl: true
+    });
+
+    // Dark Matter CartoDB Vector Tiles (Real Streets, Roads, Geographic Borders)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(leafletMap);
+
+    // Plot Server Node Markers
+    SERVER_NODES.forEach(node => {
+      const customIcon = L.divIcon({
+        className: 'custom-node-icon',
+        html: `<div class="node-custom-marker"><span>${node.flag}</span> <span>${node.code}</span></div>`,
+        iconSize: [60, 24],
+        iconAnchor: [30, 12]
+      });
+
+      const marker = L.marker([node.lat, node.lng], { icon: customIcon }).addTo(leafletMap);
+      marker.bindPopup(`
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #090d14;">
+          <strong>${node.name}</strong><br>
+          Code: ${node.code}<br>
+          Coordinates: ${node.lat.toFixed(4)}, ${node.lng.toFixed(4)}<br>
+          Status: Active Anycast Edge
+        </div>
+      `);
+
+      marker.on('click', () => {
+        selectServerNode(node);
+      });
+
+      nodeMarkers.push({ id: node.id, marker, lat: node.lat, lng: node.lng });
+    });
+
+    // Setup Geolocation Tracking
+    setupRealGeolocation();
+
+    // Map Control Overlay Buttons
+    const locateUserBtn = document.getElementById('locateUserBtn');
+    const resetMapZoomBtn = document.getElementById('resetMapZoomBtn');
+
+    if (locateUserBtn) {
+      locateUserBtn.addEventListener('click', () => {
+        audio.playClick();
+        if (State.userLocation.lat !== null && State.userLocation.lng !== null) {
+          leafletMap.flyTo([State.userLocation.lat, State.userLocation.lng], 13, { duration: 1.5 });
+          logTerminal(`>>> Centered map on device coordinates: [${State.userLocation.lat.toFixed(4)}, ${State.userLocation.lng.toFixed(4)}]`, 'prefix');
+        } else {
+          setupRealGeolocation(true);
+        }
+      });
+    }
+
+    if (resetMapZoomBtn) {
+      resetMapZoomBtn.addEventListener('click', () => {
+        audio.playClick();
+        leafletMap.flyTo([25.0, 15.0], 2, { duration: 1.2 });
+      });
+    }
+
+    // Refresh map layout on window resize or tab switch
+    setTimeout(() => { leafletMap.invalidateSize(); }, 400);
+  }
+
+  /**
+   * Acquire real GPS location and continuous position updates
+   */
+  function setupRealGeolocation(manualRequest = false) {
+    const userGpsCoordinatesEl = document.getElementById('userGpsCoordinates');
+
+    if (!('geolocation' in navigator)) {
+      State.userLocation.status = 'GPS Not Supported';
+      if (userGpsCoordinatesEl) userGpsCoordinatesEl.textContent = 'GPS: Not Supported on this Device';
+      logTerminal('>>> Geolocation API is not supported on this browser/environment.', 'warn');
+      return;
+    }
+
+    if (userGpsCoordinatesEl) userGpsCoordinatesEl.textContent = 'GPS: Acquiring Real Device Location...';
+
+    const onLocationSuccess = (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      const accuracy = Math.round(pos.coords.accuracy);
+
+      State.userLocation.lat = lat;
+      State.userLocation.lng = lng;
+      State.userLocation.accuracy = accuracy;
+      State.userLocation.status = 'Locked';
+
+      const latStr = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'}`;
+      const lngStr = `${Math.abs(lng).toFixed(4)}° ${lng >= 0 ? 'E' : 'W'}`;
+      const coordLabel = `GPS: ${latStr}, ${lngStr} (±${accuracy}m)`;
+
+      if (userGpsCoordinatesEl) userGpsCoordinatesEl.textContent = coordLabel;
+
+      // Update Map Marker
+      if (leafletMap) {
+        if (!userMarker) {
+          const userIcon = L.divIcon({
+            className: 'user-marker-container',
+            html: '<div class="user-gps-marker"><div class="user-gps-pulse"></div><div class="user-gps-dot"></div></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          });
+
+          userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(leafletMap);
+          userMarker.bindPopup(`
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #090d14;">
+              <strong style="color: #10b981;">CURRENT DEVICE LOCATION</strong><br>
+              Latitude: ${lat.toFixed(6)}<br>
+              Longitude: ${lng.toFixed(6)}<br>
+              Accuracy: ±${accuracy} meters
+            </div>
+          `);
+
+          accuracyCircle = L.circle([lat, lng], {
+            radius: accuracy,
+            color: '#10b981',
+            fillColor: '#10b981',
+            fillOpacity: 0.08,
+            weight: 1
+          }).addTo(leafletMap);
+
+          if (manualRequest) {
+            leafletMap.flyTo([lat, lng], 13, { duration: 1.5 });
+          }
+        } else {
+          userMarker.setLatLng([lat, lng]);
+          if (accuracyCircle) {
+            accuracyCircle.setLatLng([lat, lng]);
+            accuracyCircle.setRadius(accuracy);
+          }
+        }
+
+        // Draw Route Line from User to Active Node
+        updateMapRoutingLine();
+      }
+
+      logTerminal(`>>> Real GPS Location Acquired: ${coordLabel}`, 'success');
+    };
+
+    const onLocationError = (err) => {
+      let msg = 'Unavailable';
+      if (err.code === 1) msg = 'Permission Denied';
+      else if (err.code === 2) msg = 'Position Unavailable';
+      else if (err.code === 3) msg = 'Timeout';
+
+      State.userLocation.status = msg;
+      if (userGpsCoordinatesEl) userGpsCoordinatesEl.textContent = `GPS: ${msg}`;
+      logTerminal(`>>> Geolocation status: ${msg}`, 'warn');
+    };
+
+    // Continuous real GPS watching
+    if (State.userLocation.watchId !== null) {
+      navigator.geolocation.clearWatch(State.userLocation.watchId);
+    }
+
+    State.userLocation.watchId = navigator.geolocation.watchPosition(
+      onLocationSuccess,
+      onLocationError,
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
+    );
+  }
+
+  function updateMapRoutingLine() {
+    if (!leafletMap || State.userLocation.lat === null || !State.activeNode) return;
+
+    if (routePolyline) {
+      leafletMap.removeLayer(routePolyline);
+    }
+
+    const latlngs = [
+      [State.userLocation.lat, State.userLocation.lng],
+      [State.activeNode.lat, State.activeNode.lng]
+    ];
+
+    routePolyline = L.polyline(latlngs, {
+      color: '#38bdf8',
+      weight: 2,
+      dashArray: '6, 6',
+      opacity: 0.8
+    }).addTo(leafletMap);
+  }
+
+  // ==========================================================================
+  // 7. CANVAS 1: TURBO ACCELERATOR DIAL ANIMATION
   // ==========================================================================
   const boosterCanvas = document.getElementById('boosterCanvas');
   const boosterCtx = boosterCanvas ? boosterCanvas.getContext('2d') : null;
@@ -498,7 +793,7 @@
   requestAnimationFrame(drawBoosterDial);
 
   // ==========================================================================
-  // 7. CANVAS 2: REAL-TIME SPECTRUM WAVEFORM (DRIVEN BY REAL SAMPLES)
+  // 8. CANVAS 2: REAL-TIME SPECTRUM WAVEFORM (DRIVEN BY REAL TEST SAMPLES)
   // ==========================================================================
   const spectrumCanvas = document.getElementById('liveSpectrumCanvas');
   const spectrumCtx = spectrumCanvas ? spectrumCanvas.getContext('2d') : null;
@@ -516,7 +811,7 @@
 
     spectrumCtx.clearRect(0, 0, w, h);
 
-    // Draw Grid Lines
+    // Grid Lines
     spectrumCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     spectrumCtx.lineWidth = 1;
     for (let y = 20; y < h; y += 25) {
@@ -550,7 +845,7 @@
     spectrumCtx.fillStyle = grad;
     spectrumCtx.fill();
 
-    // Top Line
+    // Line Path
     spectrumCtx.beginPath();
     for (let i = 0; i < spectrumData.length; i++) {
       const val = spectrumData[i];
@@ -567,81 +862,7 @@
   requestAnimationFrame(drawLiveSpectrum);
 
   // ==========================================================================
-  // 8. CANVAS 3: WORLD NETWORK RADAR
-  // ==========================================================================
-  const radarCanvas = document.getElementById('worldRadarCanvas');
-  const radarCtx = radarCanvas ? radarCanvas.getContext('2d') : null;
-
-  function drawWorldRadar() {
-    if (!radarCtx || !radarCanvas) return;
-    const w = radarCanvas.width;
-    const h = radarCanvas.height;
-
-    radarCtx.clearRect(0, 0, w, h);
-
-    radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-    radarCtx.lineWidth = 1;
-    for (let x = 0; x < w; x += 45) {
-      radarCtx.beginPath();
-      radarCtx.moveTo(x, 0);
-      radarCtx.lineTo(x, h);
-      radarCtx.stroke();
-    }
-    for (let y = 0; y < h; y += 45) {
-      radarCtx.beginPath();
-      radarCtx.moveTo(0, y);
-      radarCtx.lineTo(w, y);
-      radarCtx.stroke();
-    }
-
-    radarCtx.beginPath();
-    SERVER_NODES.forEach((node, idx) => {
-      const nextNode = SERVER_NODES[(idx + 1) % SERVER_NODES.length];
-      radarCtx.moveTo(node.x, node.y);
-      radarCtx.lineTo(nextNode.x, nextNode.y);
-    });
-    radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
-    radarCtx.lineWidth = 1.2;
-    radarCtx.setLineDash([3, 3]);
-    radarCtx.stroke();
-    radarCtx.setLineDash([]);
-
-    const active = State.activeNode;
-    radarCtx.beginPath();
-    radarCtx.moveTo(w / 2, h / 2);
-    radarCtx.lineTo(active.x, active.y);
-    radarCtx.strokeStyle = '#10b981';
-    radarCtx.lineWidth = 2;
-    radarCtx.shadowBlur = 8;
-    radarCtx.shadowColor = '#10b981';
-    radarCtx.stroke();
-    radarCtx.shadowBlur = 0;
-
-    SERVER_NODES.forEach(node => {
-      const isCurrent = node.id === State.activeNode.id;
-
-      radarCtx.beginPath();
-      radarCtx.arc(node.x, node.y, isCurrent ? 12 : 7, 0, Math.PI * 2);
-      radarCtx.fillStyle = isCurrent ? 'rgba(16, 185, 129, 0.2)' : 'rgba(56, 189, 248, 0.08)';
-      radarCtx.fill();
-
-      radarCtx.beginPath();
-      radarCtx.arc(node.x, node.y, isCurrent ? 5 : 3.5, 0, Math.PI * 2);
-      radarCtx.fillStyle = isCurrent ? '#10b981' : '#38bdf8';
-      radarCtx.fill();
-
-      const pingLabel = node.ping !== null ? `${node.ping}ms` : '--';
-      radarCtx.font = '10px JetBrains Mono';
-      radarCtx.fillStyle = isCurrent ? '#10b981' : '#94a3b8';
-      radarCtx.fillText(`${node.code} (${pingLabel})`, node.x + 8, node.y - 5);
-    });
-
-    requestAnimationFrame(drawWorldRadar);
-  }
-  requestAnimationFrame(drawWorldRadar);
-
-  // ==========================================================================
-  // 9. LEGITIMATE PLATFORM NETWORK OPTIMIZATION (REAL BOOST)
+  // 9. REAL-TIME NETWORK BOOST ENGINE (LEGITIMATE OPTIMIZATION)
   // ==========================================================================
   const mainBoostBtn = document.getElementById('mainBoostBtn');
   const revertBoostBtn = document.getElementById('revertBoostBtn');
@@ -672,7 +893,8 @@
     const domains = [
       'https://speed.cloudflare.com',
       'https://cloudflare-dns.com',
-      'https://dns.google'
+      'https://dns.google',
+      'https://a.basemaps.cartocdn.com'
     ];
     domains.forEach(domain => {
       const link = document.createElement('link');
@@ -694,6 +916,11 @@
 
   async function runRealTurboBoost() {
     if (State.isBoosting) return;
+    if (!navigator.onLine) {
+      logTerminal('>>> ERROR: Cannot accelerate while offline/disconnected.', 'warn');
+      return;
+    }
+
     State.isBoosting = true;
     audio.playCharge();
 
@@ -703,7 +930,7 @@
     dialActionLabel.textContent = 'ANALYZING BASELINE...';
 
     // Step 1: Measure Real Baseline (Before)
-    const beforeResult = await measureRealPing('https://speed.cloudflare.com', 3);
+    const beforeResult = await measureRealPing(State.activeNode.endpoint, 3);
     State.baselineBeforeBoost = beforeResult;
     logTerminal(`[BASELINE] Latency: ${beforeResult.ping !== null ? beforeResult.ping + 'ms' : '--'} | Jitter: ${beforeResult.jitter !== null ? beforeResult.jitter + 'ms' : '--'}`, 'warn');
 
@@ -725,7 +952,7 @@
 
     // Pipeline Step 4: Edge Routing & Verification
     setStageActive('stageNode', 'Re-measuring edge latency...');
-    const afterResult = await measureRealPing('https://speed.cloudflare.com', 4);
+    const afterResult = await measureRealPing(State.activeNode.endpoint, 4);
     State.lastBoostResult = afterResult;
     setStageCompleted('stageNode', 'Verified');
 
@@ -806,6 +1033,18 @@
     if (State.boostTimerInterval) clearInterval(State.boostTimerInterval);
     State.boostTimerInterval = setInterval(updateBoostTimer, 1000);
 
+    // Save Network + Location Session Record
+    State.sessionHistory.push({
+      timestamp: new Date().toISOString(),
+      type: 'Network Boost',
+      latitude: State.userLocation.lat,
+      longitude: State.userLocation.lng,
+      beforePing,
+      afterPing,
+      deltaText,
+      networkType: State.liveMetrics.networkType
+    });
+
     logTerminal(`>>> [BEFORE] Ping: ${beforePing}ms | [AFTER] Ping: ${afterPing}ms | Real Delta: ${deltaText}`, 'success');
   }
 
@@ -836,7 +1075,7 @@
     });
 
     logTerminal('>>> Reset to default network stack.', 'warn');
-    runInitialTelemetry();
+    probeLiveTelemetry();
   }
 
   function updateBoostTimer() {
@@ -852,7 +1091,7 @@
   if (revertBoostBtn) revertBoostBtn.addEventListener('click', revertTurboBoost);
 
   // ==========================================================================
-  // 10. REAL-TIME SPEED TEST LABORATORY (ACTUAL NETWORK STREAMS)
+  // 10. REAL-TIME SPEED TEST LABORATORY (ACTUAL STREAM TRANSFERS)
   // ==========================================================================
   const dlCanvas = document.getElementById('downloadGaugeCanvas');
   const ulCanvas = document.getElementById('uploadGaugeCanvas');
@@ -909,8 +1148,8 @@
   requestAnimationFrame(updateGauges);
 
   /**
-   * Run real download speed test by streaming real bytes from Cloudflare speed endpoint
-   * speed = (amount of data transferred in bits) / elapsed time in seconds
+   * Real Download Speed Measurement using ReadableStream chunks
+   * Formula: Download Mbps = transferred bytes × 8 ÷ elapsed seconds ÷ 1,000,000
    */
   async function runRealDownloadTest(targetBytes = 15000000) {
     const dlValEl = document.getElementById('dlSpeedValue');
@@ -969,8 +1208,8 @@
   }
 
   /**
-   * Run real upload speed test by POSTing generated binary payloads to speed endpoint
-   * speed = (amount of data transferred in bits) / elapsed time in seconds
+   * Real Upload Speed Measurement using binary payload POST
+   * Formula: Upload Mbps = uploaded bytes × 8 ÷ elapsed seconds ÷ 1,000,000
    */
   async function runRealUploadTest() {
     const ulValEl = document.getElementById('ulSpeedValue');
@@ -979,8 +1218,7 @@
 
     ulSubEl.textContent = 'UPLOADING LIVE BYTES...';
 
-    // 4MB payload chunk
-    const payloadSize = 4000000;
+    const payloadSize = 4000000; // 4MB
     const buffer = new Uint8Array(payloadSize);
     for (let i = 0; i < payloadSize; i += 1024) {
       buffer[i] = Math.floor(Math.random() * 256);
@@ -1013,6 +1251,11 @@
   }
 
   async function runFullRealSpeedTest() {
+    if (!navigator.onLine) {
+      logTerminal('>>> ERROR: Cannot perform speed test while disconnected.', 'warn');
+      return;
+    }
+
     audio.playCharge();
     startSpeedTestBtn.disabled = true;
     startSpeedTestBtn.style.opacity = '0.6';
@@ -1023,7 +1266,7 @@
     speedPhaseLabel.textContent = 'Measuring real idle ping & jitter...';
     speedProgressBar.style.width = '15%';
 
-    const pingResult = await measureRealPing('https://speed.cloudflare.com', 4);
+    const pingResult = await measureRealPing(State.activeNode.endpoint, 4);
     const idlePing = pingResult.ping !== null ? pingResult.ping : '--';
     document.getElementById('resPing').textContent = `${idlePing} ms`;
     audio.playClick();
@@ -1042,25 +1285,43 @@
     document.getElementById('resPeakUl').textContent = ulResult.peakMbps > 0 ? `${ulResult.peakMbps.toFixed(1)} Mbps` : '--';
 
     // Phase 4: Loaded Latency
-    const loadedPingRes = await measureRealPing('https://speed.cloudflare.com', 2);
+    const loadedPingRes = await measureRealPing(State.activeNode.endpoint, 2);
     const loadedPing = loadedPingRes.ping !== null ? loadedPingRes.ping : '--';
     document.getElementById('resLoadedPing').textContent = `${loadedPing} ms`;
 
     // Stream Quality Rating
     const streamScoreEl = document.getElementById('resStreamScore');
-    if (streamScoreEl) {
-      if (dlResult.averageMbps >= 50) {
-        streamScoreEl.textContent = '4K / 8K HDR Ready';
-      } else if (dlResult.averageMbps >= 15) {
-        streamScoreEl.textContent = '1080p Full HD';
-      } else if (dlResult.averageMbps >= 5) {
-        streamScoreEl.textContent = '720p HD';
-      } else if (dlResult.averageMbps > 0) {
-        streamScoreEl.textContent = 'SD (Standard)';
-      } else {
-        streamScoreEl.textContent = '--';
-      }
-    }
+    let streamScore = '--';
+    if (dlResult.averageMbps >= 50) streamScore = '4K / 8K HDR Ready';
+    else if (dlResult.averageMbps >= 15) streamScore = '1080p Full HD';
+    else if (dlResult.averageMbps >= 5) streamScore = '720p HD';
+    else if (dlResult.averageMbps > 0) streamScore = 'SD (Standard)';
+
+    if (streamScoreEl) streamScoreEl.textContent = streamScore;
+
+    // Record Speed Test Session Results
+    State.testResults = {
+      downloadSpeed: dlResult.averageMbps,
+      uploadSpeed: ulResult.averageMbps,
+      peakDownload: dlResult.peakMbps,
+      peakUpload: ulResult.peakMbps,
+      idlePing,
+      loadedPing,
+      streamScore,
+      timestamp: new Date().toISOString()
+    };
+
+    // Save Network + Location Session Record
+    State.sessionHistory.push({
+      timestamp: new Date().toISOString(),
+      type: 'Speed Test',
+      latitude: State.userLocation.lat,
+      longitude: State.userLocation.lng,
+      downloadMbps: dlResult.averageMbps,
+      uploadMbps: ulResult.averageMbps,
+      ping: idlePing,
+      networkType: State.liveMetrics.networkType
+    });
 
     speedProgressBar.style.width = '100%';
     speedPhaseLabel.textContent = 'Test Complete • Real-Time Data Verified';
@@ -1074,7 +1335,7 @@
   if (startSpeedTestBtn) startSpeedTestBtn.addEventListener('click', runFullRealSpeedTest);
 
   // ==========================================================================
-  // 11. GLOBAL NODE HOPPER INITIALIZATION & ROUTING
+  // 11. GLOBAL NODE HOPPER & ROUTING
   // ==========================================================================
   const serverNodesContainer = document.getElementById('serverNodesContainer');
   const activeNodeNameEl = document.getElementById('activeNodeName');
@@ -1102,7 +1363,7 @@
         </div>
         <div class="node-metrics">
           <span>LATENCY: <strong class="${node.ping && node.ping < 30 ? 'green-text' : 'cyan-text'}">${pingText}</strong></span>
-          <span>PACKET LOSS: <strong class="green-text">0.00%</strong></span>
+          <span>COORDINATES: <strong>${node.lat.toFixed(1)}°, ${node.lng.toFixed(1)}°</strong></span>
         </div>
         <button class="node-connect-btn">
           ${isSelected ? '<i class="fa-solid fa-check"></i> CONNECTED' : '<i class="fa-solid fa-bolt"></i> WARP CONNECT'}
@@ -1123,6 +1384,11 @@
     if (activeNodeNameEl) activeNodeNameEl.textContent = `${node.name} (${node.code})`;
     renderServerNodes();
 
+    if (leafletMap) {
+      updateMapRoutingLine();
+      leafletMap.flyTo([node.lat, node.lng], 5, { duration: 1.2 });
+    }
+
     logTerminal(`>>> Measuring ping to ${node.name}...`, 'prefix');
     const res = await measureRealPing(node.endpoint, 2);
     node.ping = res.ping;
@@ -1134,7 +1400,11 @@
   async function autoLockBestNode() {
     audio.playCharge();
     logTerminal('>>> Probing all available Anycast edge nodes for shortest path...', 'warn');
-    await updateAllNodeLatencies();
+    for (const node of SERVER_NODES) {
+      const res = await measureRealPing(node.endpoint, 2);
+      node.ping = res.ping;
+    }
+    renderServerNodes();
 
     let best = SERVER_NODES[0];
     SERVER_NODES.forEach(n => {
@@ -1247,13 +1517,7 @@
     if (!processListContainer) return;
     processListContainer.innerHTML = '';
 
-    let totalUsage = 0;
-    let totalReclaimed = 0;
-
     State.processes.forEach(proc => {
-      if (!proc.throttled) totalUsage += proc.usage;
-      else totalReclaimed += proc.usage;
-
       const item = document.createElement('div');
       item.className = `process-item ${proc.throttled ? 'throttled' : ''}`;
       item.innerHTML = `
@@ -1373,19 +1637,23 @@
 
     switch (cmd) {
       case 'help':
-        logTerminal('Available commands: ping, speed, dns, turbo, status, nodes, hogs, clear, audit, help', 'prefix');
+        logTerminal('Available commands: ping, speed, dns, gps, turbo, status, nodes, hogs, clear, audit, help', 'prefix');
         break;
       case 'turbo':
       case 'boost':
         runRealTurboBoost();
         break;
       case 'status':
-        logTerminal(`Status: ${State.isBoosted ? 'OPTIMIZED' : 'STANDARD'} | Node: ${State.activeNode.name} | Latency: ${State.realMetrics.ping !== null ? State.realMetrics.ping + 'ms' : '--'}`, 'success');
+        logTerminal(`Status: ${State.isBoosted ? 'OPTIMIZED' : 'STANDARD'} | Node: ${State.activeNode.name} | Latency: ${State.liveMetrics.ping !== null ? State.liveMetrics.ping + 'ms' : '--'}`, 'success');
         break;
       case 'ping':
         logTerminal(`Pinging live Anycast edge: ${State.activeNode.name}...`, 'prefix');
-        const res = await measureRealPing('https://speed.cloudflare.com', 4);
+        const res = await measureRealPing(State.activeNode.endpoint, 4);
         logTerminal(`Round-trip result: time=${res.ping}ms | jitter=${res.jitter}ms | packet_loss=${res.loss}%`, 'success');
+        break;
+      case 'gps':
+      case 'location':
+        logTerminal(`Device Location: [Lat: ${State.userLocation.lat}, Lng: ${State.userLocation.lng}] (Accuracy: ±${State.userLocation.accuracy}m)`, 'success');
         break;
       case 'speed':
         runFullRealSpeedTest();
@@ -1445,6 +1713,13 @@
       tab.setAttribute('aria-selected', 'true');
       const pane = document.getElementById(target);
       if (pane) pane.classList.add('active');
+
+      // Refresh Leaflet map size on switching to nodes tab
+      if (target === 'tab-nodes' && leafletMap) {
+        setTimeout(() => {
+          leafletMap.invalidateSize();
+        }, 200);
+      }
     });
   });
 
@@ -1490,9 +1765,9 @@
     audio.playSuccess();
     const now = new Date();
     document.getElementById('certTimestamp').textContent = now.toUTCString();
-    document.getElementById('certScore').textContent = State.realMetrics.ping !== null ? `Latency: ${State.realMetrics.ping}ms (${State.realMetrics.jitter}ms Jitter)` : 'Pending Live Test';
-    document.getElementById('certPing').textContent = State.realMetrics.ping !== null ? `${State.realMetrics.ping}ms (${State.activeNode.name})` : '--';
-    document.getElementById('certBloat').textContent = State.realMetrics.bufferbloat !== null ? `GRADE ${State.realMetrics.bufferbloat}` : '--';
+    document.getElementById('certScore').textContent = State.liveMetrics.ping !== null ? `Latency: ${State.liveMetrics.ping}ms (${State.liveMetrics.jitter}ms Jitter)` : 'Pending Live Test';
+    document.getElementById('certPing').textContent = State.liveMetrics.ping !== null ? `${State.liveMetrics.ping}ms (${State.activeNode.name})` : '--';
+    document.getElementById('certBloat').textContent = State.liveMetrics.bufferbloat !== null ? `GRADE ${State.liveMetrics.bufferbloat}` : '--';
     if (auditModal) auditModal.classList.add('open');
   }
 
@@ -1539,17 +1814,27 @@
         status: State.isBoosted ? 'OPTIMIZED' : 'STANDARD',
         activeNode: State.activeNode,
         activeDns: State.activeDns,
-        realMeasurements: {
-          pingMs: State.realMetrics.ping,
-          jitterMs: State.realMetrics.jitter,
-          bufferbloatGrade: State.realMetrics.bufferbloat,
-          packetLossPct: State.realMetrics.packetLoss,
-          effectiveType: State.realMetrics.effectiveType
+        deviceLocation: {
+          latitude: State.userLocation.lat,
+          longitude: State.userLocation.lng,
+          accuracyMeters: State.userLocation.accuracy,
+          status: State.userLocation.status
         },
+        liveMeasurements: {
+          pingMs: State.liveMetrics.ping,
+          jitterMs: State.liveMetrics.jitter,
+          bufferbloatGrade: State.liveMetrics.bufferbloat,
+          packetLossPct: State.liveMetrics.packetLoss,
+          networkType: State.liveMetrics.networkType,
+          connectionQuality: State.liveMetrics.connectionQuality,
+          ispInfo: State.liveMetrics.ispInfo
+        },
+        speedBenchmark: State.testResults,
         boostComparison: {
           baselineBefore: State.baselineBeforeBoost,
           resultAfter: State.lastBoostResult
-        }
+        },
+        sessionHistory: State.sessionHistory
       };
 
       const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(report, null, 2));
@@ -1570,8 +1855,9 @@
   }
 
   // ==========================================================================
-  // INITIALIZE ON LOAD
+  // INITIALIZATION ON DOM READY
   // ==========================================================================
-  runInitialTelemetry();
+  startContinuousMonitoring();
+  initRealInteractiveMap();
 
 })();
