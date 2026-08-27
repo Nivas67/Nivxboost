@@ -3554,35 +3554,41 @@ input:checked + .slider:before {
     margin-bottom: 14px !important;
   }
 
-  /* ── Mode Pills: Clean Spaced Row ── */
+  /* ── Mode Pills: Clean 2x2 Grid (No Merging / No Colliding) ── */
   .mode-pills {
-    display: flex !important;
-    gap: 6px !important;
-    overflow-x: auto !important;
-    scrollbar-width: none !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
     width: 100% !important;
-    padding: 4px !important;
+    padding: 6px !important;
     box-sizing: border-box !important;
     background: rgba(8, 12, 18, 0.7) !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
+    border: 1px solid var(--border-glass) !important;
+    margin-top: 4px !important;
   }
 
-  .mode-pills::-webkit-scrollbar { display: none; }
-
   .mode-pill {
-    flex: 1 0 auto !important;
-    min-width: 95px !important;
-    padding: 8px 10px !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
     justify-content: center !important;
-    font-size: 0.68rem !important;
-    border-radius: 8px !important;
-    white-space: nowrap !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+    font-size: 0.72rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
   }
 
   .turbo-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px;
+    gap: 16px;
     width: 100% !important;
   }
 
@@ -3593,25 +3599,27 @@ input:checked + .slider:before {
 
   /* ── Booster Dial: Smooth Dynamic Viewport Sizing ── */
   .dial-container {
-    width: min(78vw, 310px) !important;
-    height: min(78vw, 310px) !important;
-    margin: 6px auto 14px !important;
+    width: min(76vw, 290px) !important;
+    height: min(76vw, 290px) !important;
+    margin: 8px auto 14px !important;
   }
 
   .dial-huge-value {
     font-size: 2.2rem !important;
   }
 
-  /* ── Pipeline Stages: Spaced Grid (No arrows overlap) ── */
+  /* ── Pipeline Stages: Spaced 3-Column Grid (No arrows overlap) ── */
   .boost-pipeline-stages {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
-    gap: 6px !important;
-    padding: 8px !important;
+    gap: 8px !important;
+    padding: 10px 8px !important;
     margin: 12px 0 16px !important;
     width: 100% !important;
     box-sizing: border-box !important;
-    border-radius: 12px !important;
+    background: var(--bg-card-inner) !important;
+    border-radius: 14px !important;
+    border: 1px solid var(--border-glass) !important;
   }
 
   .pipeline-arrow {
@@ -3624,7 +3632,9 @@ input:checked + .slider:before {
     text-align: center !important;
     flex-direction: column !important;
     gap: 4px !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
   }
 
   .stage-meta {
@@ -3636,12 +3646,32 @@ input:checked + .slider:before {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
   }
 
   .cyber-boost-btn {
     width: 100% !important;
+    min-height: 54px !important;
     border-radius: 14px !important;
-    padding: 16px 20px !important;
+    padding: 14px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .reset-stack-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
   }
 
   /* ── Responsive 2-Col Stat Grids ── */
@@ -3651,8 +3681,8 @@ input:checked + .slider:before {
   .speed-summary-grid,
   .trends-stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    margin: 10px 0 !important;
+    gap: 12px !important;
+    margin: 12px 0 !important;
   }
 
   .stat-mini-card,
@@ -3663,42 +3693,47 @@ input:checked + .slider:before {
     box-sizing: border-box !important;
   }
 
-  /* ── Game Presets: Perfectly Spaced Cards ── */
+  /* ── Game Presets: Clean 2-Col Cards with Separated Buttons ── */
   .game-presets-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
-    margin: 10px 0 !important;
+    margin: 12px 0 !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
   .game-preset-card {
-    padding: 12px !important;
+    padding: 14px 12px !important;
     border-radius: 14px !important;
     background: var(--bg-card-inner) !important;
     border: 1px solid var(--border-glass) !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    gap: 10px !important;
-    min-height: 110px !important;
+    gap: 12px !important;
+    min-height: 120px !important;
     box-sizing: border-box !important;
   }
 
   .game-preset-card .game-btn {
     width: 100% !important;
-    padding: 7px 10px !important;
-    font-size: 0.68rem !important;
+    min-height: 38px !important;
+    padding: 8px 10px !important;
+    font-size: 0.7rem !important;
     font-weight: 700 !important;
     border-radius: 8px !important;
-    margin-top: 4px !important;
+    margin-top: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
   }
 
   /* ── Leaflet Radar Map on Mobile ── */
   #realMapContainer,
   .map-container {
-    height: 240px !important;
+    height: 250px !important;
     border-radius: 16px;
     width: 100% !important;
   }
@@ -3714,18 +3749,25 @@ input:checked + .slider:before {
 
   .dual-gauges-container {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 16px !important;
   }
 
   .gauge-column {
     width: 100% !important;
-    padding: 14px !important;
+    padding: 16px !important;
     box-sizing: border-box !important;
+    border-radius: 16px !important;
   }
 
   .gauge-canvas-box {
     width: min(72vw, 240px) !important;
     height: min(72vw, 240px) !important;
+  }
+
+  .speedtest-start-btn {
+    width: 100% !important;
+    min-height: 52px !important;
+    border-radius: 14px !important;
   }
 
   /* ── Support Chat Console on Mobile ── */
