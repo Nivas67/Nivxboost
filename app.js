@@ -2049,9 +2049,11 @@
   }
 
   // ==========================================================================
-  // 17. TAB NAVIGATION & LOGO CONTROLLERS
+  // 17. TAB NAVIGATION & LOGO CONTROLLERS (DESKTOP + MOBILE BOTTOM NAV)
   // ==========================================================================
   const navTabs = document.querySelectorAll('.nav-tab-btn');
+  const mobileBottomNav = document.getElementById('mobileBottomNav');
+  const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
   const tabPanes = document.querySelectorAll('.tab-pane');
   const logoWrapper = document.querySelector('.logo-wrapper');
 
@@ -2063,28 +2065,41 @@
     });
   }
 
-  navTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      audio.playClick();
-      const target = tab.dataset.tab;
+  function switchTab(target) {
+    if (!target) return;
+    audio.playClick();
 
-      navTabs.forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tabPanes.forEach(p => p.classList.remove('active'));
-
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      const pane = document.getElementById(target);
-      if (pane) pane.classList.add('active');
-
-      if (target === 'tab-nodes' && leafletMap) {
-        setTimeout(() => {
-          leafletMap.invalidateSize();
-        }, 200);
-      }
+    navTabs.forEach(t => {
+      const isMatch = t.dataset.tab === target;
+      t.classList.toggle('active', isMatch);
+      t.setAttribute('aria-selected', isMatch ? 'true' : 'false');
     });
+
+    mobileNavItems.forEach(m => {
+      const isMatch = m.dataset.tab === target;
+      m.classList.toggle('active', isMatch);
+      m.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+    });
+
+    tabPanes.forEach(p => {
+      p.classList.toggle('active', p.id === target);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (target === 'tab-nodes' && leafletMap) {
+      setTimeout(() => {
+        leafletMap.invalidateSize();
+      }, 200);
+    }
+  }
+
+  navTabs.forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  mobileNavItems.forEach(item => {
+    item.addEventListener('click', () => switchTab(item.dataset.tab));
   });
 
   const modePills = document.querySelectorAll('.mode-pill');
@@ -2328,6 +2343,13 @@
   const pwaInstallBanner = document.getElementById('pwaInstallBanner');
   const bannerInstallBtn = document.getElementById('bannerInstallBtn');
   const bannerCloseBtn = document.getElementById('bannerCloseBtn');
+
+  // Hide PWA install controls if already running in standalone installed app
+  const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
+  if (isStandaloneApp) {
+    if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
+    if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
+  }
 
   // Register Service Worker for offline capability & mobile installation
   if ('serviceWorker' in navigator) {
@@ -2588,8 +2610,31 @@
   const togglePwdVisibility = document.getElementById('togglePwdVisibility');
   const authPassword = document.getElementById('authPassword');
 
+  // ==========================================================================
+  // 24. GOOGLE OPERATOR PROFILE MODAL & SIGN OUT CONTROLLER
+  // ==========================================================================
+  const authModalBtn = document.getElementById('authModalBtn');
+  const authModal = document.getElementById('authModal');
+  const closeAuthBtn = document.getElementById('closeAuthBtn');
+  const authBackdrop = document.getElementById('authBackdrop');
+  const signOutBtn = document.getElementById('signOutBtn');
+  const profileDisplayName = document.getElementById('profileDisplayName');
+  const profileDisplayEmail = document.getElementById('profileDisplayEmail');
+  const modalProfileAvatarWrap = document.getElementById('modalProfileAvatarWrap');
+
   function openAuthModal() {
     audio.playClick();
+    if (State.currentUser) {
+      if (profileDisplayName) profileDisplayName.textContent = State.currentUser.name || 'Google User';
+      if (profileDisplayEmail) profileDisplayEmail.textContent = State.currentUser.email || 'user@gmail.com';
+      if (modalProfileAvatarWrap) {
+        if (State.currentUser.picture) {
+          modalProfileAvatarWrap.innerHTML = `<img src="${State.currentUser.picture}" alt="Google Profile" referrerpolicy="no-referrer" style="width:48px;height:48px;border-radius:50%;border:2px solid #00daf3;object-fit:cover;">`;
+        } else {
+          modalProfileAvatarWrap.innerHTML = '<i class="fa-solid fa-user-astronaut" style="color:#00daf3;font-size:1.8rem;"></i>';
+        }
+      }
+    }
     if (authModal) authModal.classList.add('open');
   }
 
@@ -2602,109 +2647,13 @@
   if (closeAuthBtn) closeAuthBtn.addEventListener('click', closeAuthModal);
   if (authBackdrop) authBackdrop.addEventListener('click', closeAuthModal);
 
-  if (authTabSignIn && authTabSignUp) {
-    authTabSignIn.addEventListener('click', () => {
-      audio.playClick();
-      authTabSignIn.classList.add('active');
-      authTabSignUp.classList.remove('active');
-      signInForm.classList.add('active');
-      signUpForm.classList.remove('active');
-    });
-
-    authTabSignUp.addEventListener('click', () => {
-      audio.playClick();
-      authTabSignUp.classList.add('active');
-      authTabSignIn.classList.remove('active');
-      signUpForm.classList.add('active');
-      signInForm.classList.remove('active');
-    });
-  }
-
-  if (togglePwdVisibility && authPassword) {
-    togglePwdVisibility.addEventListener('click', () => {
-      audio.playClick();
-      const isPwd = authPassword.type === 'password';
-      authPassword.type = isPwd ? 'text' : 'password';
-      togglePwdVisibility.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
-    });
-  }
-
-  function setUserLoggedIn(name, email, save = true) {
-    State.currentUser = { name, email, loggedIn: true };
-    if (save) {
-      localStorage.setItem('nivx_user_session', JSON.stringify(State.currentUser));
-    }
-    if (userAccountLabel) userAccountLabel.textContent = name.toUpperCase();
-    if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-user-astronaut green-text';
-    if (profileDisplayName) profileDisplayName.textContent = name;
-    if (profileDisplayEmail) profileDisplayEmail.textContent = email;
-    if (authFormsContainer) authFormsContainer.style.display = 'none';
-    if (authProfileContainer) authProfileContainer.style.display = 'block';
-    logTerminal(`>>> [AUTH] Authenticated as ${name} (${email}). Pro Tier unlocked.`, 'success');
-  }
-
-  function loadSavedUserSession() {
-    const saved = localStorage.getItem('nivx_user_session');
-    if (saved) {
-      try {
-        const u = JSON.parse(saved);
-        if (u && u.name) {
-          setUserLoggedIn(u.name, u.email || 'operator@nivx.io', false);
-          return true;
-        }
-      } catch (e) {}
-    }
-    return false;
-  }
-
-  if (signInForm) {
-    signInForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      audio.playSuccess();
-      const email = document.getElementById('authEmail').value || 'sysadmin@network.local';
-      setUserLoggedIn('Commander Nivas', email);
-      closeAuthModal();
-    });
-  }
-
-  if (signUpForm) {
-    signUpForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      audio.playSuccess();
-      const name = document.getElementById('signUpName').value || 'Officer';
-      const email = document.getElementById('signUpEmail').value || 'operator@nivx.io';
-      setUserLoggedIn(name, email);
-      closeAuthModal();
-    });
-  }
-
-  if (googleAuthBtn) {
-    googleAuthBtn.addEventListener('click', () => {
-      audio.playSuccess();
-      setUserLoggedIn('Google User', 'nivas.network@gmail.com');
-      closeAuthModal();
-    });
-  }
-
-  if (appleAuthBtn) {
-    appleAuthBtn.addEventListener('click', () => {
-      audio.playSuccess();
-      setUserLoggedIn('Apple Operator', 'operator@icloud.com');
-      closeAuthModal();
-    });
-  }
-
   if (signOutBtn) {
     signOutBtn.addEventListener('click', () => {
       audio.playAlert();
       State.currentUser = null;
       localStorage.removeItem('nivx_user_session');
-      if (userAccountLabel) userAccountLabel.textContent = 'SIGN IN';
-      if (userAvatarIcon) userAvatarIcon.className = 'fa-solid fa-circle-user';
-      if (authFormsContainer) authFormsContainer.style.display = 'block';
-      if (authProfileContainer) authProfileContainer.style.display = 'none';
-      logTerminal('>>> [AUTH] User session logged out.', 'warn');
-      closeAuthModal();
+      logTerminal('>>> [AUTH] Google session signed out.', 'warn');
+      window.location.replace('login.html');
     });
   }
 
