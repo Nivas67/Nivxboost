@@ -598,10 +598,15 @@
       attributionControl: true
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
+    // Clean, High-Resolution, Watermark-Free Dark Vector Map Layers (No API Key Required)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/" target="_blank">Esri</a> &mdash; Global Vector Basemap',
+      maxZoom: 18
+    }).addTo(leafletMap);
+
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 18,
+      opacity: 0.95
     }).addTo(leafletMap);
 
     SERVER_NODES.forEach(node => {
