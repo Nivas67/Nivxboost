@@ -3266,12 +3266,36 @@ input:checked + .slider:before {
 }
 
 /* ── Hide PWA Install Controls When App is Already Installed / Standalone ── */
-@media (display-mode: standalone), (display-mode: fullscreen) {
+@media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
   #pwaInstallBtn,
   #pwaInstallBanner,
-  .pwa-install-header-btn {
+  .pwa-install-header-btn,
+  .pwa-install-banner {
     display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
   }
+}
+
+body.is-standalone-app #pwaInstallBtn,
+body.is-standalone-app #pwaInstallBanner,
+body.is-standalone-app .pwa-install-header-btn,
+body.is-standalone-app .pwa-install-banner,
+html.is-standalone-app #pwaInstallBtn,
+html.is-standalone-app #pwaInstallBanner {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
 }
 
 /* ── Mobile Tablet & Phone Layouts (≤768px) ── */
@@ -3644,41 +3668,74 @@ input:checked + .slider:before {
     box-sizing: border-box !important;
   }
 
-  /* ── Game Presets: Clean 2-Col Cards with Separated Buttons ── */
+  /* ── Game Presets: Clean 2-Col Vertical Cards with Full-Width Action Buttons ── */
   .game-presets-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    margin: 12px 0 !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  .game-preset-card {
-    padding: 14px 12px !important;
-    border-radius: 14px !important;
-    background: var(--bg-card-inner) !important;
-    border: 1px solid var(--border-glass) !important;
+  .game-preset-item {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    gap: 12px !important;
-    min-height: 120px !important;
+    align-items: stretch !important;
+    padding: 12px 10px !important;
+    border-radius: 14px !important;
+    background: var(--bg-card-inner) !important;
+    border: 1px solid var(--border-glass) !important;
+    gap: 10px !important;
+    min-height: 115px !important;
     box-sizing: border-box !important;
   }
 
-  .game-preset-card .game-btn {
-    width: 100% !important;
-    min-height: 38px !important;
-    padding: 8px 10px !important;
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
+  .game-preset-item .game-icon {
+    width: 30px !important;
+    height: 30px !important;
     border-radius: 8px !important;
-    margin-top: auto !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .game-preset-item .game-info {
+    margin-left: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+  }
+
+  .game-preset-item .game-title {
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: var(--text-primary) !important;
+  }
+
+  .game-preset-item .game-ping {
+    font-size: 0.62rem !important;
+    color: var(--accent-success) !important;
+  }
+
+  .game-opt-btn {
+    width: 100% !important;
+    min-height: 34px !important;
+    padding: 6px 8px !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    margin-top: auto !important;
+    letter-spacing: 0.5px !important;
+    box-sizing: border-box !important;
   }
 
   /* ── Leaflet Radar Map on Mobile ── */

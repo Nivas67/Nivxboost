@@ -2357,11 +2357,14 @@
   // Check if running in standalone installed PWA app mode
   const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || 
                           window.matchMedia('(display-mode: fullscreen)').matches ||
+                          window.matchMedia('(display-mode: minimal-ui)').matches ||
                           window.navigator.standalone === true || 
                           document.referrer.includes('android-app://') ||
                           localStorage.getItem('nivx_is_installed_pwa') === 'true';
 
   if (isStandaloneApp) {
+    document.documentElement.classList.add('is-standalone-app');
+    document.body.classList.add('is-standalone-app');
     // 100% hide all install buttons and banners when inside installed app
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
     if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
